@@ -11,11 +11,13 @@ import Join from './Pages/Join'
 import Landing from './Pages/Landing'
 import Profile from './Pages/Profile'
 import SignIn from './Pages/SignIn'
+import Header from './Components/Header';
 
 function App() {
 
   return (
     <>
+      <Header />
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/category" element={<IndivdualCategory />} />
