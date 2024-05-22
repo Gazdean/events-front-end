@@ -1,6 +1,7 @@
 import './App.css'
 
 import { Routes, Route } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import CreateEvent from './Pages/CreateEvent'
 import EventView from './Pages/EventView'
@@ -15,7 +16,6 @@ function App() {
 
   return (
     <>
-      <h1>APP</h1>
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/category" element={<IndivdualCategory />} />
