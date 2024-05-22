@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function SignInPage() {
+export default function SignIn() {
   return (
     <>
         <h1>Sign In Page</h1>

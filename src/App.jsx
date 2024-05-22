@@ -1,25 +1,31 @@
 import './App.css'
-import CreateEventPage from './Pages/CreateEvent'
+
+import { Routes, Route } from 'react-router-dom'
+
+import CreateEvent from './Pages/CreateEvent'
 import EventView from './Pages/EventView'
-import ForgotPasswordPage from './Pages/ForgotPassword'
+import ForgotPassword from './Pages/ForgotPassword'
 import IndivdualCategory from './Pages/IndivdualCategory'
-import JoinPage from './Pages/Join'
-import LandingPage from './Pages/Landing'
-import ProfilePage from './Pages/Profile'
-import SignInPage from './Pages/SignIn'
+import Join from './Pages/Join'
+import Landing from './Pages/Landing'
+import Profile from './Pages/Profile'
+import SignIn from './Pages/SignIn'
 
 function App() {
 
   return (
     <>
-      <LandingPage></LandingPage>
-      <IndivdualCategory></IndivdualCategory>
-      <EventView></EventView>
-      <SignInPage></SignInPage>
-      <JoinPage></JoinPage>
-      <ForgotPasswordPage></ForgotPasswordPage>
-      <CreateEventPage></CreateEventPage>
-      <ProfilePage></ProfilePage>
+      <h1>APP</h1>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/category" element={<IndivdualCategory />} />
+        <Route path="/event-view" element={<EventView />} />
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/join" element={<Join />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/create-event" element={<CreateEvent />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
     </>
   )
 }

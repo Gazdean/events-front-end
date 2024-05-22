@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function JoinPage() {
+export default function Join() {
   return (
    <>
     <h1>Join Page</h1>
