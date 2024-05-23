@@ -12,11 +12,13 @@ import Landing from './Pages/Landing'
 import Profile from './Pages/Profile'
 import SignIn from './Pages/SignIn'
 import Header from './Components/Header';
+import { Container } from 'react-bootstrap';
 
 function App() {
 
   return (
     <>
+    <Container>
       <Header />
       <Routes>
         <Route path="/" element={<Landing />} />
@@ -28,6 +30,7 @@ function App() {
         <Route path="/create-event" element={<CreateEvent />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
+      </Container>
     </>
   )
 }

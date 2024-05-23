@@ -4,10 +4,10 @@ import Container from 'react-bootstrap/Container'
 export default function CallToAction() {
   return (
     <Container >
-        <p>Lets</p>
+        <p className='h3'>Lets</p>
         <h1 className="" style={{color: "#429DD0"}}> Gather</h1>
-        <p>and make our community <strong>stronger</strong></p>
-        <p>Browse local events sign up and meet with your neighbourhood</p>
+        <p>and make our community <strong>stronger</strong> together</p>
+        <p>Browse local events sign up and connect with your neighbourhood</p>
     </Container>
   )
 }
