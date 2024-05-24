@@ -23,10 +23,10 @@ export default function Header() {
     
   return (
     <>
-    <Navbar className="m-3">
-        <Navbar.Brand variant="primary" as={Link} to={"/"} >Gather</Navbar.Brand>    
-        <Nav className="ms-auto d-flex flex-row justify-content-between">
-            {currentUser ? <>{error ? <p>{error}</p> : null} <p>{currentUser.email}</p> <Button onClick={handleLogout}>logout</Button></>:  <> 
+    <Navbar className="m-3 border-bottom ">
+        <Navbar.Brand style={{ color: "#429DD0" }} as={Link} to={"/"} ><strong>Gather</strong></Navbar.Brand>    
+        <Nav className="ms-auto d-flex flex-row justify-content-center align-contents-center">
+            {currentUser ? <>{error ? <p>{error}</p> : null} <Nav.Item className='pt-2 me-2' style={{fontSize:"0.9rem"}}>{currentUser.email}</Nav.Item> <Button onClick={handleLogout}>logout</Button></>:  <> 
               {location.pathname !== "/sign-in" ? <Nav.Link as={Link} to={"/sign-in"}><Button variant="primary" size="sm">Sign in</Button></Nav.Link> : null }
               {location.pathname !== "/join" ? <Nav.Link as={Link} to={"/join"}><Button variant="primary" size="sm" style={{width:"3.9rem"}}>Join</Button></Nav.Link> : null }
             </> }
