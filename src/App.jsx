@@ -17,20 +17,20 @@ import { Container } from 'react-bootstrap';
 function App() {
 
   return (
-    <>
-    <Container>
+    <> 
       <Header />
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/category" element={<IndivdualCategory />} />
-        <Route path="/event-view" element={<EventView />} />
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/join" element={<Join />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/create-event" element={<CreateEvent />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
-      </Container>
+        <main className="d-flex align-items-center justify-content-center" style={{minHeight:"80vh"}}>  
+            <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/category" element={<IndivdualCategory />} />
+              <Route path="/event-view" element={<EventView />} />
+              <Route path="/sign-in" element={<SignIn />} />
+              <Route path="/join" element={<Join />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/create-event" element={<CreateEvent />} />
+              <Route path="/profile" element={<Profile />} />
+            </Routes>
+      </main>
     </>
   )
 }
