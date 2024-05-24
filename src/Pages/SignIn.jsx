@@ -26,7 +26,7 @@ export default function SignIn () {
     }
 
     return (
-        <Container>
+        <>
           <Card>
             <Card.Body>
                 <h2 className="text-center mb-4">Log In</h2>
@@ -48,6 +48,6 @@ export default function SignIn () {
               Don't have an account? <Link to="/join">Sign up</Link> 
             </div>
           </Card>
-        </Container>
+        </>
     )
 }

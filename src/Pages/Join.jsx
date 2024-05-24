@@ -32,7 +32,7 @@ export default function Join () {
     }
 
     return (
-        <Container>
+        <>
             <Card >
                 <Card.Body >
                     <h2 className="text-center mb-4">Create an account</h2>
@@ -57,6 +57,6 @@ export default function Join () {
                          Already have an account? <Link to="/sign-in">Log in</Link>
                     </Card.Text>
             </Card>
-        </Container>
+        </>
     )
 }
