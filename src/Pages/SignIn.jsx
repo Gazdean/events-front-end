@@ -26,10 +26,10 @@ export default function SignIn () {
     }
 
     return (
-        <>
+        <Container className="w-100" style={{maxWidth:"400px"}}>
           <Card>
             <Card.Body>
-                <h2 className="text-center mb-4">Log In</h2>
+                <h2 className="text-center mb-4">Sign In</h2>
                 {error && <Alert variant="danger">{error}</Alert>}
                 <Form onSubmit={handleSubmit} >
                     <Form.Group id="email">
@@ -40,7 +40,7 @@ export default function SignIn () {
                         <Form.Label htmlFor="signInPassword" >Password</Form.Label>
                         <Form.Control id="signInPassword" name="signInPassword"type="password" ref={passwordRef} required></Form.Control>
                     </Form.Group>
-                    <Button disabled={loading} className="w-100 mt-4" type="submit">Log in</Button>
+                    <Button disabled={loading} className="w-100 mt-4" type="submit">Sign in</Button>
                 </Form>
                 <div className="w-100 text-center mt-3"><Link to="/forgot-password">Forgot Password?</Link></div>
             </Card.Body>
@@ -48,6 +48,6 @@ export default function SignIn () {
               Don't have an account? <Link to="/join">Sign up</Link> 
             </div>
           </Card>
-        </>
+        </Container>
     )
 }

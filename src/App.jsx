@@ -19,7 +19,7 @@ function App() {
   return (
     <> 
       <Header />
-        <main className="d-flex align-items-center justify-content-center" style={{minHeight:"80vh"}}>  
+        <Container className="d-flex align-items-center justify-content-center" style={{minHeight:"80vh"}}>  
             <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/category" element={<IndivdualCategory />} />
@@ -30,7 +30,7 @@ function App() {
               <Route path="/create-event" element={<CreateEvent />} />
               <Route path="/profile" element={<Profile />} />
             </Routes>
-      </main>
+      </Container>
     </>
   )
 }

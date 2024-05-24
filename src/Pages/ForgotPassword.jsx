@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react"
-import {Form, Button, Card, Alert} from "react-bootstrap"
+import {Form, Button, Card, Alert, Container} from "react-bootstrap"
 import { useAuth } from '../Contexts/AuthContext'
 import { Link } from "react-router-dom"
 
@@ -25,7 +25,7 @@ export default function ForgotPassword() {
     }
 
     return (
-        <>
+        <Container className="w-100" style={{maxWidth:"400px"}}>
             <Card>
                 <Card.Body>
                     <h2 className="text-center mb-4">Password Reset</h2>
@@ -44,6 +44,6 @@ export default function ForgotPassword() {
               </div>
             </Card>
             
-        </>
+        </Container>
     )
 }
