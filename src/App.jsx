@@ -13,7 +13,7 @@ import Profile from './Pages/Profile'
 import SignIn from './Pages/SignIn'
 import Header from './Components/Header';
 import { Container } from 'react-bootstrap';
-import PrivateRoute from './Components/PrivateRoute';
+import UserPrivateRoute from './Components/UserPrivateRoute';
 
 function App() {
 
@@ -28,8 +28,8 @@ function App() {
               <Route path="/sign-in" element={<SignIn />} />
               <Route path="/join" element={<Join />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/create-event" element={<PrivateRoute><CreateEvent /></PrivateRoute>} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/create-event" element={<UserPrivateRoute><CreateEvent /></UserPrivateRoute>} />
+              <Route path="/profile" element={<UserPrivateRoute><Profile /></UserPrivateRoute>} />
             </Routes>
       </Container>
     </>
