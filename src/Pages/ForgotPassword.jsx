@@ -1,21 +1,22 @@
-import React, { useState, useRef } from "react"
+import React, { useState } from "react"
 import {Form, Button, Card, Alert, Container} from "react-bootstrap"
 import { useAuth } from '../Contexts/AuthContext'
 import { Link } from "react-router-dom"
 
+import { useForm } from 'react-hook-form'
+
 export default function ForgotPassword() {
-    const emailRef = useRef()
     const { resetPassword } = useAuth()
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState('')
+    const {register, handleSubmit, formState:{errors}} = useForm()
 
-    async function handleSubmit(event) {
-        event.preventDefault()
+    async function onSubmit(data) {
 
         try {
             setMessage('')
             setLoading(true)
-            await resetPassword(emailRef.current.value)
+            await resetPassword(data.email)
             setMessage('Check your inbox or junk for futher instructions')
         } catch {
             // no error sent from Firebase if email does not exsist due to Firebases 'email enumeration protection' to stop brute-force attacks           
@@ -30,10 +31,11 @@ export default function ForgotPassword() {
                 <Card.Body>
                     <h2 className="text-center mb-4">Password Reset</h2>
                     {message && <Alert variant="success">{message}</Alert>}
-                    <Form onSubmit={handleSubmit} >
+                    <Form onSubmit={handleSubmit(onSubmit)} >
                         <Form.Group id="email">
                             <Form.Label htmlFor="forgotPasswordEmail">Email</Form.Label>
-                            <Form.Control id="forgotPasswordEmail" name="forgotPasswordEmail" type="email" ref={emailRef} required></Form.Control>
+                            <Form.Control id="forgotPasswordEmail" name="forgotPasswordEmail" type="email" {...register('email', {required:true})}></Form.Control>
+                            {errors.email?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An email is required</p>}
                         </Form.Group>
                         <Button disabled={loading} className="w-100 mt-4" type="submit">Reset Password</Button>
                     </Form>
