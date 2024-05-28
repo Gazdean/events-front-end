@@ -1,40 +1,37 @@
-import React, { useState, useRef } from "react"
+import React, { useState } from "react"
 import {Form, Button, Card, Alert, Container} from "react-bootstrap"
 import { useAuth } from '../Contexts/AuthContext'
 import { Link, useNavigate } from "react-router-dom"
 
+import { useForm } from 'react-hook-form'
+
 export default function Join () {
-    const emailRef = useRef()
-    const passwordRef = useRef()
-    const passwordConfirmRef = useRef()
+
     const {signup} = useAuth()
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate() 
 
-    async function handleSubmit(event) {
-        event.preventDefault()
-
+    const {register, handleSubmit, watch, formState:{errors}} = useForm()
 
     const emailRegex = /^((([!#$%&'*+\-/=?^_`{|}~\w])|([!#$%&'*+\-/=?^_`{|}~\w][!#$%&'*+\-/=?^_`{|}~\.\w]{0,}[!#$%&'*+\-/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)$/
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,15}$/
 
     async function onSubmit(data) {
-
         try {
             setError('')
             setLoading(true)
-            await signup(emailRef.current.value, passwordRef.current.value)
+            await signup(data.email, data.password)
             navigate("/")
         } catch {
-            console.log()
             setError('Failed to create account')
         }
         setLoading(false)
-        
+
     }
 
     return (
+        
         <Container className="w-100" style={{maxWidth:"400px"}}>
             <Card >
                 <Card.Body >
@@ -55,9 +52,10 @@ export default function Join () {
                         </Form.Group>
                         <Form.Group id="email">
                             <Form.Label htmlFor="joinConfirm">Password Confirmation</Form.Label>
-                            <Form.Control id="joinConfirm" name="joinConfirm"type="password"  ref={passwordConfirmRef} required></Form.Control>
+                            <Form.Control id="joinConfirm" name="joinConfirm"type="password" {...register("confirmPassword", {required: "Please confirm your password",validate: (value) =>value === watch("password") || "Passwords do not match"})} ></Form.Control>
+                            {errors.confirmPassword && ( <p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2">{errors.confirmPassword.message}</p>)}
                         </Form.Group>
-                        <Button disabled={loading} className="w-100 mt-4" type="submit">Sign Up</Button>
+                        <Button disabled={loading} className="w-100 mt-4" type="submit" >Sign Up</Button>
                     </Form>
                 </Card.Body>
                     <Card.Text className="w-100 text-center mt-2">
