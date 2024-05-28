@@ -24,14 +24,14 @@ export default function Join () {
             await signup(emailRef.current.value, passwordRef.current.value)
             navigate("/")
         } catch {
-            console.log()
             setError('Failed to create account')
         }
         setLoading(false)
-        
+
     }
 
     return (
+        
         <Container className="w-100" style={{maxWidth:"400px"}}>
             <Card >
                 <Card.Body >
