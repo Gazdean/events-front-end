@@ -1,4 +1,4 @@
-import React, { useState, /*useRef*/ } from "react"
+import React, { useState } from "react"
 import {Form, Button, Card, Alert, Container} from "react-bootstrap"
 import { useAuth } from '../Contexts/AuthContext'
 import { Link, useNavigate } from "react-router-dom"
@@ -6,17 +6,14 @@ import { Link, useNavigate } from "react-router-dom"
 import { useForm } from 'react-hook-form'
 
 export default function SignIn () {
-    // const emailRef = useRef()
-    // const passwordRef = useRef()
     const {signin} = useAuth()
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
-    const {register, handleSubmit, watch, formState:{errors}} = useForm()
+    const {register, handleSubmit, formState:{errors}} = useForm()
 
     async function onSubmit(data) {
-        // event.preventDefault()
         try {
             setError('')
             setLoading(true)
