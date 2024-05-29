@@ -1,16 +1,35 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {Form, Button, Card, Alert, Container} from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
 
 import { useForm } from 'react-hook-form'
+import { fetchEventbriteCategories } from "../apiEventBriteCalls"
+import CategoryOptions from "../Components/CategoryOptions"
 
 export default function createEvent () {
 
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
+    const [catLoading, setCatLoading] = useState(false)
+    const [categories, setCategories] = useState([])
     const navigate = useNavigate() 
 
     const {register, handleSubmit, watch, formState:{errors}} = useForm()
+
+    useEffect(()=> {
+      handleSetCategories()
+  }, [])
+
+  async function handleSetCategories() {
+    setCatLoading(true)
+    try { 
+      const data = await fetchEventbriteCategories()
+      setCategories(data.categories)
+      setCatLoading(false)
+    } catch {
+      console.log(error, ' category error')
+    }
+  }
 
     async function onSubmit(data) {
         try {
@@ -20,7 +39,7 @@ export default function createEvent () {
             
         } catch {
             console.log(error)
-            setError('Failed to create account')
+            setError('Failed Load Categories')
         }
         setLoading(false)
 
@@ -61,10 +80,9 @@ export default function createEvent () {
                         
                         <Form.Group id="category">
                             <Form.Label htmlFor="formEventCategory">Event Category</Form.Label>
-                            <Form.Select id="formEventCategory" name="eventCategory" {...register('eventCategory', {required:true, })}>
-                              <option value="1">1</option>
-                              <option value="2">2</option>
-                              <option value="3">3</option>
+                            <Form.Select id="formEventCategory" name="eventCategory" {...register('eventCategory', {required:true, })}>              
+                              {catLoading ? <option>*Loading*</option> : <option>-- please select a category --</option>}
+                              <CategoryOptions categories={categories}/>
                             </Form.Select>
                             {errors.eventCategory?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A category is required</p>}
                         </Form.Group>
