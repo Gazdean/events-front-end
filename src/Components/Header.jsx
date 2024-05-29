@@ -33,9 +33,7 @@ export default function Header() {
     setIsStaff(false)
     try {
       const querySnapShot = await querySnapshot("staff", email)
-      console.log(querySnapShot.id)
       if (querySnapShot.exists()) {
-        console.log(querySnapShot.id, "sdfhdsjfhjdh")
         setIsStaff(true)
         console.log("Staff member exists");
 
