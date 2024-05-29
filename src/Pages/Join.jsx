@@ -4,6 +4,7 @@ import { useAuth } from '../Contexts/AuthContext'
 import { Link, useNavigate } from "react-router-dom"
 
 import { useForm } from 'react-hook-form'
+import { addNewUser } from "../apiFirebaseCalls"
 
 export default function Join () {
 
@@ -22,8 +23,10 @@ export default function Join () {
             setError('')
             setLoading(true)
             await signup(data.email, data.password)
+            await addNewUser(data.email)
             navigate("/")
         } catch {
+            console.log(error)
             setError('Failed to create account')
         }
         setLoading(false)
