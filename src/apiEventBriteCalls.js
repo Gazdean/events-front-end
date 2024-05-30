@@ -1,7 +1,7 @@
+const token = import.meta.env.VITE_EVENTBRITE_TOKEN; 
+const url = 'https://www.eventbriteapi.com/v3/categories/'
+
 async function fetchEventbriteCategories() {
-    const url = 'https://www.eventbriteapi.com/v3/categories/';
-    const token = 'O6J4GAGNK2FVHU6X3K5R';  // Replace with your actual OAuth token
-  
     try {
       const response = await fetch(url, {
         method: 'GET',
