@@ -92,20 +92,21 @@ describe("formatCreateEventData", () => {
     test("when passed an object with key of isFree and value true it should the correctly formatted object", ()=> {
         // assign
         const input = {isFree: true}
-        const expected = {ticket_classes: [{
-                name: "General Admission",
-                quantity_total: 0,
-                cost: {
-                    value: "0",
-                    currency: "GBP"
-                },
-                free: true
-            }]
-        }
         const output = formatCreateEventData(input)
         // assert
         expect(output.event.ticket_classes[0].free).toBe(true)
         expect(output.event.ticket_classes[0].cost.value).toBe("0")
+    })
+    test("when passed an object with key of isFree and value false it should the correctly formatted object including the cost of a ticket", ()=> {
+        // assign
+        const input = {
+            isFree: false,
+            cost: "440"
+        }
+        const output = formatCreateEventData(input)
+        // assert
+        expect(output.event.ticket_classes[0].free).toBe(false)
+        expect(output.event.ticket_classes[0].cost.value).toBe("440")
     })
     test("when passed an object with address data it should the correctly formatted object", ()=> {
         // assign
@@ -137,73 +138,69 @@ describe("formatCreateEventData", () => {
         expect(output).toMatchObject(expected)
     })
 
-    // -----    paid event test to be added   ------
     // -----   added image test to be added?  ------
 
-
-
-
-//     test("passed the basic data object from the create event form it should return the correct object", ()=> {
-//         // assign
-//         const input = {
-//             name: "go run",
-//             description: "running for all",
-//             address_1: "here",
-//             address_2: "there",
-//             capacity: "15",
-//             city: "manchester",
-//             category_id: "108",
-//             formIsFree: "yes",
-//             postal_code: "m60",
-//             region: "lancashire",
-//             start: "2024-05-30T18:21",
-//             end: "2024-05-30T18:21",
-//             venueName: "field"
-//         }
-//         const expected = {
-//             "event": {
-//                 "name": {
-//                     "html": "<p>go run</p>" 
-//                 },
-//                 "description": {
-//                     "html": "<p>running for all</p>" 
-//                 },
-//                 "start": {
-//                     "timezone": "GMT",
-//                     "utc": "2024-05-30T18:21:00Z" 
-//                 },
-//                 "end": {
-//                     "timezone": "GMT",
-//                     "utc": "2024-05-30T18:21:00Z"  
-//                 },
-//                 "capacity": 15,
-//                 "organizer_id": "123456789",
-//                 "listed": true,
-//                 "category_id": "108", 
-//                 "ticket_classes": [
-//                     {
-//                         "name": "General Admission",
-//                         "quantity_total": 15, 
-//                         "free": true 
-//                     }
-//                 ],
-//                 "online_event": false, 
-//                 "venue": {
-//                     "name": "field",
-//                     "address": {
-//                         "address_1": "here",
-//                         "address_2": "there",
-//                         "city": "manchester",
-//                         "region": "lancashire",
-//                         "postal_code": "m60",
-//                         "country": "GB" 
-//                     }
-//                 }
-//             }
-//         };
-//         // act
-//         const output = formatCreateEventData(input)
-//         // assert
-//         expect(output).toEqual(expected)
-//     })
+    test("passed the basic data object from the create event form it should return the correct object", ()=> {
+        // assign
+        const input = {
+            name: "go run",
+            description: "running for all",
+            address_1: "here",
+            address_2: "there",
+            capacity: "15",
+            city: "manchester",
+            category_id: "108",
+            isFree: "yes",
+            postal_code: "m60",
+            region: "lancashire",
+            start: "2024-05-30T18:21",
+            end: "2024-05-30T18:21",
+            venueName: "field"
+        }
+        const expected = {
+            "event": {
+                "name": {
+                    "html": "<p>go run</p>" 
+                },
+                "description": {
+                    "html": "<p>running for all</p>" 
+                },
+                "start": {
+                    "timezone": "GMT",
+                    "utc": "2024-05-30T18:21:00Z" 
+                },
+                "end": {
+                    "timezone": "GMT",
+                    "utc": "2024-05-30T18:21:00Z"  
+                },
+                "capacity": 15,
+                "organizer_id": "123456789",
+                "listed": true,
+                "category_id": "108", 
+                "ticket_classes": [
+                    {
+                        "name": "General Admission",
+                        "quantity_total": 15, 
+                        "free": true 
+                    }
+                ],
+                "online_event": false, 
+                "venue": {
+                    "name": "field",
+                    "address": {
+                        "address_1": "here",
+                        "address_2": "there",
+                        "city": "manchester",
+                        "region": "lancashire",
+                        "postal_code": "m60",
+                        "country": "GB" 
+                    }
+                }
+            }
+        };
+        // act
+        const output = formatCreateEventData(input)
+        // assert
+        expect(output).toEqual(expected)
+    })
 })
