@@ -67,6 +67,7 @@ export default function createEvent () {
             setError('')
             setLoading(true)
             console.dir(data)
+           
             
             // navigate("/")
             
@@ -102,11 +103,11 @@ export default function createEvent () {
 
                         <Form.Group id="category">
                             <Form.Label htmlFor="formEventCategory">Event Category</Form.Label>
-                            <Form.Select id="formEventCategory" name="eventCategory" {...register('eventCategory', {required:true, })}>              
+                            <Form.Select id="formEventCategory" name="category_id" {...register('category_id', {required:true, })}>              
                               {catLoading ? <option>*Loading*</option> : <option disabled>-- please select a category --</option>}
                               <CategoryOptions categories={categories}/>
                             </Form.Select>
-                            {errors.eventCategory?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A category is required</p>}
+                            {errors.category_id?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A category is required</p>}
                         </Form.Group>
 
                         <Form.Group id="venueName">
@@ -164,14 +165,14 @@ export default function createEvent () {
                             {errors.capacity?.type==="pattern"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Should be a whole number</p>}
                         </Form.Group>
 
-                        <Form.Group id="isFree">
-                            <Form.Label htmlFor="formIsFree">Is the event free</Form.Label>
-                            <Form.Select id="formIsFree" name="formIsFree" {...register('formIsFree', {required:true})} >              
+                        <Form.Group id="eventIsFree">
+                            <Form.Label htmlFor="isFree">Is the event free</Form.Label>
+                            <Form.Select id="isFree" name="isFree" {...register('isFree', {required:true})} >              
                               <option disabled>Please Select</option>
                               <option>yes</option>
                               <option>no</option>
                             </Form.Select>
-                            {errors.formIsFree?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Free event status is required</p>}
+                            {errors.isFree?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Free event status is required</p>}
                         </Form.Group>
                         
                         { watchIsFree === "no"  && (
