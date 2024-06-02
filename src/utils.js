@@ -14,7 +14,7 @@ export function formatCreateEventData(data) {
             venue: {
                 name: "",
                 address: {
-                    "country": "UK"
+                    "country": "GB"
                 }
             }
         }
@@ -37,11 +37,13 @@ export function formatCreateEventData(data) {
                                     region: data.region,
                                     postal_code: data.postal_code}
                             }
-        if (data.isFree === true) {
+        if (data.formIsFree === true) {
                 body.event.ticket_classes[0].cost.value = "0"
+                body.event.ticket_classes[0].quantity_total = Number(data.capacity)
                 body.event.ticket_classes[0].free = true 
-        } else if (data.isFree === false) {
+        } else if (data.formIsFree === false) {
                 body.event.ticket_classes[0].cost.value = data.cost
+                body.event.ticket_classes[0].quantity_total = Number(data.capacity)
                 body.event.ticket_classes[0].free = false
         }
     }
