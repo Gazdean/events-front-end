@@ -3,8 +3,9 @@ import {Form, Button, Card, Alert, Container} from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
 
 import { useForm } from 'react-hook-form'
-import { fetchEventbriteCategories } from "../apiEventBriteCalls"
+import { fetchEventbriteCategories, createEventbriteEvent } from "../apiEventBriteCalls"
 import CategoryOptions from "../Components/CategoryOptions"
+import {formatCreateEventData} from "../utils"
 
 export default function createEvent () {
 
@@ -18,31 +19,6 @@ export default function createEvent () {
 
     const watchIsFree = watch("formIsFree", "")
     const wholeNumRegex = /^(0|[1-9]\d*)$/
-
-    const eventData = {
-        listed:false,
-        ticket_classes: [{
-            "name": "General Admission",
-            "quantity_total": 0,
-            "cost": {
-                "value": "0",
-                "currency": "GBP"
-            },
-            free: true
-        }],
-        online_event: false,
-        venue: {
-            "name": "",
-            "address": {
-                "address_1": "",
-                "address_2": "",
-                "city": "",
-                "region": "",
-                "postal_code": "3",
-                "country": "UK"
-            }
-        }
-    }
 
     useEffect(()=> {
       handleSetCategories()
@@ -64,9 +40,12 @@ export default function createEvent () {
     
     async function onSubmit(data) {
         try {
+            console.log(data, "form data")
             setError('')
             setLoading(true)
-            console.dir(data)
+            const body = formatCreateEventData(data)
+            console.log(body, "formatted body")
+            console.log(createEventbriteEvent(body))
             
             // navigate("/")
             
@@ -110,37 +89,37 @@ export default function createEvent () {
                         </Form.Group>
 
                         <Form.Group id="venueName">
-                            <Form.Label htmlFor="VenueName">Venue name</Form.Label>
+                            <Form.Label htmlFor="venueNameInput">Venue name</Form.Label>
                             <Form.Control id="venueNameInput" name="venueNameInput" type="text"  {...register('venueNameInput', {required:true, })}></Form.Control>
                             {errors.venueNameInput?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An venue name is required</p>}
                         </Form.Group>
 
                         <Form.Group id="addressLine1">
-                            <Form.Label htmlFor="addressLine1">2nd line of address</Form.Label>
+                            <Form.Label htmlFor="address_1">2nd line of address</Form.Label>
                             <Form.Control id="address_1" name="address_1" type="text"  {...register('address_1', {required:true, })}></Form.Control>
                             {errors.address_1?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Address line 1 is required</p>}
                         </Form.Group>
 
                         <Form.Group id="addressLine2">
-                            <Form.Label htmlFor="addressLine2">2nd line of address</Form.Label>
+                            <Form.Label htmlFor="address_2">2nd line of address</Form.Label>
                             <Form.Control id="address_2" name="address_2" type="text"  {...register('address_2', {required:true, })}></Form.Control>
                             {errors.address_2?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Address line 2 is required</p>}
                         </Form.Group>
 
                         <Form.Group id="cityName">
-                            <Form.Label htmlFor="cityName">City/Town</Form.Label>
+                            <Form.Label htmlFor="city">City/Town</Form.Label>
                             <Form.Control id="city" name="city" type="text"  {...register('city', {required:true, })}></Form.Control>
                             {errors.city?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A city is required</p>}
                         </Form.Group>
 
                         <Form.Group id="countyName">
-                            <Form.Label htmlFor="countyName">County</Form.Label>
+                            <Form.Label htmlFor="region">County</Form.Label>
                             <Form.Control id="region" name="region" type="text"  {...register('region', {required:true, })}></Form.Control>
                             {errors.region?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A region is required</p>}
                         </Form.Group>
 
                         <Form.Group id="postcode">
-                            <Form.Label htmlFor="postcode">Postcode</Form.Label>
+                            <Form.Label htmlFor="postal_code">Postcode</Form.Label>
                             <Form.Control id="postal_code" name="postal_code" type="text"  {...register('postal_code', {required:true, })}></Form.Control>
                             {errors.postal_code?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A postcode is required</p>}
                         </Form.Group>
@@ -176,7 +155,7 @@ export default function createEvent () {
                         
                         { watchIsFree === "no"  && (
                             <Form.Group id="Cost">
-                                <Form.Label htmlFor="formCost">Cost per ticket in £</Form.Label>
+                                <Form.Label htmlFor="cost">Cost per ticket in £</Form.Label>
                                 <Form.Control id="cost" name="cost" type="number" min="0" {...register('cost', {required:true, pattern:wholeNumRegex})}></Form.Control>
                                 {errors.cost?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Event cost is required</p>}
                                 {errors.cost?.type==="pattern"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Cost should be a whole number</p>}

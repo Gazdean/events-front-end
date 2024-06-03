@@ -14,13 +14,14 @@ import SignIn from './Pages/SignIn'
 import Header from './Components/Header';
 import { Container } from 'react-bootstrap';
 import UserPrivateRoute from './Components/UserPrivateRoute';
+import './App.css';
 
 function App() {
 
   return (
     <> 
       <Header />
-        <Container className="d-flex align-items-center justify-content-center" style={{minHeight:"80vh"}}>  
+        <Container id="container" className="d-flex align-items-center justify-content-center" style={{minHeight:"80vh"}}>  
             <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/category" element={<IndivdualCategory />} />
