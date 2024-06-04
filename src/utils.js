@@ -35,11 +35,11 @@ export function formatCreateTicketClassesData(data) {
         if (data.isFree === "true") {
             body.ticket_classes.cost= "GBP,0.00"
             body.ticket_classes.is_free= true
-        } else if (data.isFree === "false" && data.donation === "false") {
+        } else if (data.isFree === "false" && data.isDonation === "false") {
             body.ticket_classes.cost= `GBP,${data.cost}.00`
             body.ticket_classes.is_free= false
             body.ticket_classes.donation= false
-        } else if (data.isFree === "false" && data.donation === "true") {
+        } else if (data.isFree === "false" && data.isDonation === "true") {
             body.ticket_classes.is_free= true
             body.ticket_classes.donation= true
             body.ticket_classes.minimum_price= 'GBP,0.00'

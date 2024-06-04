@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const eventbriteToken = import.meta.env.VITE_EVENTBRITE_PERSONAL_OAUTH_TOKEN;
-const organizationId = import.meta.env.VITE_EVENTBRITE_ORGANIZATION_ID;
+// const organizationId = import.meta.env.VITE_EVENTBRITE_ORGANIZATION_ID;
 
 async function fetchEventbriteCategories() {
   const url = 'https://www.eventbriteapi.com/v3/categories/';
@@ -19,7 +19,7 @@ async function fetchEventbriteCategories() {
   }
 }
 
-async function createEventbriteEvent(eventData) {
+async function createEventbriteEvent(eventData, organizationId) {
 
   const url = `https://www.eventbriteapi.com/v3/organizations/${organizationId}/events/`
   const headers = {
@@ -28,12 +28,8 @@ async function createEventbriteEvent(eventData) {
   };
 
   try {
-      const response = await axios.post(url, {
-          event: {
-              ...eventData.event
-          }
-        }, 
-        { headers: headers });
+      const response = await axios.post(url, eventData, { headers: headers });
+      console.log(response.data)
       return response.data;
   } catch (error) {
       console.error('Error while creating event:', error.response.data);
@@ -41,42 +37,39 @@ async function createEventbriteEvent(eventData) {
   }
 }
 
-async function fetchOrganizationEvents() {
+// async function fetchOrganizationEvents(organizationId) {
 
-  const url = `https://www.eventbriteapi.com/v3/organizations/${organizationId}/events/`;
+//   const url = `https://www.eventbriteapi.com/v3/organizations/${organizationId}/events/`;
  
-  const headers = {
-    Authorization: `Bearer ${eventbriteToken}`,
-    'Content-Type': 'application/json'
-  };
+//   const headers = {
+//     Authorization: `Bearer ${eventbriteToken}`,
+//     'Content-Type': 'application/json'
+//   };
 
-  try {
-    const response = await axios.get(url, { headers: headers });
-    console.log('Events fetched successfully:', response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching events:', error.response ? error.response.data : error.message);
-  }
-}
+//   try {
+//     const response = await axios.get(url, { headers: headers });
+//     console.log('Events fetched successfully:', response.data);
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error fetching events:', error.response ? error.response.data : error.message);
+//   }
+// }
+// // delete below call when rendered events are rendered
+// fetchOrganizationEvents()
 
-fetchOrganizationEvents()
-
-async function getEventbriteUserId() {
+async function getEventbriteOrganizationId() {
   try {
     const response = await axios.get('https://www.eventbriteapi.com/v3/users/me/organizations/', {
       headers: {
         'Authorization': `Bearer ${eventbriteToken}`
       }
     });
-    console.log('organisation_id: ',response.data.organizations[0].id)
-    return response.data.id;
+    return response.data.organizations[0].id;
   } catch (error) {
     console.error('Error:', error.message);
     throw error;
   }
 }
 
-getEventbriteUserId()
 
-
-export { fetchEventbriteCategories, createEventbriteEvent }
+export { fetchEventbriteCategories, createEventbriteEvent, getEventbriteOrganizationId }

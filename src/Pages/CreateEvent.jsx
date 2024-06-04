@@ -3,9 +3,9 @@ import {Form, Button, Card, Alert, Container} from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
 
 import { useForm } from 'react-hook-form'
-import { fetchEventbriteCategories, createEventbriteEvent } from "../apiEventBriteCalls"
+import { fetchEventbriteCategories, createEventbriteEvent, getEventbriteOrganizationId } from "../apiEventBriteCalls"
 import CategoryOptions from "../Components/CategoryOptions"
-import {formatCreateEventData} from "../utils"
+import {formatCreateEventData, formatCreateTicketClassesData} from "../utils"
 
 export default function createEvent () {
 
@@ -13,20 +13,32 @@ export default function createEvent () {
     const [loading, setLoading] = useState(false)
     const [catLoading, setCatLoading] = useState(false)
     const [categories, setCategories] = useState([])
+    const [organizationId, setOrganizationId] = useState([])
     const navigate = useNavigate() 
 
     const {register, handleSubmit, watch, formState:{errors}, setValue} = useForm()
 
     const watchIsFree = watch("isFree", "")
     const watchIsDonation = watch("isDonation", "")
-    console.log(watchIsDonation, "watchIsDonation")
 
     const wholeNumRegex = /^(0|[1-9]\d*)$/
 
     useEffect(()=> {
       handleSetCategories()
+      handleSetOrganisationId()
   }, [])
 
+  async function handleSetOrganisationId() {
+    setError('')
+    try { 
+      const idResponse = await getEventbriteOrganizationId()
+      setOrganizationId(idResponse)
+    } catch {
+        setError('Failed To fetch organisation id')
+    }
+  }
+
+  
   async function handleSetCategories() {
     setCatLoading(true)
     try { 
@@ -43,11 +55,18 @@ export default function createEvent () {
     
     async function onSubmit(data) {
         try {
-            console.log(data, "form data")
+            
             setError('')
             setLoading(true)
-            const body = formatCreateEventData(data)
-            createEventbriteEvent(body)
+            const eventBody = formatCreateEventData(data)
+            console.log(eventBody, "form data")
+            const createdEvent = await createEventbriteEvent(eventBody, organizationId)
+
+            console.log(createdEvent.id)
+
+            const ticketBody = formatCreateTicketClassesData(data)
+
+
             
             // navigate("/")
             
