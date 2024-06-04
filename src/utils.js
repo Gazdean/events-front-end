@@ -19,36 +19,33 @@ export function formatCreateEventData(data) {
   
 }
 
+export function formatCreateTicketClassesData(data) {
+    const body = {
+        ticket_classes: {
+                display_name: "General Admission",
+                quantity_sold: 0,
+            },
+    }
 
- // ticket_classes: [{
-            //     name: "General Admission",
-            //     quantity_total: 0,
-            //     cost: {
-            //         "value": "0",
-            //         "currency": "GBP"
-            //     },
-            //     free: true
-            // }],
-            // venue: {
-            //     address: {
-            //         "country": "UK"
-            //     }
-            // }
+    if (!Object.keys(data).length) return {}
+    else {
+        body.ticket_classes.maximum_quantity = data.capacity
+        body.ticket_classes.sales_end = `${data.end}:00Z`
 
-
-     // body.event.venue =  {
-        //                         name: data.venueNameInput,
-        //                         address: {...body.event.venue.address,
-        //                             address_1: data.address_1,
-        //                             address_2: data.address_2,
-        //                             city: data.city,
-        //                             region: data.region,
-        //                             postal_code: data.postal_code}
-        //                     }
-        // if (data.isFree === true) {
-        //         body.event.ticket_classes[0].cost.value = "0"
-        //         body.event.ticket_classes[0].free = true 
-        // } else if (data.isFree === false) {
-        //         body.event.ticket_classes[0].cost.value = data.cost
-        //         body.event.ticket_classes[0].free = false
-        // }
+        if (data.isFree === true) {
+            body.ticket_classes.cost= "GBP,0.00"
+            body.ticket_classes.is_free= true
+        } else if (data.isFree === false && data.donation === false) {
+            body.ticket_classes.cost= `GBP,${data.cost}.00`
+            body.ticket_classes.is_free= false
+            body.ticket_classes.donation= false
+        } else if (data.isFree === false && data.donation === true) {
+            body.ticket_classes.is_free= true
+            body.ticket_classes.donation= true
+            body.ticket_classes.minimum_price= 'GBP,0.00'
+            body.ticket_classes.suggested_price= `GBP,${data.suggested_cost}.00`
+        }
+    }
+  return body
+  
+}

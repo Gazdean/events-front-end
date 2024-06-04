@@ -1,4 +1,4 @@
-const { formatCreateEventData } = require("../utils");
+const { formatCreateEventData, formatCreateTicketClassesData } = require("../utils");
 
 describe("formatCreateEventData", () => {
     test("when passed an empty object it should return an object", ()=> {
@@ -14,6 +14,7 @@ describe("formatCreateEventData", () => {
         // assign
         const input = {name: "go run"}
         const expected = {event:{name:{html: "<p>go run</p>"}}}
+        //act
         const output = formatCreateEventData(input)
         // assert
         expect(output).toMatchObject(expected)
@@ -22,6 +23,7 @@ describe("formatCreateEventData", () => {
         // assign
         const input = {description: "running for all"}
         const expected = {event:{description:{html: "<p>running for all</p>"}}}
+        // act
         const output = formatCreateEventData(input)
         // assert
         expect(output).toMatchObject(expected)
@@ -36,6 +38,7 @@ describe("formatCreateEventData", () => {
                                 }
                             }
                         }
+        // act
         const output = formatCreateEventData(input)
         // assert
         expect(output).toMatchObject(expected)
@@ -50,6 +53,7 @@ describe("formatCreateEventData", () => {
                                 }
                             }
                         }
+        // act
         const output = formatCreateEventData(input)
         // assert
         expect(output).toMatchObject(expected)
@@ -57,13 +61,11 @@ describe("formatCreateEventData", () => {
     test("when passed an object with key of capacity it should the correctly formatted object", ()=> {
         // assign
         const input = {capacity: "4"}
-        const expected = {event: {
-                            capacity:4
-                            }
-                        }
+        const expected = {event: {capacity:4}}
+        // act
         const output = formatCreateEventData(input)
         // assert
-        // expect(output).toMatchObject(expected)
+        expect(output).toMatchObject(expected)
         expect(typeof output.event.capacity).toBe("number")
     })
     test("when passed an object with key of category_id it should the correctly formatted object", ()=> {
@@ -73,6 +75,7 @@ describe("formatCreateEventData", () => {
                             category_id:"108"
                             }
                         }
+        // act
         const output = formatCreateEventData(input)
         // assert
         expect(output).toMatchObject(expected)
@@ -85,6 +88,7 @@ describe("formatCreateEventData", () => {
                             listed:false
                             }
                         }
+        // act
         const output = formatCreateEventData(input)
         // assert
         expect(output).toMatchObject(expected)
@@ -130,26 +134,85 @@ describe("formatCreateEventData", () => {
     })
 })
 
+describe.only("formatTicketClassData", () => {
+    test("when passed an empty object it should return an object", ()=> {
+        // assign
+        const input = {}
+        const expected = {}
+        // act
+        const output = formatCreateTicketClassesData(input)
+        // assert
+        expect(output).toEqual(expected)
+    })
 
-// test("when passed an object with key of isFree and value true it should the correctly formatted object", ()=> {
-    //     // assign
-    //     const input = {isFree: true}
-    //     const output = formatCreateEventData(input)
-    //     // assert
-    //     expect(output.event.ticket_classes[0].free).toBe(true)
-    //     expect(output.event.ticket_classes[0].cost.value).toBe("0")
-    // })
-    // test("when passed an object with key of isFree and value false it should the correctly formatted object including the cost of a ticket", ()=> {
-    //     // assign
-    //     const input = {
-    //         isFree: false,
-    //         cost: "440"
-    //     }
-    //     const output = formatCreateEventData(input)
-    //     // assert
-    //     expect(output.event.ticket_classes[0].free).toBe(false)
-    //     expect(output.event.ticket_classes[0].cost.value).toBe("440")
-    // })
+test("when passed an object with key of end it should the correctly formatted object", ()=> {
+        // assign
+        const input = {end: "2024-05-30T20:21"}
+        const expected = {ticket_classes: {
+            sales_end: "2024-05-30T20:21:00Z"
+            }
+        }
+        // act
+        const output = formatCreateTicketClassesData(input)
+        // assert
+        expect(output).toMatchObject(expected)
+       
+    })
+test("when passed an object with key of isFree and value true it should the correctly formatted object", ()=> {
+        // assign
+        const input = {isFree: true}
+        const expected = {ticket_classes: {
+            cost: 'GBP,0.00',
+            is_free: true,
+            }
+        }
+        // act
+        const output = formatCreateTicketClassesData(input)
+        // assert
+        expect(output).toMatchObject(expected)
+    })
+    test("when passed an object with key of isFree is false and donation is false it should the correctly formatted object including the cost of a ticket", ()=> {
+        // assign
+        const input = {
+            isFree: false,
+            donation: false,
+            cost: "440"
+        }
+        const expected = {ticket_classes: {
+            cost: 'GBP,440.00',
+            is_free: false,
+            donation: false
+            }
+        }
+        // act
+        const output = formatCreateTicketClassesData(input)
+        // assert
+        expect(output).toMatchObject(expected)
+    })
+    test("when passed an object with key of isFree and value false and donation is true it should the correctly formatted object including the cost of a ticket", ()=> {
+        // assign
+        const input = {
+            isFree: false,
+            donation: true,
+            suggested_cost: "40"
+        }
+        const expected = {ticket_classes: {
+            minimum_price: 'GBP,0.00',
+            suggested_price: 'GBP,40.00',
+            is_free: true,
+            donation: true
+            }
+        }
+        // act
+        const output = formatCreateTicketClassesData(input)
+        // assert
+        expect(output).toMatchObject(expected)
+    })
+})
+
+
+
+
     // test("when passed an object with address data it should the correctly formatted object", ()=> {
     //     // assign
     //     const input = {
@@ -175,7 +238,7 @@ describe("formatCreateEventData", () => {
     //             }
     //         }
     //     }
-    //     const output = formatCreateEventData(input)
+    //     const output = formatCreateTicketClassesData(input)
     //     // assert
     //     expect(output).toMatchObject(expected)
     // })

@@ -154,8 +154,8 @@ export default function createEvent () {
                         </Form.Group>
                         
                         { watchIsFree === "no"  && (
-                            <Form.Group id="Cost">
-                                <Form.Label htmlFor="cost">Cost per ticket in £</Form.Label>
+                            <Form.Group id="costInput">
+                                <Form.Label htmlFor="costInput">Cost per ticket in £</Form.Label>
                                 <Form.Control id="cost" name="cost" type="number" min="0" {...register('cost', {required:true, pattern:wholeNumRegex})}></Form.Control>
                                 {errors.cost?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Event cost is required</p>}
                                 {errors.cost?.type==="pattern"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Cost should be a whole number</p>}
