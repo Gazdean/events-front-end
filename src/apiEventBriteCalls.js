@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const eventbriteToken = import.meta.env.VITE_EVENTBRITE_PERSONAL_OAUTH_TOKEN;
-const organizationId = import.meta.env.VITE_EVENTBRITE_ORGANIZER_ID;
+const organizationId = import.meta.env.VITE_EVENTBRITE_ORGANIZATION_ID;
 
 async function fetchEventbriteCategories() {
   const url = 'https://www.eventbriteapi.com/v3/categories/';
