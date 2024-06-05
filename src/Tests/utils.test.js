@@ -1,4 +1,4 @@
-const { formatCreateEventData, formatCreateTicketClassesData } = require("../utils");
+const { formatCreateEventData, formatCreateTicketClassData } = require("../utils");
 
 describe("formatCreateEventData", () => {
     test("when passed an empty object it should return an object", ()=> {
@@ -140,7 +140,7 @@ describe.only("formatTicketClassData", () => {
         const input = {}
         const expected = {}
         // act
-        const output = formatCreateTicketClassesData(input)
+        const output = formatCreateTicketClassData(input)
         // assert
         expect(output).toEqual(expected)
     })
@@ -148,63 +148,60 @@ describe.only("formatTicketClassData", () => {
 test("when passed an object with key of end it should the correctly formatted object", ()=> {
         // assign
         const input = {end: "2024-05-30T20:21"}
-        const expected = {ticket_classes: {
+        const expected = {ticket_class: {
             sales_end: "2024-05-30T20:21:00Z"
             }
         }
         // act
-        const output = formatCreateTicketClassesData(input)
+        const output = formatCreateTicketClassData(input)
         // assert
         expect(output).toMatchObject(expected)
        
     })
 test("when passed an object with key of isFree and value true it should the correctly formatted object", ()=> {
         // assign
-        const input = {isFree: true}
-        const expected = {ticket_classes: {
-            cost: 'GBP,0.00',
-            is_free: true,
+        const input = {isFree: "true"}
+        const expected = {ticket_class: {
+            cost: 'GBP,0',
+            free: true,
             }
         }
         // act
-        const output = formatCreateTicketClassesData(input)
+        const output = formatCreateTicketClassData(input)
         // assert
         expect(output).toMatchObject(expected)
     })
     test("when passed an object with key of isFree is false and donation is false it should the correctly formatted object including the cost of a ticket", ()=> {
         // assign
         const input = {
-            isFree: false,
-            donation: false,
-            cost: "440"
+            isFree: "false",
+           donation: "false",
+            cost: "44"
         }
-        const expected = {ticket_classes: {
-            cost: 'GBP,440.00',
-            is_free: false,
+        const expected = {ticket_class: {
+            cost: 'GBP,4400',
+            free: false,
             donation: false
-            }
+           }
         }
         // act
-        const output = formatCreateTicketClassesData(input)
+        const output = formatCreateTicketClassData(input)
         // assert
         expect(output).toMatchObject(expected)
     })
     test("when passed an object with key of isFree and value false and donation is true it should the correctly formatted object including the cost of a ticket", ()=> {
         // assign
         const input = {
-            isFree: false,
-            donation: true,
-            suggested_cost: "40"
+            isFree: "false",
+           donation: "true",
         }
-        const expected = {ticket_classes: {
-            minimum_price: 'GBP,0.00',
-            suggested_price: 'GBP,40.00',
-            is_free: true,
+        const expected = {ticket_class: {
+            free: false,
             donation: true
             }
         }
         // act
-        const output = formatCreateTicketClassesData(input)
+        const output = formatCreateTicketClassData(input)
         // assert
         expect(output).toMatchObject(expected)
     })
@@ -238,7 +235,7 @@ test("when passed an object with key of isFree and value true it should the corr
     //             }
     //         }
     //     }
-    //     const output = formatCreateTicketClassesData(input)
+    //     const output = formatCreateTicketClassData(input)
     //     // assert
     //     expect(output).toMatchObject(expected)
     // })

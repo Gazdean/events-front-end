@@ -3,30 +3,40 @@ import {Form, Button, Card, Alert, Container} from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
 
 import { useForm } from 'react-hook-form'
-import { fetchEventbriteCategories, createEventbriteEvent, getEventbriteOrganizationId } from "../apiEventBriteCalls"
+import { fetchEventbriteCategories, createEventbriteEvent, getEventbriteOrganizationId, createEventTicketClass } from "../apiEventBriteCalls"
 import CategoryOptions from "../Components/CategoryOptions"
-import {formatCreateEventData, formatCreateTicketClassesData} from "../utils"
+import {formatCreateEventData, formatCreateTicketClassData} from "../utils"
 
-export default function createEvent () {
+export default function createEvent ({organizationId}) {
 
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const [catLoading, setCatLoading] = useState(false)
     const [categories, setCategories] = useState([])
-    const [organizationId, setOrganizationId] = useState([])
+    
     const navigate = useNavigate() 
 
     const {register, handleSubmit, watch, formState:{errors}, setValue} = useForm()
 
     const watchIsFree = watch("isFree", "")
-    const watchIsDonation = watch("isDonation", "")
+    const watchIsDonation = watch("donation", "")
 
     const wholeNumRegex = /^(0|[1-9]\d*)$/
 
     useEffect(()=> {
       handleSetCategories()
-      handleSetOrganisationId()
   }, [])
+
+//  below useEffect resets form values depending on the value of true/false answers
+    useEffect(() => {
+        if (watchIsFree === "true") {
+            setValue('cost', ''); 
+            setValue('donation', ''); 
+        } else if (watchIsFree === "false" && watchIsDonation === "true") {
+            setValue('cost', '')
+        }
+    }, [watchIsFree, watchIsDonation]);
+
 
   async function handleSetOrganisationId() {
     setError('')
@@ -55,23 +65,25 @@ export default function createEvent () {
     
     async function onSubmit(data) {
         try {
-            
+            // console.log(data, "data")
             setError('')
             setLoading(true)
             const eventBody = formatCreateEventData(data)
-            console.log(eventBody, "form data")
+            // console.log(eventBody, "formatted data")
             const createdEvent = await createEventbriteEvent(eventBody, organizationId)
 
-            console.log(createdEvent.id)
+            const eventId = createdEvent.id
 
-            const ticketBody = formatCreateTicketClassesData(data)
+            const ticketBody = formatCreateTicketClassData(data)
+            console.log(ticketBody)
 
-
+            const createdTicketClass = await createEventTicketClass(ticketBody, eventId)
             
-            // navigate("/")
+            navigate("/")
             
         } catch {
             console.log(error)
+            setError('failed to create event')
             
         } finally {
             setLoading(false)
@@ -100,24 +112,24 @@ export default function createEvent () {
                             {errors.description?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An event description is required</p>}
                         </Form.Group>
 
-                        <Form.Group id="category">
-                            <Form.Label htmlFor="formEventCategory">Event Category</Form.Label>
-                            <Form.Select id="formEventCategory" name="eventCategory" {...register('eventCategory', {required:true, })}>              
+                        <Form.Group id="EventCategory">
+                            <Form.Label htmlFor="category_id">Event Category</Form.Label>
+                            <Form.Select id="category_id" name="category_id" {...register('category_id', {required:true, })}>              
                               {catLoading ? <option>*Loading*</option> : <option disabled>-- please select a category --</option>}
                               <CategoryOptions categories={categories}/>
                             </Form.Select>
-                            {errors.eventCategory?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A category is required</p>}
+                            {errors.category_id?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A category is required</p>}
                         </Form.Group>
 
                         <Form.Group id="startDate">
-                            <Form.Label htmlFor="formEventstartDate">Event start date</Form.Label>
-                            <Form.Control id="formEventstartDate" name="start" type="datetime-local" {...register('start', {required:true, })}></Form.Control>
+                            <Form.Label htmlFor="start">Event start date</Form.Label>
+                            <Form.Control id="start" name="start" type="datetime-local" {...register('start', {required:true, })}></Form.Control>
                             {errors.start?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >a start date and time is required</p>}
                         </Form.Group>
 
                         <Form.Group id="endDate">
-                            <Form.Label htmlFor="formEventEndDate">Event EndDate</Form.Label>
-                            <Form.Control id="formEventEndDate" name="end" type="datetime-local" {...register('end', {required:true, })}></Form.Control>
+                            <Form.Label htmlFor="end">Event EndDate</Form.Label>
+                            <Form.Control id="end" name="end" type="datetime-local"  {...register('end', {required:true, })}></Form.Control>
                             {errors.end?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An end date and time is required</p>}
                         </Form.Group>
 
@@ -140,27 +152,18 @@ export default function createEvent () {
                         
                         { watchIsFree === "false"  && (
                         <Form.Group id="selectDonation">
-                            <Form.Label htmlFor="selectDonation">Is the event accepting donations</Form.Label>
-                            <Form.Select id="isDonation" name="isDonation" {...register('isDonation', {required:true})} >              
+                            <Form.Label htmlFor="donation">Is the event pay what you feel</Form.Label>
+                            <Form.Select id="donation" name="donation" {...register('donation', {required:true})} >              
                               <option>Please Select</option>
                               <option>true</option>
                               <option>false</option>
                             </Form.Select>
-                            {errors.isDonation?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Donation event status is required</p>}
+                            {errors.donation?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Donation event status is required</p>}
                         </Form.Group>)}
-                        
-                        {watchIsDonation === "true" && watchIsFree === "false" &&(
-                            <Form.Group id="donationInput">
-                                <Form.Label htmlFor="donationInput">Suggested donation per ticket in £</Form.Label>
-                                <Form.Control id="donation" name="donation" type="number" min="0" {...register('donation', {required:true, pattern:wholeNumRegex})}></Form.Control>
-                                {errors.donation?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Event donation is required</p>}
-                                {errors.donation?.type==="pattern"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Donation should be a whole number</p>}
-                            </Form.Group>) 
-                        }
 
                         {watchIsDonation === "false" && watchIsFree === "false" && (
                             <Form.Group id="costInput">
-                                <Form.Label htmlFor="costInput">Cost per ticket in £</Form.Label>
+                                <Form.Label htmlFor="cost">Cost per ticket in £</Form.Label>
                                 <Form.Control id="cost" name="cost" type="number" min="0" {...register('cost', {required:true, pattern:wholeNumRegex})}></Form.Control>
                                 {errors.cost?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Event cost is required</p>}
                                 {errors.cost?.type==="pattern"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Cost should be a whole number</p>}

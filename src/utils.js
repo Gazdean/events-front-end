@@ -13,37 +13,36 @@ export function formatCreateEventData(data) {
         body.event.start = {timezone: "Europe/London", utc: `${data.start}:00Z`}
         body.event.end = {timezone: "Europe/London", utc: `${data.end}:00Z`}
         body.event.capacity = Number(data.capacity)
-        body.event.category_id = data.category_id      
+        body.event.category_id = data.category_id     
     }
   return body
   
 }
 
-export function formatCreateTicketClassesData(data) {
+export function formatCreateTicketClassData(data) {
+    const costInPence = data.cost *100
     const body = {
-        ticket_classes: {
-                display_name: "General Admission",
-                quantity_sold: 0,
+        ticket_class: {
+                name: "General Admission",
             },
     }
 
     if (!Object.keys(data).length) return {}
     else {
-        body.ticket_classes.maximum_quantity = data.capacity
-        body.ticket_classes.sales_end = `${data.end}:00Z`
+        body.ticket_class.quantity_total = data.capacity
+        body.ticket_class.sales_end = `${data.end}:00Z`
 
         if (data.isFree === "true") {
-            body.ticket_classes.cost= "GBP,0.00"
-            body.ticket_classes.is_free= true
-        } else if (data.isFree === "false" && data.isDonation === "false") {
-            body.ticket_classes.cost= `GBP,${data.cost}.00`
-            body.ticket_classes.is_free= false
-            body.ticket_classes.donation= false
-        } else if (data.isFree === "false" && data.isDonation === "true") {
-            body.ticket_classes.is_free= true
-            body.ticket_classes.donation= true
-            body.ticket_classes.minimum_price= 'GBP,0.00'
-            body.ticket_classes.suggested_price= `GBP,${data.suggested_cost}.00`
+            body.ticket_class.cost= "GBP,0"
+            body.ticket_class.free= true
+        } else if (data.isFree === "false" && data.donation === "false") {
+            body.ticket_class.cost= `GBP,${costInPence}`
+            body.ticket_class.free= false
+            body.ticket_class.donation= false
+        } else if (data.isFree === "false" && data.donation === "true") {
+            body.ticket_class.free= false
+            body.ticket_class.donation= true
+            
         }
     }
   return body
