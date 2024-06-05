@@ -46,25 +46,13 @@ async function createEventTicketClass(ticketData, event_id) {
   };
 
   try {
-      const response = await axios.post(url, ticketData, { headers: headers });
-      console.log(response.data)
-      return response.data;
+    const response = await axios.post(url, ticketData, { headers: headers });
+    console.log(response.data)
+    return response.data;
   } catch (error) {
-      if (error.response) {
-      // Request made and server responded
-      console.error('Status:', error.response.status);
-      console.error('Headers:', error.response.headers);
-      console.error('Body:', error.response.data.error_description);
-    } else if (error.request) {
-      // Request was made but no response was received
-      console.error('Request:', error.request);
-    } else {
-      // Something happened in setting up the request
-      console.error('Error Message:', error.message);
-    }
+    console.log(error)
     throw error;
-  }
-}
+}}
 
 async function fetchAllEvents(organizationId) {
 
@@ -84,6 +72,23 @@ async function fetchAllEvents(organizationId) {
   }
 }
 
+async function fetchEventTicketClasses(eventId) {
+  const url = `https://www.eventbriteapi.com/v3/events/${eventId}/ticket_classes/`;
+  const headers = {
+    'Authorization': `Bearer ${eventbriteToken}`,  
+    'Content-Type': 'application/json'
+  };
+
+  try {
+    const response = await axios.get(url, { headers });
+    return response.data.ticket_classes;
+  } catch (error) {
+    console.error('Error fetching ticket classes:', error);
+    throw error;
+  }
+}
+
+
 async function getEventbriteOrganizationId() {
   try {
     const response = await axios.get('https://www.eventbriteapi.com/v3/users/me/organizations/', {
@@ -99,4 +104,4 @@ async function getEventbriteOrganizationId() {
 }
 
 
-export { fetchEventbriteCategories, createEventbriteEvent, getEventbriteOrganizationId, createEventTicketClass, fetchAllEvents }
+export { fetchEventbriteCategories, createEventbriteEvent, getEventbriteOrganizationId, createEventTicketClass, fetchAllEvents, fetchEventTicketClasses }
