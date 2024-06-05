@@ -35,10 +35,10 @@ export default function Header() {
       const querySnapShot = await querySnapshot("staff", email)
       if (querySnapShot.exists()) {
         setIsStaff(true)
-        console.log("Staff member exists");
+        // console.log("Staff member exists");
 
       } else {
-        console.log("Staff member does not exist");
+        // console.log("Staff member does not exist");
       }
     } catch (error) {
       console.error("Error checking if staff exists: ", error);

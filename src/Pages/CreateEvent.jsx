@@ -3,27 +3,52 @@ import {Form, Button, Card, Alert, Container} from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
 
 import { useForm } from 'react-hook-form'
-import { fetchEventbriteCategories, createEventbriteEvent } from "../apiEventBriteCalls"
+import { fetchEventbriteCategories, createEventbriteEvent, getEventbriteOrganizationId, createEventTicketClass } from "../apiEventBriteCalls"
 import CategoryOptions from "../Components/CategoryOptions"
-import {formatCreateEventData} from "../utils"
+import {formatCreateEventData, formatCreateTicketClassData} from "../utils"
 
-export default function createEvent () {
+export default function createEvent ({organizationId}) {
 
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const [catLoading, setCatLoading] = useState(false)
     const [categories, setCategories] = useState([])
+    
     const navigate = useNavigate() 
 
-    const {register, handleSubmit, watch, formState:{errors}} = useForm()
+    const {register, handleSubmit, watch, formState:{errors}, setValue} = useForm()
 
-    const watchIsFree = watch("formIsFree", "")
+    const watchIsFree = watch("isFree", "")
+    const watchIsDonation = watch("donation", "")
+
     const wholeNumRegex = /^(0|[1-9]\d*)$/
 
     useEffect(()=> {
       handleSetCategories()
   }, [])
 
+//  below useEffect resets form values depending on the value of true/false answers
+    useEffect(() => {
+        if (watchIsFree === "true") {
+            setValue('cost', ''); 
+            setValue('donation', ''); 
+        } else if (watchIsFree === "false" && watchIsDonation === "true") {
+            setValue('cost', '')
+        }
+    }, [watchIsFree, watchIsDonation]);
+
+
+  async function handleSetOrganisationId() {
+    setError('')
+    try { 
+      const idResponse = await getEventbriteOrganizationId()
+      setOrganizationId(idResponse)
+    } catch {
+        setError('Failed To fetch organisation id')
+    }
+  }
+
+  
   async function handleSetCategories() {
     setCatLoading(true)
     try { 
@@ -40,17 +65,25 @@ export default function createEvent () {
     
     async function onSubmit(data) {
         try {
-            console.log(data, "form data")
+            // console.log(data, "data")
             setError('')
             setLoading(true)
-            const body = formatCreateEventData(data)
-            console.log(body, "formatted body")
-            console.log(createEventbriteEvent(body))
+            const eventBody = formatCreateEventData(data)
+            // console.log(eventBody, "formatted data")
+            const createdEvent = await createEventbriteEvent(eventBody, organizationId)
+
+            const eventId = createdEvent.id
+
+            const ticketBody = formatCreateTicketClassData(data)
+            console.log(ticketBody)
+
+            const createdTicketClass = await createEventTicketClass(ticketBody, eventId)
             
-            // navigate("/")
+            navigate("/")
             
         } catch {
             console.log(error)
+            setError('failed to create event')
             
         } finally {
             setLoading(false)
@@ -79,60 +112,24 @@ export default function createEvent () {
                             {errors.description?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An event description is required</p>}
                         </Form.Group>
 
-                        <Form.Group id="category">
-                            <Form.Label htmlFor="formEventCategory">Event Category</Form.Label>
-                            <Form.Select id="formEventCategory" name="eventCategory" {...register('eventCategory', {required:true, })}>              
+                        <Form.Group id="EventCategory">
+                            <Form.Label htmlFor="category_id">Event Category</Form.Label>
+                            <Form.Select id="category_id" name="category_id" {...register('category_id', {required:true, })}>              
                               {catLoading ? <option>*Loading*</option> : <option disabled>-- please select a category --</option>}
                               <CategoryOptions categories={categories}/>
                             </Form.Select>
-                            {errors.eventCategory?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A category is required</p>}
-                        </Form.Group>
-
-                        <Form.Group id="venueName">
-                            <Form.Label htmlFor="venueNameInput">Venue name</Form.Label>
-                            <Form.Control id="venueNameInput" name="venueNameInput" type="text"  {...register('venueNameInput', {required:true, })}></Form.Control>
-                            {errors.venueNameInput?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An venue name is required</p>}
-                        </Form.Group>
-
-                        <Form.Group id="addressLine1">
-                            <Form.Label htmlFor="address_1">2nd line of address</Form.Label>
-                            <Form.Control id="address_1" name="address_1" type="text"  {...register('address_1', {required:true, })}></Form.Control>
-                            {errors.address_1?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Address line 1 is required</p>}
-                        </Form.Group>
-
-                        <Form.Group id="addressLine2">
-                            <Form.Label htmlFor="address_2">2nd line of address</Form.Label>
-                            <Form.Control id="address_2" name="address_2" type="text"  {...register('address_2', {required:true, })}></Form.Control>
-                            {errors.address_2?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Address line 2 is required</p>}
-                        </Form.Group>
-
-                        <Form.Group id="cityName">
-                            <Form.Label htmlFor="city">City/Town</Form.Label>
-                            <Form.Control id="city" name="city" type="text"  {...register('city', {required:true, })}></Form.Control>
-                            {errors.city?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A city is required</p>}
-                        </Form.Group>
-
-                        <Form.Group id="countyName">
-                            <Form.Label htmlFor="region">County</Form.Label>
-                            <Form.Control id="region" name="region" type="text"  {...register('region', {required:true, })}></Form.Control>
-                            {errors.region?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A region is required</p>}
-                        </Form.Group>
-
-                        <Form.Group id="postcode">
-                            <Form.Label htmlFor="postal_code">Postcode</Form.Label>
-                            <Form.Control id="postal_code" name="postal_code" type="text"  {...register('postal_code', {required:true, })}></Form.Control>
-                            {errors.postal_code?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A postcode is required</p>}
+                            {errors.category_id?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A category is required</p>}
                         </Form.Group>
 
                         <Form.Group id="startDate">
-                            <Form.Label htmlFor="formEventstartDate">Event start date</Form.Label>
-                            <Form.Control id="formEventstartDate" name="start" type="datetime-local" {...register('start', {required:true, })}></Form.Control>
+                            <Form.Label htmlFor="start">Event start date</Form.Label>
+                            <Form.Control id="start" name="start" type="datetime-local" {...register('start', {required:true, })}></Form.Control>
                             {errors.start?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >a start date and time is required</p>}
                         </Form.Group>
 
                         <Form.Group id="endDate">
-                            <Form.Label htmlFor="formEventEndDate">Event EndDate</Form.Label>
-                            <Form.Control id="formEventEndDate" name="end" type="datetime-local" {...register('end', {required:true, })}></Form.Control>
+                            <Form.Label htmlFor="end">Event EndDate</Form.Label>
+                            <Form.Control id="end" name="end" type="datetime-local"  {...register('end', {required:true, })}></Form.Control>
                             {errors.end?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An end date and time is required</p>}
                         </Form.Group>
 
@@ -143,26 +140,36 @@ export default function createEvent () {
                             {errors.capacity?.type==="pattern"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Should be a whole number</p>}
                         </Form.Group>
 
-                        <Form.Group id="isFree">
-                            <Form.Label htmlFor="formIsFree">Is the event free</Form.Label>
-                            <Form.Select id="formIsFree" name="formIsFree" {...register('formIsFree', {required:true})} >              
-                              <option disabled>Please Select</option>
-                              <option>yes</option>
-                              <option>no</option>
+                        <Form.Group id="inputIsFree">
+                            <Form.Label htmlFor="isFree">Is the event free</Form.Label>
+                            <Form.Select id="isFree" name="isFree" {...register('isFree', {required:true})} >              
+                              <option>Please Select</option>
+                              <option>true</option>
+                              <option>false</option>
                             </Form.Select>
-                            {errors.formIsFree?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Free event status is required</p>}
+                            {errors.isFree?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Free event status is required</p>}
                         </Form.Group>
                         
-                        { watchIsFree === "no"  && (
-                            <Form.Group id="Cost">
+                        { watchIsFree === "false"  && (
+                        <Form.Group id="selectDonation">
+                            <Form.Label htmlFor="donation">Is the event pay what you feel</Form.Label>
+                            <Form.Select id="donation" name="donation" {...register('donation', {required:true})} >              
+                              <option>Please Select</option>
+                              <option>true</option>
+                              <option>false</option>
+                            </Form.Select>
+                            {errors.donation?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Donation event status is required</p>}
+                        </Form.Group>)}
+
+                        {watchIsDonation === "false" && watchIsFree === "false" && (
+                            <Form.Group id="costInput">
                                 <Form.Label htmlFor="cost">Cost per ticket in £</Form.Label>
                                 <Form.Control id="cost" name="cost" type="number" min="0" {...register('cost', {required:true, pattern:wholeNumRegex})}></Form.Control>
                                 {errors.cost?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Event cost is required</p>}
                                 {errors.cost?.type==="pattern"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Cost should be a whole number</p>}
                             </Form.Group>) 
                         }
-                        
-                            
+                          
                         <Button disabled={loading} className="w-100 mt-4" type="submit" >Create Event</Button>
                     
                     </Form>
@@ -171,3 +178,43 @@ export default function createEvent () {
         </Container>
     )
 }
+
+
+
+// COMPONENTS FOR VENUE
+
+/* <Form.Group id="venueName">
+        <Form.Label htmlFor="venueNameInput">Venue name</Form.Label>
+        <Form.Control id="venueNameInput" name="venueNameInput" type="text"  {...register('venueNameInput', {required:true, })}></Form.Control>
+        {errors.venueNameInput?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An venue name is required</p>}
+    </Form.Group>
+
+    <Form.Group id="addressLine1">
+        <Form.Label htmlFor="address_1">2nd line of address</Form.Label>
+        <Form.Control id="address_1" name="address_1" type="text"  {...register('address_1', {required:true, })}></Form.Control>
+        {errors.address_1?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Address line 1 is required</p>}
+    </Form.Group>
+
+    <Form.Group id="addressLine2">
+        <Form.Label htmlFor="address_2">2nd line of address</Form.Label>
+        <Form.Control id="address_2" name="address_2" type="text"  {...register('address_2', {required:true, })}></Form.Control>
+        {errors.address_2?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Address line 2 is required</p>}
+    </Form.Group>
+
+    <Form.Group id="cityName">
+        <Form.Label htmlFor="city">City/Town</Form.Label>
+        <Form.Control id="city" name="city" type="text"  {...register('city', {required:true, })}></Form.Control>
+        {errors.city?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A city is required</p>}
+    </Form.Group>
+
+    <Form.Group id="countyName">
+        <Form.Label htmlFor="region">County</Form.Label>
+        <Form.Control id="region" name="region" type="text"  {...register('region', {required:true, })}></Form.Control>
+        {errors.region?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A region is required</p>}
+    </Form.Group>
+
+    <Form.Group id="postcode">
+        <Form.Label htmlFor="postal_code">Postcode</Form.Label>
+        <Form.Control id="postal_code" name="postal_code" type="text"  {...register('postal_code', {required:true, })}></Form.Control>
+        {errors.postal_code?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A postcode is required</p>}
+    </Form.Group> */
