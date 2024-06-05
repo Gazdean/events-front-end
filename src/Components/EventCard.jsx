@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Card, Col, Container } from 'react-bootstrap'
 import { fetchEventTicketClasses } from '../apiEventBriteCalls'
+import SignUpModal from './SignUpModal'
 
 export default function EventCard({event}) {
 
@@ -10,7 +11,12 @@ export default function EventCard({event}) {
     const [dateInfo, setDateInfo] = useState({})
     const [timeInfo, setTimeInfo] = useState({})
     const [error, SetError] = useState("")
-    console.log(event)
+
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+  
+
 
     useEffect(()=> {
         handleFetchTickets()
@@ -63,7 +69,8 @@ export default function EventCard({event}) {
             {loading? <p>--loading--</p> : eventTickets.free ? <p style={{color:"green"}}>free event</p> : eventTickets.donation ? <p style={{color:"blue"}}>donation</p> : <p style={{color:"red"}}>Price: {ticketCost}</p>}
             {loading? <p>--loading--</p> : <p style={{color:"green"}}>Tickets Available: {eventTickets.quantity_total > 5 ? eventTickets.quantity_total : 'Nearly Sold Out!!'}</p> }
         </Card>
-        <Button href="#" variant="primary">Sign up to event</Button>   
+        <Button onClick={handleShow} variant="primary">Sign up to event</Button>
+        <SignUpModal setShow={setShow} show={show} />   
     </Col>
   )
 }
