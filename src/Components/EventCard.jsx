@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Card, Col, Container } from 'react-bootstrap'
+import { Button, Card, Col, Image } from 'react-bootstrap'
 import { fetchEventTicketClasses } from '../apiEventBriteCalls'
 import { Link } from 'react-router-dom'
 import { handleFormatDate } from '../utils'
@@ -34,22 +34,25 @@ export default function EventCard({event, images}) {
     }
 
   return (
+    <>
+        {loading? <p>--loading--</p> :
+            <Col sm={2} className="w-100 border m-2 ms-0 p-3" variant="primary" style={{maxWidth:"400px"}}>
+                <h2 >{event.name.text}</h2>
+                
+                <div>
+                    <p>Date: {dateInfo.startDate}</p>
+                    <p>Time: {dateInfo.startTime} to {dateInfo.endTime}</p>
+                </div>
+                <Image src={images[event.category_id].thumb} alt={"generic event"}/>
+                <p >{`${event.description.text.slice(0, 100)}.........`}</p>
 
-    <Col sm={2} className="w-100 border m-2 ms-0 p-3" variant="primary" style={{maxWidth:"400px"}}>
-        <h2 >{event.name.text}</h2>
-        
-        <div>
-            <p>Date: {dateInfo.startDate}</p>
-            <p>Time: {dateInfo.startTime} to {dateInfo.endTime}</p>
-        </div>
-        <img src={images[event.category_id].thumb} alt={"generic event"}/>
-        <p >{`${event.description.text.slice(0, 100)}.........`}</p>
-
-        <Card className= "mb-3">
-            {loading? <p>--loading--</p> : eventTickets.free ? <p style={{color:"green"}}>free event</p> : eventTickets.donation ? <p style={{color:"blue"}}>donation</p> : <p style={{color:"red"}}>Price: {ticketCost}</p>}
-            {loading? <p>--loading--</p> : <p style={{color:"green"}}>Tickets Available: {eventTickets.quantity_total < 5 && eventTickets.quantity_total > 0 ? 'Nearly Sold Out!!' : eventTickets.quantity_total == 0 ? 'Sold Out!!!!!' : eventTickets.quantity_total }</p> }
-        </Card>
-        <Link to={`event/${event.id}`}><Button variant="primary">View More</Button></Link>
-    </Col>
+                <Card className= "mb-3">
+                    {eventTickets.free ? <p style={{color:"green"}}>free event</p> : eventTickets.donation ? <p style={{color:"blue"}}>donation</p> : <p style={{color:"red"}}>Price: {ticketCost}</p>}
+                    <p style={{color:"green"}}>Tickets Available: {eventTickets.quantity_total < 5 && eventTickets.quantity_total > 0 ? 'Nearly Sold Out!!' : eventTickets.quantity_total == 0 ? 'Sold Out!!!!!' : eventTickets.quantity_total }</p> 
+                </Card>
+                <Link to={`event/${event.id}`}><Button variant="primary">View More</Button></Link>
+            </Col>
+    }
+    </>
   )
 }

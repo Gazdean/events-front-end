@@ -21,6 +21,7 @@ export function formatCreateEventData(data) {
 }
 
 export function formatCreateTicketClassData(data) {
+    console.log('data in call', data)
     const costInPence = data.cost *100
     const body = {
         ticket_class: {
@@ -36,11 +37,11 @@ export function formatCreateTicketClassData(data) {
         if (data.isFree === "true") {
             body.ticket_class.cost= "GBP,0"
             body.ticket_class.free= true
-        } else if (data.isFree === "false" && data.donation === "false") {
+        } else if (data.donation === "false") {
             body.ticket_class.cost= `GBP,${costInPence}`
             body.ticket_class.free= false
             body.ticket_class.donation= false
-        } else if (data.isFree === "false" && data.donation === "true") {
+        } else if (data.donation === "true") {
             body.ticket_class.free= false
             body.ticket_class.donation= true
             

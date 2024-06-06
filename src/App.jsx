@@ -89,7 +89,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/create-event" element={<UserPrivateRoute><CreateEvent organizationId={organizationId} /></UserPrivateRoute>}/>
           <Route path="/profile" element={<UserPrivateRoute> <Profile /> </UserPrivateRoute>}/>
-          <Route path="/event/:event_id" element={<IndividualEvent organizationId={organizationId} />}/>
+          <Route path="/event/:event_id" element={<IndividualEvent organizationId={organizationId} images={images}/>}/>
         </Routes>
       </Container>
     </>
