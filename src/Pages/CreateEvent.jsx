@@ -11,6 +11,7 @@ export default function createEvent ({organizationId}) {
 
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
+    const [creatingEvent, setCreatingEvent] = useState(false)
     const [catLoading, setCatLoading] = useState(false)
     const [categories, setCategories] = useState([])
     
@@ -59,10 +60,12 @@ export default function createEvent ({organizationId}) {
   }
     
     async function onSubmit(data) {
+        setError('')
+        setLoading(true)
+        setCreatingEvent(true)
         try {
             // console.log(data, "data")
-            setError('')
-            setLoading(true)
+           
             const eventBody = formatCreateEventData(data)
             // console.log(eventBody, "formatted data")
             const createdEvent = await createEventbriteEvent(eventBody, organizationId)
@@ -82,6 +85,7 @@ export default function createEvent ({organizationId}) {
             
         } finally {
             setLoading(false)
+            setCreatingEvent(false)
         }
     }
 
@@ -92,6 +96,7 @@ export default function createEvent ({organizationId}) {
                 <Card.Body >
                     <h2 className="text-center mb-4">Create an event</h2>
                     {error && <Alert variant="danger">{error}</Alert>}
+                    {creatingEvent && <Alert variant="primary">Creating your event</Alert>}
 
                     <Form onSubmit={handleSubmit(onSubmit)} noValidate={true}>
 
@@ -124,7 +129,7 @@ export default function createEvent ({organizationId}) {
 
                         <Form.Group id="endDate">
                             <Form.Label htmlFor="end">Event EndDate</Form.Label>
-                            <Form.Control id="end" name="end" type="datetime-local"  {...register('end', {required:true, })}></Form.Control>
+                            <Form.Control id="end" name="end" type="datetime-local" {...register('end', {required:true, })}></Form.Control>
                             {errors.end?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An end date and time is required</p>}
                         </Form.Group>
 
@@ -163,8 +168,7 @@ export default function createEvent ({organizationId}) {
                                 {errors.cost?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Event cost is required</p>}
                                 {errors.cost?.type==="pattern"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Cost should be a whole number</p>}
                             </Form.Group>) 
-                        }
-                          
+                        }                      
                         <Button disabled={loading} className="w-100 mt-4" type="submit" >Create Event</Button>
                     
                     </Form>
