@@ -14,7 +14,7 @@ import { Container } from "react-bootstrap";
 import UserPrivateRoute from "./Components/UserPrivateRoute";
 import "./App.css";
 
-import { getEventbriteOrganizationId } from "./apiEventBriteCalls";
+import { fetchEventbriteCategories, getEventbriteOrganizationId } from "./apiEventBriteCalls";
 import { useEffect, useState } from "react";
 import IndividualEvent from "./Pages/IndividualEvent";
 import {fetchUnsplashCollection} from './apiUnsplashCalls'
@@ -24,17 +24,21 @@ function App() {
   const [error, setError] = useState("");
   const [images, setImages] = useState({})
   const [loadingImages, setLoadingImages] = useState(false)
+
+    const [catLoading, setCatLoading] = useState(false)
+    const [categories, setCategories] = useState([])
   
   useEffect(() => {
     handleSetOrganisationId();
     handleFetchImages()
+    handleSetCategories()
   }, []);
 
   async function handleFetchImages() {
     setLoadingImages(true)
     try {
       const responseImages = await fetchUnsplashCollection()
-      console.log('response images', responseImages)
+      // console.log('response images', responseImages)
       const imageObject = {}
       responseImages.forEach(image=> {
         if (image.id === 'EKpByvjvioU') {imageObject['103']=image.urls}
@@ -71,6 +75,27 @@ function App() {
     }
   }
 
+  async function handleSetCategories() {
+    setCatLoading(true)
+    try { 
+        const data = await fetchEventbriteCategories()
+        const categories = data.categories
+        const filteredCategories = categories.filter(category=>{
+            const wantedCategories = [103,110,113,105,104,108,107,102,111,115,106,199]
+            if (wantedCategories.includes(Number(category.id))) {
+                return categories
+            }
+        })
+        setCategories(filteredCategories)
+        setCatLoading(false)
+    } catch {
+        console.log(error, ' category error')
+        setError('Failed To Load Categories')
+    } finally {
+        setCatLoading(false)
+    }
+  }
+
   return (
     <>
       <Header />
@@ -82,12 +107,12 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<Landing organizationId={organizationId} images={images} loadingImages={loadingImages}/>}
+            element={<Landing organizationId={organizationId} images={images} loadingImages={loadingImages} catLoading={catLoading} categories={categories} />}
           />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/join" element={<Join />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/create-event" element={<UserPrivateRoute><CreateEvent organizationId={organizationId} /></UserPrivateRoute>}/>
+          <Route path="/create-event" element={<UserPrivateRoute><CreateEvent organizationId={organizationId} catLoading={catLoading} categories={categories} /></UserPrivateRoute>}/>
           <Route path="/profile" element={<UserPrivateRoute> <Profile /> </UserPrivateRoute>}/>
           <Route path="/event/:event_id" element={<IndividualEvent organizationId={organizationId} images={images}/>}/>
         </Routes>

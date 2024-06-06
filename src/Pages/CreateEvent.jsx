@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react"
 import {Form, Button, Card, Alert, Container} from "react-bootstrap"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 import { useForm } from 'react-hook-form'
-import { fetchEventbriteCategories, createEventbriteEvent, createEventTicketClass } from "../apiEventBriteCalls"
+import { createEventbriteEvent, createEventTicketClass } from "../apiEventBriteCalls"
 import CategoryOptions from "../Components/CategoryOptions"
 import {formatCreateEventData, formatCreateTicketClassData} from "../utils"
 
-export default function createEvent ({organizationId}) {
+export default function createEvent ({organizationId, catLoading, categories}) {
 
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const [creatingEvent, setCreatingEvent] = useState(false)
-    const [catLoading, setCatLoading] = useState(false)
-    const [categories, setCategories] = useState([])
     
     const navigate = useNavigate() 
 
@@ -24,10 +22,6 @@ export default function createEvent ({organizationId}) {
 
     const wholeNumRegex = /^(0|[1-9]\d*)$/
 
-    useEffect(()=> {
-      handleSetCategories()
-  }, [])
-
 //  below useEffect resets form values depending on the value of true/false answers
     useEffect(() => {
         if (watchIsFree === "true") {
@@ -37,27 +31,6 @@ export default function createEvent ({organizationId}) {
             setValue('cost', '')
         }
     }, [watchIsFree, watchIsDonation]);
-  
-  async function handleSetCategories() {
-    setCatLoading(true)
-    try { 
-        const data = await fetchEventbriteCategories()
-        const categories = data.categories
-        const filteredCategories = categories.filter(category=>{
-            const wantedCategories = [103,110,113,105,104,108,107,102,111,115,106,199]
-            if (wantedCategories.includes(Number(category.id))) {
-                return categories
-            }
-        })
-        setCategories(filteredCategories)
-        setCatLoading(false)
-    } catch {
-        console.log(error, ' category error')
-        setError('Failed To Load Categories')
-    } finally {
-        setCatLoading(false)
-    }
-  }
     
     async function onSubmit(data) {
         setError('')
