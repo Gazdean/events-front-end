@@ -1,19 +1,25 @@
 import axios from "axios";
 
 const unsplashToken = import.meta.env.VITE_UNSPLASH_API_KEY
+const baseUrl = 'https://api.unsplash.com/'
+const collectionId = 'huoJ2ZcVdNQ'
 
-async function fetchUnsplashImage() {
-  const url = 'https://www.eventbriteapi.com/v3/categories/';
-  const headers = {
-    'Authorization': `Bearer ${eventbriteToken}`,
-    'Content-Type': 'application/json'
-  };
-
+const fetchUnsplashCollection = async () => {
   try {
-    const response = await axios.get(url, { headers });
-    return response.data;
+      const response = await axios.get(`${baseUrl}collections/${collectionId}/photos`, {
+          params :{
+            page: 1,
+            per_page: 14
+          },
+          headers: {
+              Authorization: `Client-ID ${unsplashToken}`
+          }
+      });
+      console.log(response.data)
+      return response.data;
   } catch (error) {
-    console.error('Error fetching categories:', error);
-    throw error;
+      throw error
   }
-}
+};
+
+export {fetchUnsplashCollection}

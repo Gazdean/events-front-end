@@ -27,7 +27,6 @@ export default function EventCard({event}) {
         setloading(true)
         try {
             const tickets = await fetchEventTicketClasses(eventId)
-            console.log('tickets', tickets[0].quantity_total )
             setEventTickets(tickets[0])
             if (tickets[0].cost) setTicketCost(tickets[0].cost.display)
             handleFormatDate()
