@@ -4,17 +4,18 @@ import { fetchEventTicketClasses } from '../apiEventBriteCalls'
 import { Link } from 'react-router-dom'
 import { handleFormatDate } from '../utils'
 
-export default function EventCard({event}) {
+export default function EventCard({event, images}) {
 
     const [ eventTickets, setEventTickets ] = useState({})
     const [ ticketCost, setTicketCost] = useState('')
     const [loading, setloading] = useState(false)
     const [dateInfo, setDateInfo] = useState({})
-    const [error, setError] = useState("")
+    const [error, setError] = useState('')
 
     useEffect(()=> {
         handleFetchTickets(event)
         setDateInfo(handleFormatDate(event))
+        
     }, [])
 
     async function handleFetchTickets(event) {
@@ -41,6 +42,7 @@ export default function EventCard({event}) {
             <p>Date: {dateInfo.startDate}</p>
             <p>Time: {dateInfo.startTime} to {dateInfo.endTime}</p>
         </div>
+        <img src={images[event.category_id].thumb} alt={"generic event"}/>
         <p >{`${event.description.text.slice(0, 100)}.........`}</p>
 
         <Card className= "mb-3">

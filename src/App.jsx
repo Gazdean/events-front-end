@@ -22,7 +22,8 @@ import {fetchUnsplashCollection} from './apiUnsplashCalls'
 function App() {
   const [organizationId, setOrganizationId] = useState("");
   const [error, setError] = useState("");
-  const [images, setImages] = useState([])
+  const [images, setImages] = useState({})
+  const [loadingImages, setLoadingImages] = useState(false)
   
   useEffect(() => {
     handleSetOrganisationId();
@@ -30,16 +31,33 @@ function App() {
   }, []);
 
   async function handleFetchImages() {
+    setLoadingImages(true)
     try {
       const responseImages = await fetchUnsplashCollection()
-      setImages(responseImages)
-      console.log(responseImages)
+      console.log('response images', responseImages)
+      const imageObject = {}
+      responseImages.forEach(image=> {
+        if (image.id === 'EKpByvjvioU') {imageObject['103']=image.urls}
+        else if (image.id === 'snnhGYNqm44') {imageObject['110']=image.urls}
+        else if (image.id === 'Zyx1bK9mqmA') {imageObject['113']=image.urls}
+        else if (image.id === '2PODhmrvLik') {imageObject['107']=image.urls}
+        else if (image.id === 'yKc4YuGMPC4') {imageObject['105']=image.urls}
+        else if (image.id === '2uwFEAGUm6E') {imageObject['104']=image.urls}
+        else if (image.id === 'gPnHi8AmO5k') {imageObject['199']=image.urls}
+        else if (image.id === 'aQYgUYwnCsM') {imageObject['102']=image.urls}
+        else if (image.id === 'tKN1WXrzQ3s') {imageObject.landing=image.urls}
+        else if (image.id === '7uSrOyY1U0I') {imageObject['113']=image.urls}
+        else if (image.id === '9QTQFihyles') {imageObject['115']=image.urls}
+        else if (image.id === 'FO4mQZi1c0M') {imageObject['106']=image.urls}
+        else if (image.id === 'mQVWb7kUoOE') {imageObject['108']=image.urls}
+      })
 
+      setImages(imageObject)
     } catch(error) {
         console.log(error)
         setError(error)
     } finally {
-
+      setLoadingImages(false)
     }
   }
   
@@ -64,7 +82,7 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<Landing organizationId={organizationId} />}
+            element={<Landing organizationId={organizationId} images={images} loadingImages={loadingImages}/>}
           />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/join" element={<Join />} />

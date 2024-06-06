@@ -9,7 +9,7 @@ const fetchUnsplashCollection = async () => {
       const response = await axios.get(`${baseUrl}collections/${collectionId}/photos`, {
           params :{
             page: 1,
-            per_page: 14
+            per_page: 20
           },
           headers: {
               Authorization: `Client-ID ${unsplashToken}`
@@ -18,6 +18,7 @@ const fetchUnsplashCollection = async () => {
       console.log(response.data)
       return response.data;
   } catch (error) {
+      console.log(error)
       throw error
   }
 };
