@@ -7,31 +7,30 @@ import Modal from 'react-bootstrap/Modal';
 export default function SignUpModal({setShow, show}) {
     const [counter, setCounter] = useState(25)
 
-    const handleClose = () => setShow(false);
-
     useEffect(()=>{ 
         if(counter > 0 && show) {
             setTimeout(()=> {
                 setCounter(prevCounter => prevCounter - 1);
             },1000)
         } else if(counter === 0) {
-            handleCountDownZero()
+            handleClose()
         }
     },[counter, show])
 
-    function handleCountDownZero() {
-        setCounter(25)
+    function handleClose() {
+        
         setShow(false)
+        setTimeout(()=>{
+           setCounter(25)
+        }, 1000)
+       
     }
 
-    function handleCloseModal() {
-        setCounter(25)
-        setShow(false)
-    }
+    // function handleCloseModal() {
+    //     setCounter(25)
+    //     setShow(false)
+    // }
 
-    
-
-  
     return (
       <>
         <Modal
@@ -52,7 +51,7 @@ export default function SignUpModal({setShow, show}) {
           </Modal.Body>
           <Button variant="primary">Complete Sign Up</Button>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>
+            <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
             
