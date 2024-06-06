@@ -46,7 +46,7 @@ export default function SignUpModal({setShow, show}) {
           </Modal.Body>
           <Button variant="primary">Complete Sign Up</Button>
           <Modal.Footer>
-            <Button diasble={!show} variant="secondary" onClick={handleClose}>
+            <Button diasble={`${!show}`} variant="secondary" onClick={handleClose}>
               Close
             </Button>
             

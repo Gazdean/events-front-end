@@ -20,6 +20,7 @@ async function fetchEventbriteCategories() {
 }
 
 async function createEventbriteEvent(eventData, organizationId) {
+  console.log('event data',eventData)
 
   const url = `${baseUrl}organizations/${organizationId}/events/`
 
