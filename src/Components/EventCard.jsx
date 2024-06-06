@@ -50,7 +50,7 @@ export default function EventCard({event, images}) {
                     {eventTickets.free ? <p style={{color:"green"}}>free event</p> : eventTickets.donation ? <p style={{color:"blue"}}>donation</p> : <p style={{color:"red"}}>Price: {ticketCost}</p>}
                     <p style={{color:"green"}}>Tickets Available: {eventTickets.quantity_total < 5 && eventTickets.quantity_total > 0 ? 'Nearly Sold Out!!' : eventTickets.quantity_total == 0 ? 'Sold Out!!!!!' : eventTickets.quantity_total }</p> 
                 </Card>
-                <Link to={`event/${event.id}`}><Button variant="primary">View More</Button></Link>
+                <Link to={`event/${event.id}`}><Button variant="primary">More Info</Button></Link>
             </Col>
     }
     </>
