@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { fetchAllEvents } from '../apiEventBriteCalls'
 import EventCard from './EventCard'
-import { setLogLevel } from 'firebase/app'
 import { Container, Row } from 'react-bootstrap'
 
 export default function EventView({organizationId}) {
@@ -12,6 +11,7 @@ export default function EventView({organizationId}) {
   useEffect(()=>{
     if(organizationId) {
       handleFetchEvents()
+
     }
   }, [organizationId])
 
@@ -20,7 +20,6 @@ export default function EventView({organizationId}) {
     try {
       const eventsObject = await fetchAllEvents(organizationId)
       const events = eventsObject.events
-      console.log(events, 'events')
       
       setEvents(events)
     }catch(error) {

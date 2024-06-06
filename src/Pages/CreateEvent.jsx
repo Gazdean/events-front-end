@@ -3,7 +3,7 @@ import {Form, Button, Card, Alert, Container} from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
 
 import { useForm } from 'react-hook-form'
-import { fetchEventbriteCategories, createEventbriteEvent, getEventbriteOrganizationId, createEventTicketClass } from "../apiEventBriteCalls"
+import { fetchEventbriteCategories, createEventbriteEvent, createEventTicketClass } from "../apiEventBriteCalls"
 import CategoryOptions from "../Components/CategoryOptions"
 import {formatCreateEventData, formatCreateTicketClassData} from "../utils"
 
@@ -36,25 +36,20 @@ export default function createEvent ({organizationId}) {
             setValue('cost', '')
         }
     }, [watchIsFree, watchIsDonation]);
-
-
-  async function handleSetOrganisationId() {
-    setError('')
-    try { 
-      const idResponse = await getEventbriteOrganizationId()
-      setOrganizationId(idResponse)
-    } catch {
-        setError('Failed To fetch organisation id')
-    }
-  }
-
   
   async function handleSetCategories() {
     setCatLoading(true)
     try { 
-      const data = await fetchEventbriteCategories()
-      setCategories(data.categories)
-      setCatLoading(false)
+        const data = await fetchEventbriteCategories()
+        const categories = data.categories
+        const filteredCategories = categories.filter(category=>{
+            const wantedCategories = [103,110,113,105,104,108,107,102,111,115,106,199]
+            if (wantedCategories.includes(Number(category.id))) {
+                return categories
+            }
+        })
+        setCategories(filteredCategories)
+        setCatLoading(false)
     } catch {
         console.log(error, ' category error')
         setError('Failed To Load Categories')
