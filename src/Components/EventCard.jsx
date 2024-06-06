@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Card, Col, Container } from 'react-bootstrap'
 import { fetchEventTicketClasses } from '../apiEventBriteCalls'
-import SignUpModal from './SignUpModal'
+import { Link } from 'react-router-dom'
+import { handleFormatDate } from '../utils'
 
 export default function EventCard({event}) {
 
@@ -9,48 +10,26 @@ export default function EventCard({event}) {
     const [ ticketCost, setTicketCost] = useState('')
     const [loading, setloading] = useState(false)
     const [dateInfo, setDateInfo] = useState({})
-    const [timeInfo, setTimeInfo] = useState({})
-    const [error, SetError] = useState("")
-
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-  
-
+    const [error, setError] = useState("")
 
     useEffect(()=> {
-        handleFetchTickets()
+        handleFetchTickets(event)
+        setDateInfo(handleFormatDate(event))
     }, [])
 
-    async function handleFetchTickets() {
+    async function handleFetchTickets(event) {
         const eventId = event.id
         setloading(true)
         try {
             const tickets = await fetchEventTicketClasses(eventId)
             setEventTickets(tickets[0])
             if (tickets[0].cost) setTicketCost(tickets[0].cost.display)
-            handleFormatDate()
-
         } catch (error){
             console.log('ERORR: ', error)
-            SetError('failed to fetch event tickets')
-
+            setError('failed to fetch event tickets')
         } finally {
             setloading(false)
         }
-    }
-
-    function handleFormatDate() {
-        const startString =  event.start.local
-        const endString = event.end.local
-
-        const startDate = `${startString.slice(8,10)}-${startString.slice(5,7)}-${startString.slice(0, 4)}`
-        const endDate = `${endString.slice(8,10)}-${endString.slice(5,7)}-${endString.slice(0, 4)}`
-        setDateInfo({start: startDate, end: endDate})
-
-        const startTime = startString.slice(11, 16)
-        const endTime = endString.slice(11, 16)
-        setTimeInfo({start: startTime, end: endTime})
     }
 
   return (
@@ -59,17 +38,16 @@ export default function EventCard({event}) {
         <h2 >{event.name.text}</h2>
         
         <div>
-            <p>Date: {dateInfo.start}</p>
-            <p>Time: {timeInfo.start} to {timeInfo.end}</p>
+            <p>Date: {dateInfo.startDate}</p>
+            <p>Time: {dateInfo.startTime} to {dateInfo.endTime}</p>
         </div>
-        <p >{event.description.text}</p>
+        <p >{`${event.description.text.slice(0, 100)}.........`}</p>
 
         <Card className= "mb-3">
             {loading? <p>--loading--</p> : eventTickets.free ? <p style={{color:"green"}}>free event</p> : eventTickets.donation ? <p style={{color:"blue"}}>donation</p> : <p style={{color:"red"}}>Price: {ticketCost}</p>}
-            {loading? <p>--loading--</p> : <p style={{color:"green"}}>Tickets Available: {eventTickets.quantity_total > 5 ? eventTickets.quantity_total : 'Nearly Sold Out!!'}</p> }
+            {loading? <p>--loading--</p> : <p style={{color:"green"}}>Tickets Available: {eventTickets.quantity_total < 5 && eventTickets.quantity_total > 0 ? 'Nearly Sold Out!!' : eventTickets.quantity_total == 0 ? 'Sold Out!!!!!' : eventTickets.quantity_total }</p> }
         </Card>
-        <Button onClick={handleShow} variant="primary">Sign up to event</Button>
-        <SignUpModal setShow={setShow} show={show} />   
+        <Link to={`event/${event.id}`}><Button variant="primary">View More</Button></Link>
     </Col>
   )
 }

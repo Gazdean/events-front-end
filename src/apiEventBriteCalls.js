@@ -56,6 +56,19 @@ async function fetchAllEvents(organizationId) {
   }
 }
 
+async function fetchIndividualEvent(eventId) {
+
+  const url = `${baseUrl}/events/${eventId}/`;
+
+  try {
+    const response = await axios.get(url, { headers: headers });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching event:', error.response ? error.response.data : error.message);
+    throw error
+  }
+}
+
 async function fetchEventTicketClasses(eventId) {
   const url = `${baseUrl}events/${eventId}/ticket_classes/`;
 
@@ -82,4 +95,12 @@ async function getEventbriteOrganizationId() {
 }
 
 
-export { fetchEventbriteCategories, createEventbriteEvent, getEventbriteOrganizationId, createEventTicketClass, fetchAllEvents, fetchEventTicketClasses }
+export { 
+  fetchEventbriteCategories, 
+  createEventbriteEvent, 
+  getEventbriteOrganizationId, 
+  createEventTicketClass, 
+  fetchAllEvents, 
+  fetchEventTicketClasses,
+  fetchIndividualEvent
+}

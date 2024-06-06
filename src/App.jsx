@@ -16,15 +16,33 @@ import "./App.css";
 
 import { getEventbriteOrganizationId } from "./apiEventBriteCalls";
 import { useEffect, useState } from "react";
+import IndividualEvent from "./Pages/IndividualEvent";
+import {fetchUnsplashCollection} from './apiUnsplashCalls'
 
 function App() {
   const [organizationId, setOrganizationId] = useState("");
   const [error, setError] = useState("");
-
+  const [images, setImages] = useState([])
+  
   useEffect(() => {
     handleSetOrganisationId();
+    handleFetchImages()
   }, []);
 
+  async function handleFetchImages() {
+    try {
+      const responseImages = await fetchUnsplashCollection()
+      setImages(responseImages)
+      console.log(responseImages)
+
+    } catch(error) {
+        console.log(error)
+        setError(error)
+    } finally {
+
+    }
+  }
+  
   async function handleSetOrganisationId() {
     setError("");
     try {
@@ -51,22 +69,9 @@ function App() {
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/join" element={<Join />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route
-            path="/create-event"
-            element={
-              <UserPrivateRoute>
-                <CreateEvent organizationId={organizationId} />
-              </UserPrivateRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <UserPrivateRoute>
-                <Profile />
-              </UserPrivateRoute>
-            }
-          />
+          <Route path="/create-event" element={<UserPrivateRoute><CreateEvent organizationId={organizationId} /></UserPrivateRoute>}/>
+          <Route path="/profile" element={<UserPrivateRoute> <Profile /> </UserPrivateRoute>}/>
+          <Route path="/event/:event_id" element={<IndividualEvent organizationId={organizationId} />}/>
         </Routes>
       </Container>
     </>
