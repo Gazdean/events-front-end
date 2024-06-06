@@ -26,11 +26,6 @@ export default function SignUpModal({setShow, show}) {
        
     }
 
-    // function handleCloseModal() {
-    //     setCounter(25)
-    //     setShow(false)
-    // }
-
     return (
       <>
         <Modal
@@ -42,7 +37,7 @@ export default function SignUpModal({setShow, show}) {
           <Modal.Header closeButton>
             <Modal.Title>Sign Up To Event</Modal.Title>
           </Modal.Header>
-          <h2 style={{width:'80px', border: counter <= 10 ? '3px solid red': counter <= 20 ? '3px solid orange ' : '3px solid green', borderRadius: '30px'}}>{counter}</h2>
+          <h2>{counter}</h2>
           <Modal.Body> 
             Your ticket will be held for 60 seconds<br/>If you close this form before completing your sign up your ticket will be released and you will need to sign up from the event screen again
           </Modal.Body>
@@ -51,7 +46,7 @@ export default function SignUpModal({setShow, show}) {
           </Modal.Body>
           <Button variant="primary">Complete Sign Up</Button>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button diasble={!show} variant="secondary" onClick={handleClose}>
               Close
             </Button>
             

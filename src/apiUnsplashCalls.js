@@ -2,7 +2,7 @@ import axios from "axios";
 
 const unsplashToken = import.meta.env.VITE_UNSPLASH_API_KEY
 const baseUrl = 'https://api.unsplash.com/'
-const collectionId = 'huoJ2ZcVdNQ'
+const collectionId = '001scadf0vU'
 
 const fetchUnsplashCollection = async () => {
   try {

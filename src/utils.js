@@ -1,3 +1,4 @@
+
 export function formatCreateEventData(data) {
     const body = {
         event :{
@@ -47,4 +48,19 @@ export function formatCreateTicketClassData(data) {
     }
   return body
   
+}
+
+export function handleFormatDate(event) {
+    const startString =  event.start.local
+    const endString = event.end.local
+
+    const startDate = `${startString.slice(8,10)}-${startString.slice(5,7)}-${startString.slice(0, 4)}`
+    const endDate = `${endString.slice(8,10)}-${endString.slice(5,7)}-${endString.slice(0, 4)}`
+    
+    const startTime = startString.slice(11, 16)
+    const endTime = endString.slice(11, 16)
+
+    const dateObj = {startDate, endDate, startTime, endTime}
+
+    return dateObj
 }
