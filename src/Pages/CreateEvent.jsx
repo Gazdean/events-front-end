@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { createEventbriteEvent, createEventTicketClass } from "../apiEventBriteCalls"
 import CategoryOptions from "../Components/CategoryOptions"
 import {formatCreateEventData, formatCreateTicketClassData} from "../utils"
+import ReturnToEventsButton from "../Components/ReturnToEventsButton"
 
 export default function createEvent ({organizationId, catLoading, categories}) {
 
@@ -65,7 +66,7 @@ export default function createEvent ({organizationId, catLoading, categories}) {
     return (
         
         <Container className="w-100" style={{maxWidth:"400px"}}>
-            <Card >
+            <Card className="mb-4">
                 <Card.Body >
                     <h2 className="text-center mb-4">Create an event</h2>
                     {error && <Alert variant="danger">{error}</Alert>}
@@ -147,6 +148,7 @@ export default function createEvent ({organizationId, catLoading, categories}) {
                     </Form>
                 </Card.Body>
             </Card>
+            <ReturnToEventsButton string={"Cancel And Return To Events"}/>
         </Container>
     )
 }
