@@ -58,6 +58,7 @@ export default function EventView({organizationId, images, catLoading, categorie
       <Row className="mt-5">
         {loading ? <p>--loading--</p> : filteredEvents.map(event=><EventCard key={event.id} event={event} images={images} filteredCat={filteredCat}/>)}
       </Row>
+      {events.length && !filteredEvents.length ? <Row><h2>Sorry<br/> There Are No Events Of This Type!</h2></Row> : null}
       {error && <Alert variant="danger">{error}</Alert>}
     </Container >
   )
