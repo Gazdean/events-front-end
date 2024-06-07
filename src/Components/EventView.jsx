@@ -25,7 +25,6 @@ export default function EventView({organizationId, images, catLoading, categorie
   }, [events, filteredCat])
 
   function handleFilterEvents(events) {
-    console.log(events)
     if (!filteredCat) {
       setFilteredEvents(events);
     } else {
@@ -45,12 +44,10 @@ export default function EventView({organizationId, images, catLoading, categorie
       setLoading(false)
     }
   }
-  console.log("Filtered Category", filteredCat)
-  console.log("events", events)
-
+ 
   return (
     <Container className="mt-5">
-      <h1>All Events</h1>
+      <h1>{filteredEvents.length === events.length ? "All Events" : filteredCat ? categories.find(category=>category.id === filteredCat).name : null}</h1>
       <ButtonToolbar aria-label="Toolbar with button groups">
       <ButtonGroup className="me-1" aria-label="First group">
       <FilterButton classname="pe-1" catLoading={catLoading} categories={categories} setFilteredCat={setFilteredCat}/>
