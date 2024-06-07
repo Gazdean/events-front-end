@@ -49,8 +49,8 @@ export default function EventCard({event, images, filteredCat}) {
                 <h2 >{event.name.text}</h2>
                 
                 <div>
-                    <p>Date: {dateInfo.startDate}</p>
-                    <p>Time: {dateInfo.startTime} to {dateInfo.endTime}</p>
+                    <p>Start: <strong>{dateInfo.startDate}</strong> at <strong>{dateInfo.startTime}</strong></p>
+                    <p>End: <strong>{dateInfo.endDate}</strong> at <strong>{dateInfo.endTime}</strong></p>
                 </div>
                 <Image src={images[event.category_id].thumb} alt={"generic event"}/>
                 <p >{`${event.description.text.slice(0, 100)}.........`}</p>
