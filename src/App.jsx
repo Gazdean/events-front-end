@@ -10,7 +10,7 @@ import Landing from "./Pages/Landing";
 import Profile from "./Pages/Profile";
 import SignIn from "./Pages/SignIn";
 import Header from "./Components/Header";
-import { Container } from "react-bootstrap";
+import { Alert, Container } from "react-bootstrap";
 import UserPrivateRoute from "./Components/UserPrivateRoute";
 import "./App.css";
 
@@ -99,6 +99,7 @@ function App() {
   return (
     <>
       <Header />
+      {error && <Alert variant="danger">{error}</Alert>}
       <Container
         id="container"
         className="d-flex align-items-center justify-content-center"
@@ -116,6 +117,7 @@ function App() {
           <Route path="/profile" element={<UserPrivateRoute> <Profile /> </UserPrivateRoute>}/>
           <Route path="/event/:event_id" element={<IndividualEvent organizationId={organizationId} images={images}/>}/>
         </Routes>
+        {error && <Alert variant="danger">{error}</Alert>}
       </Container>
     </>
   );

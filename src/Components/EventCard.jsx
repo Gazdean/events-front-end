@@ -4,7 +4,7 @@ import { fetchEventTicketClasses } from '../apiEventBriteCalls'
 import { Link } from 'react-router-dom'
 import { handleFormatDate } from '../utils'
 
-export default function EventCard({event, images}) {
+export default function EventCard({event, images, filteredCat}) {
 
     const [ eventTickets, setEventTickets ] = useState({})
     const [ ticketCost, setTicketCost] = useState('')
@@ -17,6 +17,14 @@ export default function EventCard({event, images}) {
         setDateInfo(handleFormatDate(event))
         
     }, [])
+
+    function handleFilterEvents(events) {
+        console.log("in filter function", events)
+        events.filter(event=> {
+            if (filteredCat === "") event
+            else {return event.category_id === filteredCat}
+        })
+      }
 
     async function handleFetchTickets(event) {
         const eventId = event.id
@@ -34,6 +42,7 @@ export default function EventCard({event, images}) {
     }
 
   return (
+    
     <>
         {loading? <p>--loading--</p> :
             <Col sm={2} className="w-100 border m-2 ms-0 p-3" variant="primary" style={{maxWidth:"400px"}}>
