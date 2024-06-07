@@ -59,9 +59,8 @@ export default function IndividualEvent({ organizationId, images }) {
                         <p>{event.summary}</p>
                         {loading? <p>--loading--</p> : eventTickets.free ? <p style={{color:"green"}}>free event</p> : eventTickets.donation ? <p style={{color:"blue"}}>donation</p> : <p style={{color:"red"}}>Price: {eventTickets.cost.display}</p>}
                         {loading? <p>--loading--</p> : <p style={{color:"green"}}>Tickets Available: {eventTickets.quantity_total < 5 && eventTickets.quantity_total > 0 ? 'Nearly Sold Out!!' : eventTickets.quantity_total == 0 ? 'Sold Out!!!!!' : eventTickets.quantity_total }</p> }
-                        
-                        {currentUser ? <><Button className="me-5" onClick={handleShow}>Sign Up</Button><SignUpModal setShow={setShow} show={show} />   </> : null}
                         <ReturnToEventsButton string={"Return To Events"}/>
+                        {currentUser ? <><Button className="ms-5" onClick={handleShow}>Sign Up</Button><SignUpModal setShow={setShow} show={show} event={event}/>   </> : null}
                     </Col>
                 </Row>
             )

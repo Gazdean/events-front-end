@@ -18,27 +18,19 @@ export default function EventCard({event, images, filteredCat}) {
         
     }, [])
 
-    function handleFilterEvents(events) {
-        console.log("in filter function", events)
-        events.filter(event=> {
-            if (filteredCat === "") event
-            else {return event.category_id === filteredCat}
-        })
-      }
-
     async function handleFetchTickets(event) {
-        const eventId = event.id
-        setloading(true)
-        try {
-            const tickets = await fetchEventTicketClasses(eventId)
-            setEventTickets(tickets[0])
-            if (tickets[0].cost) setTicketCost(tickets[0].cost.display)
-        } catch (error){
-            console.log('ERORR: ', error)
-            setError('failed to fetch event tickets')
-        } finally {
-            setloading(false)
-        }
+        // const eventId = event.id
+        // setloading(true)
+        // try {
+        //     const tickets = await fetchEventTicketClasses(eventId)
+        //     setEventTickets(tickets[0])
+        //     if (tickets[0].cost) setTicketCost(tickets[0].cost.display)
+        // } catch (error){
+        //     console.log('ERORR: ', error)
+        //     setError('failed to fetch event tickets')
+        // } finally {
+        //     setloading(false)
+        // }
     }
 
   return (

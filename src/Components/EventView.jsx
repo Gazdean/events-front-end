@@ -38,6 +38,7 @@ export default function EventView({organizationId, images, catLoading, categorie
       const eventsObject = await fetchAllEvents(organizationId)
       const events = eventsObject.events      
       setEvents(events)
+      console.log("herererere", events)
     }catch(error) {
       setError('Failed To fetch events')
     } finally {

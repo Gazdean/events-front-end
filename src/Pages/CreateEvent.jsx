@@ -53,7 +53,7 @@ export default function createEvent ({organizationId, catLoading, categories}) {
             
             navigate("/")
             
-        } catch {
+        } catch(error){
             console.log(error)
             setError('failed to create event')
             
