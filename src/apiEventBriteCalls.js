@@ -8,7 +8,9 @@ const headers = {
   };
 
 async function fetchEventbriteCategories() {
-  const url = `${baseUrl}categories/`;
+   console.log("called categories")
+   
+   const url = `${baseUrl}categories/`;
 
   try {
     const response = await axios.get(url, { headers });
@@ -20,6 +22,7 @@ async function fetchEventbriteCategories() {
 }
 
 async function createEventbriteEvent(eventData, organizationId) {
+  console.log('called create event')
   console.log('event data',eventData)
 
   const url = `${baseUrl}organizations/${organizationId}/events/`
@@ -34,6 +37,7 @@ async function createEventbriteEvent(eventData, organizationId) {
 }
 
 async function createEventTicketClass(ticketData, event_id) {
+  console.log("called ticket classes")
 
   const url = `${baseUrl}events/${event_id}/ticket_classes/`
 
@@ -46,6 +50,7 @@ async function createEventTicketClass(ticketData, event_id) {
 }}
 
 async function fetchAllEvents(organizationId) {
+  console.log('called organization')
 
   const url = `${baseUrl}organizations/${organizationId}/events/`;
 
@@ -58,6 +63,7 @@ async function fetchAllEvents(organizationId) {
 }
 
 async function fetchIndividualEvent(eventId) {
+  console.log('called individual event')
 
   const url = `${baseUrl}/events/${eventId}/`;
 
@@ -71,6 +77,8 @@ async function fetchIndividualEvent(eventId) {
 }
 
 async function fetchEventTicketClasses(eventId) {
+  console.log('called ticket classes')
+
   const url = `${baseUrl}events/${eventId}/ticket_classes/`;
 
   try {
@@ -84,6 +92,8 @@ async function fetchEventTicketClasses(eventId) {
 
 
 async function getEventbriteOrganizationId() {
+  console.log('called organization')
+
   const url = `${baseUrl}users/me/organizations/`;
 
   try {

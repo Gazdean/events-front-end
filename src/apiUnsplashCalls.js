@@ -15,7 +15,6 @@ const fetchUnsplashCollection = async () => {
               Authorization: `Client-ID ${unsplashToken}`
           }
       });
-      console.log(response.data)
       return response.data;
   } catch (error) {
       console.log(error)
