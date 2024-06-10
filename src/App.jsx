@@ -183,38 +183,37 @@ function App() {
   }
 
   async function handleFetchEventsTickets() {
-
     const eventsIds = events.map((event) => event.id);
     const eventsTicketsObj = {};
+    const errors = [];
 
     setEventsTicketsLoading(true);
     setEventTicketsError("");
 
     try {
-      await Promise.all(
-        eventsIds.map(async (eventId) => {
-          try {
-            const tickets = await fetchEventTickets(eventId);
-              eventsTicketsObj[eventId] = tickets
-        } catch (error) {
-            console.log("ERROR: ", error);
-            setEventTicketsError(
-              `Failed to fetch event tickets for event ID: ${eventId}`
-            );
-          }
-        })
-      );
-      console.log(eventsTicketsObj)
-      setEventsTickets(eventsTicketsObj);
+        await Promise.all(
+            eventsIds.map(async (eventId) => {
+                try {
+                    const tickets = await fetchEventTickets(eventId);
+                    eventsTicketsObj[eventId] = tickets;
+                } catch (error) {
+                    console.log("ERROR: ", error);
+                    errors.push(error)
+                }
+            })
+        );
+        setEventsTickets(eventsTicketsObj);
     } catch (error) {
-      console.error("Error:", error);
-      setEventTicketsError("Failed to fetch all event tickets");
+        setEventTicketsError("Failed to fetch all event tickets"); // not catching errors from promise.all ???????????
     } finally {
-      setEventsTicketsLoading(false);
+        if (errors.length) {
+          setEventTicketsError("Failed to fetch all event tickets"); // used finally block to catch set the errors
+        }else {
+          console.log('hrerererererererererererererere')
+          setEventsTicketsLoading(false);
+        }
     }
-  }
-
-  (eventsTickets.length && console.log("eventsTickets", eventsTickets))
+}
 
   return (
     <>
@@ -240,6 +239,10 @@ function App() {
                 eventsTickets={eventsTickets}
                 eventsLoading={eventsLoading}
                 eventsTicketsLoading={eventsTicketsLoading}
+                catError = {catError}
+                eventTicketsError={eventTicketsError}
+                eventsError={eventsError}
+
               />
             }
           />
