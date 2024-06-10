@@ -5,6 +5,7 @@ const baseUrl = 'https://api.unsplash.com/'
 const collectionId = '001scadf0vU'
 
 const fetchUnsplashCollection = async () => {
+  console.log('called images')
   try {
       const response = await axios.get(`${baseUrl}collections/${collectionId}/photos`, {
           params :{

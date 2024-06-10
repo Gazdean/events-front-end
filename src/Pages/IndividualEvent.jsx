@@ -3,7 +3,7 @@ import { Button, Container, Image, Row, Col } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 
 import { useAuth } from "../Contexts/AuthContext";
-import { fetchEventTicketClasses, fetchIndividualEvent } from "../apiEventBriteCalls";
+import { fetchEventTickets, fetchIndividualEvent } from "../apiEventBriteCalls";
 import SignUpModal from '../Components/SignUpModal'
 import { handleFormatDate } from "../utils";
 import ReturnToEventsButton from "../Components/ReturnToEventsButton";
@@ -31,7 +31,7 @@ export default function IndividualEvent({ organizationId, images }) {
       const responseEvent = await fetchIndividualEvent(event_id, organizationId);
       setEvent(responseEvent);
       setDateTime(handleFormatDate(responseEvent))
-      const responseTickets = await fetchEventTicketClasses(responseEvent.id)
+      const responseTickets = await fetchEventTickets(responseEvent.id)
       setEventTickets(responseTickets[0])
       console.log(eventTickets)
       

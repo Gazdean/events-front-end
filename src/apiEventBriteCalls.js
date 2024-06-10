@@ -50,7 +50,7 @@ async function createEventTicketClass(ticketData, event_id) {
 }}
 
 async function fetchAllEvents(organizationId) {
-  console.log('called organization')
+  console.log('called All Events')
 
   const url = `${baseUrl}organizations/${organizationId}/events/`;
 
@@ -76,7 +76,7 @@ async function fetchIndividualEvent(eventId) {
   }
 }
 
-async function fetchEventTicketClasses(eventId) {
+async function fetchEventTickets(eventId) {
   console.log('called ticket classes')
 
   const url = `${baseUrl}events/${eventId}/ticket_classes/`;
@@ -112,6 +112,6 @@ export {
   getEventbriteOrganizationId, 
   createEventTicketClass, 
   fetchAllEvents, 
-  fetchEventTicketClasses,
+  fetchEventTickets,
   fetchIndividualEvent
 }
