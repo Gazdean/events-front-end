@@ -3,11 +3,12 @@ import { Button, Card, Col, Image } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { handleFormatDate } from '../utils'
 
-export default function EventCard({event, images, eventsTickets , eventsTicketsLoading}) {
+export default function EventCard({event, images, eventsTickets}) {
 
-    const [ ticketCost, setTicketCost] = useState('')
+    const [ticketCost, setTicketCost] = useState('')
     const [dateInfo, setDateInfo] = useState({})
     const [tickets, setTickets] = useState([])
+    const [ticketQuantity, setTicketQuantity] = useState([])
    
     useEffect(() => {
         setDateInfo(handleFormatDate(event))   
@@ -19,8 +20,9 @@ export default function EventCard({event, images, eventsTickets , eventsTicketsL
       }, [eventsTickets])
 
     useEffect(()=>{
-     if(tickets.cost)
-     setTicketCost(tickets.cost.display)
+        setTicketQuantity(tickets.quantity_total)
+        if(tickets.cost)
+        setTicketCost(tickets.cost.display)
     },[tickets])
 
   return (
@@ -36,7 +38,7 @@ export default function EventCard({event, images, eventsTickets , eventsTicketsL
 
             <Card className= "mb-3">
                 {tickets.free ? <p style={{color:"green"}}>free event</p> : tickets.donation ? <p style={{color:"blue"}}>donation</p> : <p style={{color:"red"}}>Price: {ticketCost}</p>}
-                <p style={{color:"green"}}>Tickets Available: {eventsTickets[event.id].quantity_total < 5 && eventsTickets[event.id].quantity_total > 0 ? 'Nearly Sold Out!!' : eventsTickets[event.id].quantity_total == 0 ? 'Sold Out!!!!!' : eventsTickets[event.id].quantity_total }</p> 
+                <p style={{color:"green"}}>Tickets Available: {ticketQuantity < 5 && ticketQuantity > 0 ? 'Nearly Sold Out!!' : ticketQuantity == 0 ? 'Sold Out!!!!!' : ticketQuantity }</p> 
             </Card>
             <Link to={`event/${event.id}`}><Button variant="primary">More Info</Button></Link>
         </Col>      
