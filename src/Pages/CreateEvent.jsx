@@ -28,7 +28,7 @@ export default function createEvent ({organizationId, catLoading, categories}) {
         if (watchIsFree === "true") {
             setValue('cost', ''); 
             setValue('donation', ''); 
-        } else if (watchIsFree === "false" && watchIsDonation === "true") {
+        } else if (watchIsFree === "false" && watchIsDonation === "true") { // change to !watchIsFree
             setValue('cost', '')
         }
     }, [watchIsFree, watchIsDonation]);

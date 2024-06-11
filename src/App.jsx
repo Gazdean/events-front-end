@@ -48,6 +48,7 @@ function App() {
   const [loadingImages, setLoadingImages] = useState(false);
   const [catLoading, setCatLoading] = useState(false);
   const [eventsLoading, setEventsLoading] = useState(false);
+  const [myEventsLoading, setMyEventsLoading] = useState(false);
   const [eventsTicketsLoading, setEventsTicketsLoading] = useState(false);
 
   useEffect(() => {
@@ -75,16 +76,16 @@ function App() {
   // EVENTBRITE CALL
   async function handleFetchMyEvents(collection, document) {
     setMyEventsError("");
+    setMyEventsLoading(true)
     try {
       const myEventsResponse = await getCollection(collection, document);
-      if (myEventsResponse) {
         setMyEvents(myEventsResponse.myEvents);
-      }
+      
     } catch (error) {
       console.log(error);
       setMyEventsError("Failed to load My Events");
     } finally {
-      setMyEventsError("");
+      setMyEventsLoading(false)
     }
   }
 
@@ -93,7 +94,6 @@ function App() {
     setLoadingImages(true);
     try {
       const responseImages = await fetchUnsplashCollection();
-      console.log("response images", responseImages);
       const imageObject = {};
       responseImages.forEach((image) => {
         if (image.id === "tKN1WXrzQ3s") {
@@ -199,6 +199,7 @@ function App() {
                 } catch (error) {
                     console.log("ERROR: ", error);
                     errors.push(error)
+                    throw error
                 }
             })
         );
@@ -206,12 +207,12 @@ function App() {
     } catch (error) {
         setEventTicketsError("Failed to fetch all event tickets"); // not catching errors from promise.all ???????????
     } finally {
-        if (errors.length) {
-          setEventTicketsError("Failed to fetch all event tickets"); // used finally block to catch set the errors
-        }else {
+        // if (errors.length) {
+        //   // setEventTicketsError("Failed to fetch all event tickets"); // used finally block to catch set the errors
+        // }else {
           console.log('hrerererererererererererererere')
           setEventsTicketsLoading(false);
-        }
+        // }
     }
 }
 
@@ -219,7 +220,6 @@ function App() {
     <>
       <Header />
       {organizationIdError && <Alert variant="danger">{organizationIdError}</Alert>}
-      {myEventsError && <Alert variant="danger">{myEventsError}</Alert>}
       <Container
         id="container"
         className="d-flex align-items-center justify-content-center"
@@ -265,8 +265,7 @@ function App() {
             path="/profile"
             element={
               <UserPrivateRoute>
-                {" "}
-                <Profile />{" "}
+                <Profile events={events} eventsError={eventsError} eventsLoading={eventsLoading} myEvents={myEvents} myEventsLoading={myEventsLoading} myEventsError={myEventsError} images={images}/>
               </UserPrivateRoute>
             }
           />
