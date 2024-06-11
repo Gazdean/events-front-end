@@ -41,6 +41,7 @@ function App() {
   // Error handling
   const [organizationIdError, setOrganizationIdError] = useState("");
   const [catError, setCatError] = useState("");
+  const [imageError, setImageError] = useState("");
   const [myEventsError, setMyEventsError] = useState("");
   const [eventsError, setEventsError] = useState("");
   const [eventTicketsError, setEventTicketsError] = useState("");
@@ -92,6 +93,7 @@ function App() {
   //UNSPLASH CALL
   async function handleFetchImages() {
     setLoadingImages(true);
+    setImageError('')
     try {
       const responseImages = await fetchUnsplashCollection();
       const imageObject = {};
@@ -128,7 +130,7 @@ function App() {
       setImages(imageObject);
     } catch (error) {
       console.log(error);
-      setError(error);
+      setImageError("Failed to load images");
     } finally {
       setLoadingImages(false);
     }
@@ -220,6 +222,7 @@ function App() {
     <>
       <Header />
       {organizationIdError && <Alert variant="danger">{organizationIdError}</Alert>}
+      {imageError && <Alert variant="danger">{imageError}</Alert>}
       <Container
         id="container"
         className="d-flex align-items-center justify-content-center"

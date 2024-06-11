@@ -29,7 +29,7 @@ export default function Profile({events, myEvents, eventsError, eventsLoading, m
           <Row>
             <Row className="mt-5">
             
-            {eventsLoading ? <p>-- Events Loading --</p> : !myEvents.length ? <p>You Have No Events</p> : filteredEvents.map(event=><ProfileEventCard key={event.id} event={event} images={images}/>)}     
+            {eventsLoading ? <p>-- Events Loading --</p> : !myEvents.length ? <p>You Have No Events</p> : filteredEvents.map(event=><ProfileEventCard key={event.id} event={event}/>)}     
           </Row>
             {eventsError && <Alert variant="danger">{eventsError}</Alert>}
           </Row>
