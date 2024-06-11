@@ -1,11 +1,42 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ReturnToEventsButton from '../Components/ReturnToEventsButton'
+import { Alert, Col, Container, Row } from 'react-bootstrap'
+import EventCard from '../Components/EventCard'
+import ProfileEventCard from '../Components/ProfileEventCard'
 
-export default function Profile() {
+export default function Profile({events, myEvents, eventsError, eventsLoading, myEventsloading, myEventsError, images}) {
+  
+  const [filteredEvents,  setFilteredEvents] = useState([])
+
+  useEffect(()=>{
+    if (events.length && myEvents.length) {
+    console.log('profile events', events)
+    handleFilterEvents()
+    }
+  },[events, myEvents])
+
+  function handleFilterEvents() {
+    const myFilteredEvents = events.filter(event => myEvents.includes(event.id))
+    setFilteredEvents(myFilteredEvents)
+  }
+
   return (
     <>
-        <h1>Profile Page</h1>
-        <ReturnToEventsButton/>
+        <Container>
+          <h2>My Events</h2>
+          {myEventsError && <Alert variant="danger">{myEventsError}</Alert>}
+          {myEventsloading ? <p>-- Loading My Events --</p> : 
+          <Row>
+            <Row className="mt-5">
+            
+            {eventsLoading ? <p>-- Events Loading --</p> : !myEvents.length ? <p>You Have No Events</p> : filteredEvents.map(event=><ProfileEventCard key={event.id} event={event}/>)}     
+          </Row>
+            {eventsError && <Alert variant="danger">{eventsError}</Alert>}
+          </Row>
+          
+          }   
+          <ReturnToEventsButton string={"Return To Events"}/>
+        </Container>
     </>
   )
 }

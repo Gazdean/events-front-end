@@ -5,7 +5,6 @@ import FilterButton from './FilterButton'
 
 export default function EventView({images, catLoading, categories, events, eventsTickets, eventsLoading, eventsTicketsLoading, catError, eventTicketsError, eventsError }) {
 
-  const [error, setError] = useState()
   const [filteredCat, setFilteredCat] = useState("")
   const [filteredEvents, setFilteredEvents] = useState([])
 
