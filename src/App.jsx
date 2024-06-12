@@ -29,7 +29,7 @@ import { useAuth } from "./Contexts/AuthContext";
 import { MyEventsContext } from "./Contexts/MyEventsContext";
 
 function App() {
-   const { myEvents, setMyEvents } = useContext(MyEventsContext); /* for rendering events in users profile */
+  const { setMyEvents, setMyEventsError, setMyEventsLoading } = useContext(MyEventsContext); /* for rendering events in users profile */
 
   const { currentUser } = useAuth();
   // States
@@ -42,14 +42,14 @@ function App() {
   const [organizationIdError, setOrganizationIdError] = useState("");
   const [catError, setCatError] = useState("");
   const [imageError, setImageError] = useState("");
-  const [myEventsError, setMyEventsError] = useState("");
+  // const [myEventsError, setMyEventsError] = useState("");
   const [eventsError, setEventsError] = useState("");
   const [eventTicketsError, setEventTicketsError] = useState("");
   // Loading 
   const [loadingImages, setLoadingImages] = useState(false);
   const [catLoading, setCatLoading] = useState(false);
   const [eventsLoading, setEventsLoading] = useState(false);
-  const [myEventsLoading, setMyEventsLoading] = useState(false);
+  // const [myEventsLoading, setMyEventsLoading] = useState(false);
   const [eventsTicketsLoading, setEventsTicketsLoading] = useState(false);
 
   useEffect(() => {
@@ -268,7 +268,7 @@ function App() {
             path="/profile"
             element={
               <UserPrivateRoute>
-                <Profile events={events} eventsError={eventsError} eventsLoading={eventsLoading} myEvents={myEvents} myEventsLoading={myEventsLoading} myEventsError={myEventsError} images={images}/>
+                <Profile events={events} eventsError={eventsError} eventsLoading={eventsLoading} />
               </UserPrivateRoute>
             }
           />

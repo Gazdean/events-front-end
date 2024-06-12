@@ -3,10 +3,13 @@ import ReturnToEventsButton from '../Components/ReturnToEventsButton'
 import { Alert, Col, Container, Row } from 'react-bootstrap'
 import EventCard from '../Components/EventCard'
 import ProfileEventCard from '../Components/ProfileEventCard'
+import { useContext } from 'react'
+import { MyEventsContext } from '../Contexts/MyEventsContext'
 
-export default function Profile({events, myEvents, eventsError, eventsLoading, myEventsloading, myEventsError, images}) {
+export default function Profile({events, eventsError, eventsLoading}) {
   
   const [filteredEvents,  setFilteredEvents] = useState([])
+  const { myEvents, myEventsLoading, myEventsError } = useContext(MyEventsContext);
 
   useEffect(()=>{
     if (events.length && myEvents.length) {
@@ -25,7 +28,7 @@ export default function Profile({events, myEvents, eventsError, eventsLoading, m
         <Container>
           <h2>My Events</h2>
           {myEventsError && <Alert variant="danger">{myEventsError}</Alert>}
-          {myEventsloading ? <p>-- Loading My Events --</p> : 
+          {myEventsLoading ? <p>-- Loading My Events --</p> : 
           <Row>
             <Row className="mt-5">
             

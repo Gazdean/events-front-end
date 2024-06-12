@@ -17,6 +17,7 @@ export default function IndividualEvent({ organizationId, images }) {
     const [show, setShow] = useState(false);
     const [error, setError] = useState("")
     const [eventTickets, setEventTickets] = useState()
+    const [alreadySignedUp, setAlreadySignedUp] = useState(false)
 
 
   useEffect(() => {
