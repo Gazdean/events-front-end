@@ -207,14 +207,9 @@ function App() {
         );
         setEventsTickets(eventsTicketsObj);
     } catch (error) {
-        setEventTicketsError("Failed to fetch all event tickets"); // not catching errors from promise.all ???????????
+        setEventTicketsError("Failed to fetch all event tickets");
     } finally {
-        // if (errors.length) {
-        //   // setEventTicketsError("Failed to fetch all event tickets"); // used finally block to catch set the errors
-        // }else {
-          console.log('hrerererererererererererererere')
           setEventsTicketsLoading(false);
-        // }
     }
 }
 
