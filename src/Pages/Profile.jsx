@@ -13,21 +13,16 @@ export default function Profile({events, eventsError, eventsLoading, handleFetch
   const { myEvents, myEventsLoading, myEventsError } = useContext(MyEventsContext);
   const [filteredEvents,  setFilteredEvents] = useState([])
 
- 
   useEffect(() => {
       handleFetchMyEvents("users", currentUser.email);
   }, []);
 
-
-  
   useEffect(()=>{
     if (events.length && myEvents.length) {
     console.log('profile events', events)
     handleFilterEvents()
     }
   },[events, myEvents])
-
-
 
   function handleFilterEvents() {
     const myFilteredEvents = events.filter(event => myEvents.includes(event.id))
