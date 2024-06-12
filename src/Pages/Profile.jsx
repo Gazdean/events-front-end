@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import ReturnToEventsButton from '../Components/ReturnToEventsButton'
-import { Alert, Col, Container, Row } from 'react-bootstrap'
-import EventCard from '../Components/EventCard'
+import { Alert, Container, Row } from 'react-bootstrap'
+
 import ProfileEventCard from '../Components/ProfileEventCard'
 import { useContext } from 'react'
 import { MyEventsContext } from '../Contexts/MyEventsContext'
 
-export default function Profile({events, eventsError, eventsLoading}) {
+import { useAuth } from "../Contexts/AuthContext"
 
+export default function Profile({events, eventsError, eventsLoading, handleFetchMyEvents}) {
+  const { currentUser } = useAuth();
   const { myEvents, myEventsLoading, myEventsError } = useContext(MyEventsContext);
-  
   const [filteredEvents,  setFilteredEvents] = useState([])
+
+ 
+  useEffect(() => {
+      handleFetchMyEvents("users", currentUser.email);
+  }, []);
+
+
   
   useEffect(()=>{
     if (events.length && myEvents.length) {
@@ -18,6 +26,8 @@ export default function Profile({events, eventsError, eventsLoading}) {
     handleFilterEvents()
     }
   },[events, myEvents])
+
+
 
   function handleFilterEvents() {
     const myFilteredEvents = events.filter(event => myEvents.includes(event.id))

@@ -263,7 +263,7 @@ function App() {
             path="/profile"
             element={
               <UserPrivateRoute>
-                <Profile events={events} eventsError={eventsError} eventsLoading={eventsLoading} />
+                <Profile events={events} eventsError={eventsError} eventsLoading={eventsLoading} handleFetchMyEvents={handleFetchMyEvents}/>
               </UserPrivateRoute>
             }
           />
