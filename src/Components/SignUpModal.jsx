@@ -6,6 +6,7 @@ import { upDateMyEvents } from '../apiFirebaseCalls';
 import { useAuth } from '../Contexts/AuthContext'
 import { useNavigate } from 'react-router';
 import ModalCalendarBody from './ModalCalendarBody';
+import ModalSignUpBody from './ModalSignUpBody';
 
 
 export default function SignUpModal({setShowSignUpModal, showSignUpModal, event}) {
@@ -32,31 +33,7 @@ export default function SignUpModal({setShowSignUpModal, showSignUpModal, event}
            setCounter(25)
         }, 1000)
     }
-
-    async function handleSignUp() {
-      setSignUpComplete(false)
-      try {
-        const eventData = event.id
-        await upDateMyEvents(currentUser.email, eventData)
-        setSignUpComplete(true)
-        // setShowSignUpModal(False)
-        // navigate("/profile")
-      } catch(error) {
-        console.log(error)
-      }
-    }
-    async function handleAddEventToCalendar() {
-
-      try {
-       
-      } catch(error) {
-        console.log(error)
-      }
-    }
     
-
-
-
     return (
       <>
         <Modal
@@ -65,25 +42,9 @@ export default function SignUpModal({setShowSignUpModal, showSignUpModal, event}
           backdrop="static"
           keyboard={false}
         >
-          {!signUpComplete ? <>
-          <Modal.Header closeButton>
-            <Modal.Title>Sign Up To Event</Modal.Title>
-          </Modal.Header>
-          <h2>{counter}</h2>
-          <Modal.Body> 
-            Your ticket will be held for 60 seconds<br/>If you close this form before completing your sign up your ticket will be released and you will need to sign up from the event screen again
-          </Modal.Body>
-          <Modal.Body>
-            When you complete the event sign up<br/>The event will be added to 'my events' in your profile.
-          </Modal.Body>
-          <Button variant="primary" onClick={handleSignUp}>Complete Sign Up</Button>
-          <Modal.Footer>
-            <Button disable={`${!showSignUpModal}`} variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-            
-          </Modal.Footer>
-          </> : 
+          {!signUpComplete ? 
+          <ModalSignUpBody setSignUpComplete={setSignUpComplete} event={event} showSignUpModal={showSignUpModal}  setShowSignUpModal={setShowSignUpModal}/>
+           : 
           <ModalCalendarBody event={event} showSignUpModal={showSignUpModal} handleClose={handleClose}/>
           }
         </Modal>

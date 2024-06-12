@@ -1,14 +1,7 @@
 import React, { useState } from 'react';
-
-
-
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-
 import { useNavigate } from 'react-router';
-
-
-
 import { postCalendarEventGoogleApi } from '../apiGoogleCalls';
 import { Alert } from 'react-bootstrap';
 
@@ -57,8 +50,6 @@ export default function ModalCalendarBody({event, showSignUpModal}) {
         } finally {
           setCreatingCalendarEvent(false)
           navigate('/profile')
-          
-          
         }
       }
     });
@@ -79,9 +70,9 @@ export default function ModalCalendarBody({event, showSignUpModal}) {
         Do you want to add this event to your calendar?
       </Modal.Body>
       {calendarEventError && <Alert variant="danger">{calendarEventError}</Alert>}
-      <Button variant="primary" disable={creatingCalendarEvent} onClick={handleAddEventToCalendar}>Add To Calendar</Button>
+      <Button variant="primary" disable={creatingCalendarEvent? 'true' : 'false'} onClick={handleAddEventToCalendar}>Add To Calendar</Button>
       <Modal.Footer>
-        <Button disable={creatingCalendarEvent} variant="secondary" onClick={handleClose}>Close</Button>         
+        <Button disable={creatingCalendarEvent ? 'true' : 'false'} variant="secondary" onClick={handleClose}>Close</Button>         
       </Modal.Footer>
       </>
     )
