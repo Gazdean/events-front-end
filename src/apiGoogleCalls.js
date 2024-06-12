@@ -13,6 +13,7 @@ async function postCalendarEventGoogleApi(eventData, accessToken) {
       }
     );
     window.open(response.data.htmlLink);
+    
   } catch (error) {
     console.log('Error creating event', error);
     throw error
