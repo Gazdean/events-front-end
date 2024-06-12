@@ -7,10 +7,11 @@ import { useContext } from 'react'
 import { MyEventsContext } from '../Contexts/MyEventsContext'
 
 export default function Profile({events, eventsError, eventsLoading}) {
+
+  const { myEvents, myEventsLoading, myEventsError } = useContext(MyEventsContext);
   
   const [filteredEvents,  setFilteredEvents] = useState([])
-  const { myEvents, myEventsLoading, myEventsError } = useContext(MyEventsContext);
-
+  
   useEffect(()=>{
     if (events.length && myEvents.length) {
     console.log('profile events', events)
