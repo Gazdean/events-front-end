@@ -38,16 +38,14 @@ export default function createEvent ({organizationId, catLoading, categories}) {
         setLoading(true)
         setCreatingEvent(true)
         try {
-            // console.log(data, "data")
            
             const eventBody = formatCreateEventData(data)
-            // console.log(eventBody, "formatted data")
+
             const createdEvent = await createEventbriteEvent(eventBody, organizationId)
 
             const eventId = createdEvent.id
 
             const ticketBody = formatCreateTicketClassData(data)
-            console.log(ticketBody)
 
             const createdTicketClass = await createEventTicketClass(ticketBody, eventId)
             
