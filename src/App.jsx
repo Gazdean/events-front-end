@@ -71,7 +71,7 @@ function App() {
   }, [organizationId]);
 
   useEffect(() => {
-    events && handleFetchEventsTickets();
+    events.length && handleFetchEventsTickets();
   }, [events]);
 
   // EVENTBRITE CALL
@@ -176,6 +176,7 @@ function App() {
     try {
       const eventsObject = await fetchAllEvents(organizationId);
       const responseEvents = eventsObject.events;
+      
       setEvents(responseEvents);
     } catch (error) {
       setEventsError("Failed To fetch events");
