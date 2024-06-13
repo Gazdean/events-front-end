@@ -46,7 +46,7 @@ function App() {
   const [eventsError, setEventsError] = useState("");
   const [eventTicketsError, setEventTicketsError] = useState("");
   // Loading 
-  const [loadingImages, setLoadingImages] = useState(false);
+  const [imagesLoading, setImagesLoading] = useState(false);
   const [catLoading, setCatLoading] = useState(false);
   const [eventsLoading, setEventsLoading] = useState(false);
   // const [myEventsLoading, setMyEventsLoading] = useState(false);
@@ -92,7 +92,7 @@ function App() {
 
   //UNSPLASH CALL
   async function handleFetchImages() {
-    setLoadingImages(true);
+    setImagesLoading(true);
     setImageError('')
     try {
       const responseImages = await fetchUnsplashCollection();
@@ -132,7 +132,7 @@ function App() {
       console.log(error);
       setImageError("Failed to load images");
     } finally {
-      setLoadingImages(false);
+      setImagesLoading(false);
     }
   }
 
@@ -230,7 +230,7 @@ function App() {
               <Landing
                 organizationId={organizationId}
                 images={images}
-                loadingImages={loadingImages}
+                imagesLoading={imagesLoading}
                 catLoading={catLoading}
                 categories={categories}
                 events={events}

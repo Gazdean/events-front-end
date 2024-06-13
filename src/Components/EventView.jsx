@@ -3,7 +3,7 @@ import EventCard from './EventCard'
 import { Alert, Button, ButtonGroup, ButtonToolbar, Col, Container, Row } from 'react-bootstrap'
 import FilterButton from './FilterButton'
 
-export default function EventView({images, catLoading, categories, events, eventsTickets, eventsLoading, eventsTicketsLoading, catError, eventTicketsError, eventsError }) {
+export default function EventView({images, catLoading, categories, events, eventsTickets, eventsLoading, imagesLoading, eventsTicketsLoading, catError, eventTicketsError, eventsError }) {
 
   const [filteredCat, setFilteredCat] = useState("")
   const [filteredEvents, setFilteredEvents] = useState([])
@@ -19,6 +19,7 @@ export default function EventView({images, catLoading, categories, events, event
       setFilteredEvents(events.filter(event => event.category_id === filteredCat));
     }
   }
+  console.log(events)
  
   return (
     <>
@@ -32,7 +33,7 @@ export default function EventView({images, catLoading, categories, events, event
         </ButtonToolbar>
           {catError && <Alert variant="danger">{catError}</Alert>}
           <Row className="mt-5">
-            {eventsLoading ? <p>-- Events Loading --</p> : eventTicketsError ? <Alert variant="danger">{eventTicketsError}</Alert> :eventsTicketsLoading ? <p>-- Tickets Loading --</p> :filteredEvents.map(event=><EventCard key={event.id} event={event} images={images} eventsTickets={eventsTickets} eventsTicketsLoading={eventsTicketsLoading}/>)}     
+            {eventsLoading ? <p>-- Events Loading --</p> : eventTicketsError ? <Alert variant="danger">{eventTicketsError}</Alert> : eventsTicketsLoading ? <p>-- Tickets Loading --</p> : filteredEvents.map(event=><EventCard key={event.id} event={event} images={images} imagesLoading={imagesLoading} eventsTickets={eventsTickets} eventsTicketsLoading={eventsTicketsLoading}/>)}     
           </Row>
           {eventsError && <Alert variant="danger">{eventsError}</Alert>}
           {events.length && !filteredEvents.length ? <Row><h2>Sorry<br/> There Are No Events Of This Type!</h2></Row> : null}

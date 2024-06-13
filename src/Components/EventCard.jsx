@@ -3,7 +3,7 @@ import { Button, Card, Col, Image } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { handleFormatDate } from '../utils'
 
-export default function EventCard({event, images, eventsTickets}) {
+export default function EventCard({event, images, eventsTickets, imagesLoading}) {
 
     const [ticketCost, setTicketCost] = useState('')
     const [dateInfo, setDateInfo] = useState({})
@@ -33,7 +33,7 @@ export default function EventCard({event, images, eventsTickets}) {
                 <p>Start: <strong>{dateInfo.startDate}</strong> at <strong>{dateInfo.startTime}</strong></p>
                 <p>End: <strong>{dateInfo.endDate}</strong> at <strong>{dateInfo.endTime}</strong></p>
             </div>
-            <Image src={images[event.category_id].thumb} alt={"generic event"}/>
+            {imagesLoading ? <p>-- Loading --</p> : <Image src={images[event.category_id]?.thumb} alt={`generic ${event.name.text} event picture`}/> }
             <p >{`${event.description.text.slice(0, 100)}.........`}</p>
 
             <Card className= "mb-3">
