@@ -22,7 +22,7 @@ export function formatCreateEventData(data) {
 
 export function formatCreateTicketClassData(data) {
     console.log('data in call', data)
-    const costInPence = data.cost *100
+    const costInPence = data.cost * 100
     const body = {
         ticket_class: {
                 name: "General Admission",
@@ -52,8 +52,12 @@ export function formatCreateTicketClassData(data) {
 }
 
 export function handleFormatDate(event) {
-    const startString =  event.start.local
-    const endString = event.end.local
+  
+    // event.start.utc has been used to stop an hour being added to the times when fetching due to BST, 
+    // need to test what happens clocks go back and if any logic needs to be added
+    
+    const startString = event.start.utc 
+    const endString = event.end.utc
 
     const startDate = `${startString.slice(8,10)}-${startString.slice(5,7)}-${startString.slice(0, 4)}`
     const endDate = `${endString.slice(8,10)}-${endString.slice(5,7)}-${endString.slice(0, 4)}`

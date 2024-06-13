@@ -59,10 +59,8 @@ async function fetchAllEvents(organizationId) {
     const response = await axios.get(url, { headers: headers, params: params });
     return response.data;
   } catch (error) {
-    console.error(
-      "Error fetching events:",
-      error.response ? error.response.data : error.message
-    );
+    console.error("Error fetching events:",error);
+    throw error
   }
 }
 
@@ -75,10 +73,7 @@ async function fetchIndividualEvent(eventId) {
     const response = await axios.get(url, { headers: headers });
     return response.data;
   } catch (error) {
-    console.error(
-      "Error fetching event:",
-      error.response ? error.response.data : error.message
-    );
+    console.error("Error fetching event:", error);
     throw error;
   }
 }
