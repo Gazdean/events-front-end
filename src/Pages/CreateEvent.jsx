@@ -73,14 +73,15 @@ export default function createEvent ({organizationId, categories}) {
 
                         <Form.Group id="eventTitle">
                             <Form.Label htmlFor="name">Event Name</Form.Label>
-                            <Form.Control id="name" name="name" type="text"  {...register('name', {required:true, })}></Form.Control>
+                            <Form.Control id="name" name="name" type="text" maxLength={140} {...register('name', {required:true, })}></Form.Control>
                             {errors.name?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An event name is required</p>}
                         </Form.Group>
 
                         <Form.Group id="eventDescription">
                             <Form.Label htmlFor="description">Event Description</Form.Label>
-                            <Form.Control id="description" name="description" type="text"  as="textarea" rows={3} {...register('description', {required:true, })}></Form.Control>
+                            <Form.Control id="description" name="description" type="text"  as="textarea" rows={3} {...register('description', {required:true, maxLength: 140})}></Form.Control>
                             {errors.description?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An event description is required</p>}
+                            {errors.description?.type==="maxLength"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Only use 140 characters</p>}
                         </Form.Group>
 
                         <Form.Group id="EventCategory">
@@ -140,8 +141,7 @@ export default function createEvent ({organizationId, categories}) {
                                 {errors.cost?.type==="pattern"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Cost should be a whole number</p>}
                             </Form.Group>) 
                         }                      
-                        <Button disabled={loading} className="w-100 mt-4" type="submit" >Create Event</Button>
-                    
+                        <Button disabled={loading} className="w-100 mt-4" type="submit" >Create Event</Button>                   
                     </Form>
                 </Card.Body>
             </Card>
