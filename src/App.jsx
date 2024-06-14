@@ -111,30 +111,43 @@ function App() {
       const imageObject = {};
       responseImages.forEach((image) => {
         if (image.id === "tKN1WXrzQ3s") {
+          // Cafe Picture
           imageObject.landing = image.urls;
         } else if (image.id === "aQYgUYwnCsM") {
+          // Science & tech
           imageObject["102"] = image.urls;
         } else if (image.id === "EKpByvjvioU") {
+          // Music
           imageObject["103"] = image.urls;
         } else if (image.id === "2uwFEAGUm6E") {
+          // Film & Media
           imageObject["104"] = image.urls;
         } else if (image.id === "yKc4YuGMPC4") {
+          // Arts
           imageObject["105"] = image.urls;
-        } else if (image.id === "FO4mQZi1c0M") {
+        } else if (image.id === "IwVRO3TLjLc") {
+          // Fashion
           imageObject["106"] = image.urls;
         } else if (image.id === "2PODhmrvLik") {
+          // Health
           imageObject["107"] = image.urls;
         } else if (image.id === "mQVWb7kUoOE") {
+          // Sports & Fitness
           imageObject["108"] = image.urls;
         } else if (image.id === "snnhGYNqm44") {
+          // Food & Drink
           imageObject["110"] = image.urls;
         } else if (image.id === "7uSrOyY1U0I") {
+          // Charity & Causes
           imageObject["111"] = image.urls;
         } else if (image.id === "Zyx1bK9mqmA") {
+          // Community
           imageObject["113"] = image.urls;
         } else if (image.id === "9QTQFihyles") {
+          // Family & Education
           imageObject["115"] = image.urls;
         } else if (image.id === "gPnHi8AmO5k") {
+          // Other
           imageObject["199"] = image.urls;
         }
       });
@@ -200,7 +213,7 @@ function App() {
         <LoadingComponent loadingMessage={"LOADING GATHER EVENTS"}/>}
       {organizationId && events.length && categories.length &&
       <>
-        <Header/>
+        <HeaderTest/>
         {imageError && <Alert variant="danger">{imageError}</Alert>}
           <Container id="container" className="mt-5 d-flex align-items-center justify-content-center" style={{ minHeight: "80vh" }}>
             <Routes>
