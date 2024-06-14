@@ -39,10 +39,8 @@ export async function getCollection(collection, document) {
     }
 }
 
-
 export async function upDateMyEvents(id, data) {
     try {
-        
          await updateDoc(doc(db, "users", id), {
             myEvents: arrayUnion(data)
           });;
@@ -52,3 +50,25 @@ export async function upDateMyEvents(id, data) {
         throw error
     }
 }
+
+export async function addAnEvent(id, data) {
+    try {
+         await setDoc(doc(db, "events", id), {         
+          }, { merge: true });
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+} 
+
+export async function upDateEventAttendees(id, data) {
+    try {
+         await updateDoc(doc(db, "events", id), {
+            signedUpUsers:arrayUnion(data)
+          });
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}
+
