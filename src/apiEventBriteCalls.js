@@ -106,6 +106,21 @@ async function getEventbriteOrganizationId() {
   }
 }
 
+async function updateEventTickets(data, eventId, ticket_class_id) {
+  console.log("called update ticket classes");
+
+  const url = `${baseUrl}events/${eventId}/ticket_classes/${ticket_class_id}/`;
+  // update TicketClasses is a post on eventbrite not a patch?
+  try {
+    const response = await axios.post(url, data, { headers });
+    console.log("response data in update call",response.data)
+    return response.data
+  } catch (error) {
+    console.error("Error updating ticket classes:", error);
+    throw error;
+  }
+}
+
 export {
   fetchEventbriteCategories,
   createEventbriteEvent,
