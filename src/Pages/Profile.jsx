@@ -8,7 +8,7 @@ import { MyEventsContext } from '../Contexts/MyEventsContext'
 
 import { useAuth } from "../Contexts/AuthContext"
 
-export default function Profile({events, eventsError, eventsLoading, handleFetchMyEvents}) {
+export default function Profile({events, handleFetchMyEvents}) {
   const { currentUser } = useAuth();
   const { myEvents, myEventsLoading, myEventsError } = useContext(MyEventsContext);
   const [filteredEvents,  setFilteredEvents] = useState([])
@@ -19,7 +19,6 @@ export default function Profile({events, eventsError, eventsLoading, handleFetch
 
   useEffect(()=>{
     if (events.length && myEvents.length) {
-    console.log('profile events', events)
     handleFilterEvents()
     }
   },[events, myEvents])
@@ -35,14 +34,9 @@ export default function Profile({events, eventsError, eventsLoading, handleFetch
           <h2>My Events</h2>
           {myEventsError && <Alert variant="danger">{myEventsError}</Alert>}
           {myEventsLoading ? <p>-- Loading My Events --</p> : 
-          <Row>
             <Row className="mt-5">
-            
-            {eventsLoading ? <p>-- Events Loading --</p> : !myEvents.length ? <p>You Have No Events</p> : filteredEvents.map(event=><ProfileEventCard key={event.id} event={event}/>)}     
-          </Row>
-            {eventsError && <Alert variant="danger">{eventsError}</Alert>}
-          </Row>
-          
+              {!myEvents.length ? <p>You Have No Events</p> : filteredEvents.map(event=><ProfileEventCard key={event.id} event={event}/>)}     
+            </Row>
           }   
           <ReturnToEventsButton string={"Return To Events"}/>
         </Container>

@@ -2,7 +2,8 @@ import "./App.css";
 
 import { Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Alert, Container } from "react-bootstrap";
+import { Alert, Col, Container, Row } from "react-bootstrap";
+import Spinner from 'react-bootstrap/Spinner'
 import { useEffect, useState, useContext } from "react";
 
 import CreateEvent from "./Pages/CreateEvent";
@@ -17,83 +18,94 @@ import Header from "./Components/Header";
 import UserPrivateRoute from "./Components/UserPrivateRoute";
 
 import {
-  fetchEventTickets,
-  fetchEventbriteCategories,
   getEventbriteOrganizationId,
+  fetchEventbriteCategories,
   fetchAllEvents,
 } from "./apiEventBriteCalls";
+
 import { fetchUnsplashCollection } from "./apiUnsplashCalls";
 import { getCollection } from "./apiFirebaseCalls";
 
 import { useAuth } from "./Contexts/AuthContext";
 import { MyEventsContext } from "./Contexts/MyEventsContext";
+import CallToAction from "./Components/CallToAction";
 
 function App() {
   const { setMyEvents, setMyEventsError, setMyEventsLoading } = useContext(MyEventsContext); /* for rendering events in users profile */
 
   const { currentUser } = useAuth();
-  // States
+
+  // Data States
   const [organizationId, setOrganizationId] = useState("");
   const [images, setImages] = useState({});
   const [categories, setCategories] = useState([]);
-  const [eventsTickets, setEventsTickets] = useState([]);
+  const [eventsTickets, setEventsTickets] = useState({});
   const [events, setEvents] = useState([]);
-  // Error handling
+
+  // Error Handling States
   const [organizationIdError, setOrganizationIdError] = useState("");
   const [catError, setCatError] = useState("");
   const [imageError, setImageError] = useState("");
-  // const [myEventsError, setMyEventsError] = useState("");
   const [eventsError, setEventsError] = useState("");
-  const [eventTicketsError, setEventTicketsError] = useState("");
-  // Loading 
+  // const [myEventsError, setMyEventsError] = useState(""); // moved to context
+
+  // Loading States
+  const [fetchingOrganisatioId, setFetchingOrganisationId] = useState(false)
   const [imagesLoading, setImagesLoading] = useState(false);
   const [catLoading, setCatLoading] = useState(false);
   const [eventsLoading, setEventsLoading] = useState(false);
-  // const [myEventsLoading, setMyEventsLoading] = useState(false);
-  const [eventsTicketsLoading, setEventsTicketsLoading] = useState(false);
+  // const [myEventsLoading, setMyEventsLoading] = useState(false); // moved to context
 
   useEffect(() => {
     handleSetOrganisationId();
-    handleFetchImages();
     handleSetCategories();
+    handleFetchImages();
   }, []);
 
-  useEffect(() => {
-    if (currentUser) {
-      handleFetchMyEvents("users", currentUser.email);
-    } else {
-      setMyEvents([]);
-    }
-  }, [currentUser]);
+  async function handleSetOrganisationId() {
+    setFetchingOrganisationId(true);
+    setOrganizationIdError("");
 
-  useEffect(() => {
-    organizationId && handleFetchEvents();
-  }, [organizationId]);
-
-  useEffect(() => {
-    events.length && handleFetchEventsTickets();
-  }, [events]);
-
-  // EVENTBRITE CALL
-  async function handleFetchMyEvents(collection, document) {
-    setMyEventsError("");
-    setMyEventsLoading(true)
     try {
-      const myEventsResponse = await getCollection(collection, document);
-        setMyEvents(myEventsResponse.myEvents);
-      
-    } catch (error) {
-      console.log(error);
-      setMyEventsError("Failed to load My Events");
+      const idResponse = await getEventbriteOrganizationId();
+      setOrganizationId(idResponse);
+    } catch(error) {
+      console.log("organisation Id error", error)
+      setOrganizationIdError("Site down, Failed To fetch organisation id ");
     } finally {
-      setMyEventsLoading(false)
+      setFetchingOrganisationId(false)
+    }
+  } 
+
+    async function handleSetCategories() {
+    setCatLoading(true);
+    setCatError("");
+
+    try {
+      const data = await fetchEventbriteCategories();
+      const categories = data.categories;
+      const filteredCategories = categories.filter((category) => {
+        const wantedCategories = [
+          103, 110, 113, 105, 104, 108, 107, 102, 111, 115, 106, 199,
+        ];
+        if (wantedCategories.includes(Number(category.id))) {
+          return categories;
+        }
+      });
+      setCategories(filteredCategories);
+      setCatLoading(false);
+    } catch(error) {
+      console.log(error, " category error");
+      setCatError("Failed To Load Categories");
+    } finally {
+      setCatLoading(false);
     }
   }
 
-  //UNSPLASH CALL
   async function handleFetchImages() {
     setImagesLoading(true);
-    setImageError('')
+    setImageError('');
+
     try {
       const responseImages = await fetchUnsplashCollection();
       const imageObject = {};
@@ -129,156 +141,134 @@ function App() {
 
       setImages(imageObject);
     } catch (error) {
-      console.log(error);
+      console.log('failed to load images', error);
       setImageError("Failed to load images");
     } finally {
       setImagesLoading(false);
     }
   }
 
-  async function handleSetOrganisationId() {
-    setOrganizationIdError("");
-    try {
-      const idResponse = await getEventbriteOrganizationId();
-      setOrganizationId(idResponse);
-    } catch {
-      setOrganizationIdError("Failed To fetch organisation id");
-    }
-  }
-
-  async function handleSetCategories() {
-    setCatLoading(true);
-    setCatError;
-    try {
-      const data = await fetchEventbriteCategories();
-      const categories = data.categories;
-      const filteredCategories = categories.filter((category) => {
-        const wantedCategories = [
-          103, 110, 113, 105, 104, 108, 107, 102, 111, 115, 106, 199,
-        ];
-        if (wantedCategories.includes(Number(category.id))) {
-          return categories;
-        }
-      });
-      setCategories(filteredCategories);
-      setCatLoading(false);
-    } catch(error) {
-      console.log(error, " category error");
-      setCatError("Failed To Load Categories");
-    } finally {
-      setCatLoading(false);
-    }
-  }
+  useEffect(() => {
+    organizationId && handleFetchEvents();
+  }, [organizationId]);
 
   async function handleFetchEvents() {
     setEventsLoading(true);
     setEventsError("");
+
     try {
       const eventsObject = await fetchAllEvents(organizationId);
       const responseEvents = eventsObject.events;
       
       setEvents(responseEvents);
     } catch (error) {
-      setEventsError("Failed To fetch events");
+      setEventsError("Failed To fetch events", error);
     } finally {
       setEventsLoading(false);
     }
   }
-
-  async function handleFetchEventsTickets() {
-    const eventsIds = events.map((event) => event.id);
-    const eventsTicketsObj = {};
-    const errors = [];
-
-    setEventsTicketsLoading(true);
-    setEventTicketsError("");
-
-    try {
-        await Promise.all(
-            eventsIds.map(async (eventId) => {
-                try {
-                    const tickets = await fetchEventTickets(eventId);
-                    eventsTicketsObj[eventId] = tickets;
-                } catch (error) {
-                    console.log("ERROR: ", error);
-                    errors.push(error)
-                    throw error
-                }
-            })
-        );
-        setEventsTickets(eventsTicketsObj);
-    } catch (error) {
-        setEventTicketsError("Failed to fetch all event tickets");
-    } finally {
-          setEventsTicketsLoading(false);
+  
+  useEffect(() => {
+    if (currentUser) {
+      handleFetchMyEvents("users", currentUser.email);
+    } else {
+      setMyEvents([]);
     }
-}
+  }, [currentUser]);
+
+  async function handleFetchMyEvents(collection, document) {
+    setMyEventsError("");
+    setMyEventsLoading(true)
+    try {
+      const myEventsResponse = await getCollection(collection, document);
+        setMyEvents(myEventsResponse.myEvents);    
+    } catch (error) {
+      console.log('failed to load my events', error);
+      setMyEventsError("Failed to load My Events");
+    } finally {
+      setMyEventsLoading(false)
+    }
+  }
 
   return (
     <>
-      <Header />
       {organizationIdError && <Alert variant="danger">{organizationIdError}</Alert>}
-      {imageError && <Alert variant="danger">{imageError}</Alert>}
-      <Container
-        id="container"
-        className="d-flex align-items-center justify-content-center"
-        style={{ minHeight: "80vh" }}
-      >
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Landing
-                organizationId={organizationId}
-                images={images}
-                imagesLoading={imagesLoading}
-                catLoading={catLoading}
-                categories={categories}
-                events={events}
-                eventsTickets={eventsTickets}
-                eventsLoading={eventsLoading}
-                eventsTicketsLoading={eventsTicketsLoading}
-                catError = {catError}
-                eventTicketsError={eventTicketsError}
-                eventsError={eventsError}
+      {eventsError && <Alert variant="danger">{eventsError}</Alert>}
+      {catError && <Alert variant="danger">{catError}</Alert>}
 
+      {eventsLoading || catLoading && 
+      <Container>
+        <CallToAction/>
+        <Row>
+        <Col sm={2}>
+        <Spinner animation="border" variant="primary" />
+        <Spinner animation="border" variant="success" />
+        </Col>
+        <Col sm={8}>
+        <h2>LOADING GATHERS EVENTS</h2>
+        </Col>
+        <Col sm={2}>
+        <Spinner animation="border" variant="danger" />
+        <Spinner animation="border" variant="warning" />
+        </Col>
+        </Row>
+      </Container>}
+      {organizationId && events.length && categories.length &&
+      <>
+        <Header />
+        {imageError && <Alert variant="danger">{imageError}</Alert>}
+          <Container id="container" className="d-flex align-items-center justify-content-center" style={{ minHeight: "80vh" }}>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Landing
+                    organizationId={organizationId}
+                    categories={categories}
+                    events={events}
+                    images={images}
+                    imagesLoading={imagesLoading}
+                    eventsTickets={eventsTickets}
+                    setEventsTickets={setEventsTickets}
+                  />
+                }
               />
-            }
-          />
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/join" element={<Join />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route
-            path="/create-event"
-            element={
-              <UserPrivateRoute>
-                <CreateEvent
-                  organizationId={organizationId}
-                  catLoading={catLoading}
-                  categories={categories}
-                />
-              </UserPrivateRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <UserPrivateRoute>
-                <Profile events={events} eventsError={eventsError} eventsLoading={eventsLoading} handleFetchMyEvents={handleFetchMyEvents}/>
-              </UserPrivateRoute>
-            }
-          />
-          <Route
-            path="/event/:event_id"
-            element={
-              <IndividualEvent
-                organizationId={organizationId}
-                images={images}
+              <Route path="/sign-in" element={<SignIn />} />
+              <Route path="/join" element={<Join />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route
+                path="/create-event"
+                element={
+                  <UserPrivateRoute>
+                    <CreateEvent
+                      organizationId={organizationId}
+                      categories={categories}
+                    />
+                  </UserPrivateRoute>
+                }
               />
-            }
-          />
-        </Routes>
-      </Container>
+              <Route
+                path="/profile"
+                element={
+                  <UserPrivateRoute>
+                    <Profile events={events} handleFetchMyEvents={handleFetchMyEvents}/>
+                  </UserPrivateRoute>
+                }
+              />
+              <Route
+                path="/event/:event_id"
+                element={
+                  <IndividualEvent
+                    organizationId={organizationId}
+                    images={images}
+                    imagesLoading={imagesLoading}
+                  />
+                }
+              />
+            </Routes>
+          </Container>
+        </>
+      }
     </>
   );
 }
