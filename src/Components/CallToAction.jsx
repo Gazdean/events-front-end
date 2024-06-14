@@ -9,7 +9,8 @@ export default function CallToAction() {
         <p className='h3'>Let's</p>
         <h1 className="display-4" style={{ color: "#429DD0" }}>Gather</h1>
         <p className='h5'>and make our community <strong>stronger</strong> together</p>
-        <p>Browse our events, sign up, and connect with your local community.</p>
+        <p>Browse our events, sign up, and connect with your local community</p>
+        <p>All events held or meet at our Cafe unless stated</p>
       </Card>
     </Container>
   )

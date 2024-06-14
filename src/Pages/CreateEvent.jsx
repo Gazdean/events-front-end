@@ -8,14 +8,13 @@ import CategoryOptions from "../Components/CategoryOptions"
 import {formatCreateEventData, formatCreateTicketClassData} from "../utils"
 import ReturnToEventsButton from "../Components/ReturnToEventsButton"
 
-export default function createEvent ({organizationId, catLoading, categories}) {
+export default function createEvent ({organizationId, categories}) {
+    const navigate = useNavigate() 
 
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const [creatingEvent, setCreatingEvent] = useState(false)
     
-    const navigate = useNavigate() 
-
     const {register, handleSubmit, watch, formState:{errors}, setValue} = useForm()
 
     const watchIsFree = watch("isFree", "")
@@ -87,7 +86,7 @@ export default function createEvent ({organizationId, catLoading, categories}) {
                         <Form.Group id="EventCategory">
                             <Form.Label htmlFor="category_id">Event Category</Form.Label>
                             <Form.Select id="category_id" name="category_id" {...register('category_id', {required:true, })}>              
-                              {catLoading ? <option>*Loading*</option> : <option disabled>-- please select a category --</option>}
+                              <option>-- please select a category --</option>
                               <CategoryOptions categories={categories}/>
                             </Form.Select>
                             {errors.category_id?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A category is required</p>}

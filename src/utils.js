@@ -21,7 +21,6 @@ export function formatCreateEventData(data) {
 }
 
 export function formatCreateTicketClassData(data) {
-    console.log('data in call', data)
     const costInPence = data.cost * 100
     const body = {
         ticket_class: {

@@ -18,7 +18,7 @@ const fetchUnsplashCollection = async () => {
       });
       return response.data;
   } catch (error) {
-      console.log(error)
+      console.log("Error fetching images", error)
       throw error
   }
 };

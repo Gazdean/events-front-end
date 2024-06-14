@@ -6,12 +6,9 @@ import { handleFormatDate } from '../utils';
 export default function ProfileEventCard({ event }) {
   const [dateObj, setDateObj] = useState({});
 
-
   useEffect(() => {
     setDateObj(handleFormatDate(event));
   }, [event]);
-
-  
 
   return (
     <Card>

@@ -1,47 +1,69 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Card, Col, Image } from 'react-bootstrap'
+import { Alert, Button, Card, Col, Image } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { handleFormatDate } from '../utils'
+import { fetchEventTickets } from '../apiEventBriteCalls'
 
-export default function EventCard({event, images, eventsTickets, imagesLoading}) {
+export default function EventCard({event, images, eventsTickets, setEventsTickets, imagesLoading}) {
 
-    const [ticketCost, setTicketCost] = useState('')
     const [dateInfo, setDateInfo] = useState({})
-    const [tickets, setTickets] = useState([])
-    const [ticketQuantity, setTicketQuantity] = useState([])
+    const [currentEventTicket, setCurrentEventTicket] = useState({});
+    const [eventTicketsError, setEventTicketsError] = useState("");
+    const [eventsTicketsLoading, setEventsTicketsLoading] = useState(false);
    
     useEffect(() => {
-        setDateInfo(handleFormatDate(event))   
-      }, [event])
+        setDateInfo(handleFormatDate(event))  
+        handleFetchEventsTickets() 
+      }, [])
 
-    useEffect(() => {
-          const eventTicketObj = eventsTickets[event.id][0]
-          setTickets(eventTicketObj)
-      }, [eventsTickets])
-
-    useEffect(()=>{
-        setTicketQuantity(tickets.quantity_total)
-        if(tickets.cost)
-        setTicketCost(tickets.cost.display)
-    },[tickets])
+    async function handleFetchEventsTickets() {
+      setEventsTicketsLoading(true);
+      setEventTicketsError("");
+      try {
+        if (!eventsTickets.hasOwnProperty(event.id)) {
+            const ticket = await fetchEventTickets(event.id);
+            setEventsTickets((prevTickets) => ({...prevTickets, [event.id]: ticket[0]}))
+            setCurrentEventTicket(ticket[0])
+        } else {
+            const ticket = eventsTickets[event.id]
+            setCurrentEventTicket(ticket)
+        }
+      } catch (error) {
+          console.log('Failed to fetch tickets', error)
+          setEventTicketsError("Failed to fetch event tickets");
+      } finally {
+          setEventsTicketsLoading(false);
+      }
+    } 
 
   return (
     <> 
         <Col sm={2} className="w-100 border m-2 ms-0 p-3" variant="primary" style={{maxWidth:"400px"}}>
             <h2 >{event.name.text}</h2>  
+            <h2 >{event.id}</h2>  
             <div>
                 <p>Start: <strong>{dateInfo.startDate}</strong> at <strong>{dateInfo.startTime}</strong></p>
                 <p>End: <strong>{dateInfo.endDate}</strong> at <strong>{dateInfo.endTime}</strong></p>
             </div>
-            {imagesLoading ? <p>-- Loading --</p> : <Image src={images[event.category_id]?.thumb} alt={`generic ${event.name.text} event picture`}/> }
+            {imagesLoading ?
+              <p>-- Image Loading --</p> : 
+              <Image src={images[event.category_id]?.thumb} alt={`generic ${event?.name?.text} event picture`}/>
+            }
             <p >{`${event.description.text.slice(0, 100)}.........`}</p>
 
             <Card className= "mb-3">
-                {tickets.free ? <p style={{color:"green"}}>free event</p> : tickets.donation ? <p style={{color:"blue"}}>donation</p> : <p style={{color:"red"}}>Price: {ticketCost}</p>}
-                <p style={{color:"green"}}>Tickets Available: {ticketQuantity < 5 && ticketQuantity > 0 ? 'Nearly Sold Out!!' : ticketQuantity == 0 ? 'Sold Out!!!!!' : ticketQuantity }</p> 
-            </Card>
+              {eventTicketsError ? 
+                <Alert variant="danger">{eventTicketsError}</Alert> :
+                eventsTicketsLoading ? <p> --tickets loading --</p> :
+                <>
+                  {currentEventTicket?.free ? <p style={{color:"green"}}>free event</p> : currentEventTicket?.donation ? <p style={{color:"blue"}}>donation</p> : <p style={{color:"red"}}>Price: {currentEventTicket?.cost?.display}</p>}
+                  <p style={{color:"green"}}>Tickets Available: {currentEventTicket?.quantity_total < 5 && currentEventTicket?.quantity_total > 0 ? 'Nearly Sold Out!!' : currentEventTicket?.quantity_total == 0 ? 'Sold Out!!!!!' : currentEventTicket?.quantity_total }</p> 
+                </>
+              }
+                </Card>
             <Link to={`event/${event.id}`}><Button variant="primary">More Info</Button></Link>
         </Col>      
     </>
   )
 }
+//  
