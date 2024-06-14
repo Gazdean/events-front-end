@@ -12,7 +12,7 @@ export default function LoadingComponent({loadingMessage}) {
                 <Spinner animation="border" variant="success" />
             </Col>
             <Col sm={8}>
-                <h2>loadingMessage</h2>
+                <h2>{loadingMessage}</h2>
             </Col>
             <Col sm={2}>
                 <Spinner animation="border" variant="danger" />

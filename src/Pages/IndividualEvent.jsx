@@ -8,7 +8,7 @@ import SignUpModal from '../Components/SignUpModal'
 import { handleFormatDate } from "../utils";
 import ReturnToEventsButton from "../Components/ReturnToEventsButton";
 import { MyEventsContext } from "../Contexts/MyEventsContext";
-import { upDateMyEvents } from "../apiFirebaseCalls";
+import { addAnEvent, upDateEventAttendees, upDateMyEvents } from "../apiFirebaseCalls";
 
 export default function IndividualEvent({ organizationId, images, imagesLoading }) {
   const { myEvents } = useContext(MyEventsContext);
@@ -20,8 +20,7 @@ export default function IndividualEvent({ organizationId, images, imagesLoading 
   const [dateTime, setDateTime] = useState({})
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [eventTickets, setEventTickets] = useState(null)
-  const [alreadySignedUp, setAlreadySignedUp] = useState(false)
-  
+  const [alreadySignedUp, setAlreadySignedUp] = useState(false) 
   const [signUpComplete, setSignUpComplete]= useState(false)
 
   // loading states
@@ -78,15 +77,14 @@ export default function IndividualEvent({ organizationId, images, imagesLoading 
   function handleSetAlreadySignedUp() {
     myEvents.includes(event.id) ? setAlreadySignedUp(true) : null
   }
-
-    // {setSignUpComplete, event, showSignUpModal, setShowSignUpModal}) {
-  
   
   async function handleSignUp() {
     setSigningUp(true)
     try {
       const eventData = event.id
       await upDateMyEvents(currentUser.email, eventData)
+      await addAnEvent(event.id)
+      await upDateEventAttendees(eventData, currentUser.email)
       setSignUpComplete(true)
       handleShowSignUpModal()
     } catch(error) {
@@ -97,8 +95,6 @@ export default function IndividualEvent({ organizationId, images, imagesLoading 
     }
   }
   
-
-  console.log(event)
   return (
     <Container>
        {fetchEventError && <Alert variant="danger">{fetchEventError}</Alert>}
