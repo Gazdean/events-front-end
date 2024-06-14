@@ -2,8 +2,7 @@ import "./App.css";
 
 import { Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Alert, Col, Container, Row } from "react-bootstrap";
-import Spinner from 'react-bootstrap/Spinner'
+import { Alert, Container} from "react-bootstrap";
 import { useEffect, useState, useContext } from "react";
 
 import CreateEvent from "./Pages/CreateEvent";
@@ -28,7 +27,8 @@ import { getCollection } from "./apiFirebaseCalls";
 
 import { useAuth } from "./Contexts/AuthContext";
 import { MyEventsContext } from "./Contexts/MyEventsContext";
-import CallToAction from "./Components/CallToAction";
+import LoadingComponent from "./Components/LoadingComponent";
+import HeaderTest from "./Components/Header";
 
 function App() {
   const { setMyEvents, setMyEventsError, setMyEventsLoading } = useContext(MyEventsContext); /* for rendering events in users profile */
@@ -197,27 +197,12 @@ function App() {
       {catError && <Alert variant="danger">{catError}</Alert>}
 
       {eventsLoading || catLoading && 
-      <Container>
-        <CallToAction/>
-        <Row>
-        <Col sm={2}>
-        <Spinner animation="border" variant="primary" />
-        <Spinner animation="border" variant="success" />
-        </Col>
-        <Col sm={8}>
-        <h2>LOADING GATHERS EVENTS</h2>
-        </Col>
-        <Col sm={2}>
-        <Spinner animation="border" variant="danger" />
-        <Spinner animation="border" variant="warning" />
-        </Col>
-        </Row>
-      </Container>}
+        <LoadingComponent loadingMessage={"LOADING GATHER EVENTS"}/>}
       {organizationId && events.length && categories.length &&
       <>
-        <Header />
+        <Header/>
         {imageError && <Alert variant="danger">{imageError}</Alert>}
-          <Container id="container" className="d-flex align-items-center justify-content-center" style={{ minHeight: "80vh" }}>
+          <Container id="container" className="mt-5 d-flex align-items-center justify-content-center" style={{ minHeight: "80vh" }}>
             <Routes>
               <Route
                 path="/"
