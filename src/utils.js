@@ -51,10 +51,7 @@ export function formatCreateTicketClassData(data) {
 }
 
 export function handleFormatDate(event) {
-  
-    // event.start.utc has been used to stop an hour being added to the times when fetching due to BST, 
-    // need to test what happens clocks go back and if any logic needs to be added
-    
+
     const startString = event.start.utc 
     const endString = event.end.utc
 

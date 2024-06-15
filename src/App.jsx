@@ -13,7 +13,7 @@ import Profile from "./Pages/Profile";
 import SignIn from "./Pages/SignIn";
 import IndividualEvent from "./Pages/IndividualEvent";
 
-import Header from "./Components/Header";
+
 import UserPrivateRoute from "./Components/UserPrivateRoute";
 
 import {
@@ -28,7 +28,7 @@ import { getCollection } from "./apiFirebaseCalls";
 import { useAuth } from "./Contexts/AuthContext";
 import { MyEventsContext } from "./Contexts/MyEventsContext";
 import LoadingComponent from "./Components/LoadingComponent";
-import HeaderTest from "./Components/Header";
+import Header from "./Components/Header";
 
 function App() {
   const { setMyEvents, setMyEventsError, setMyEventsLoading } = useContext(MyEventsContext); /* for rendering events in users profile */
@@ -213,7 +213,7 @@ function App() {
         <LoadingComponent loadingMessage={"LOADING GATHER EVENTS"}/>}
       {organizationId && events.length && categories.length &&
       <>
-        <HeaderTest/>
+        <Header/>
         {imageError && <Alert variant="danger">{imageError}</Alert>}
           <Container id="container" className="mt-5 d-flex align-items-center justify-content-center" style={{ minHeight: "80vh" }}>
             <Routes>
