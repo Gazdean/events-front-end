@@ -1,4 +1,4 @@
-const { formatCreateEventData, formatCreateTicketClassData } = require("../utils");
+const { formatCreateEventData, formatCreateTicketClassData, isEventOld, handleFormatDate } = require("../utils");
 
 describe("formatCreateEventData", () => {
     test("when passed an empty object it should return an object", ()=> {
@@ -134,7 +134,7 @@ describe("formatCreateEventData", () => {
     })
 })
 
-describe.only("formatTicketClassData", () => {
+describe("formatTicketClassData", () => {
     test("when passed an empty object it should return an object", ()=> {
         // assign
         const input = {}
@@ -204,5 +204,92 @@ test("when passed an object with key of isFree and value true it should the corr
         const output = formatCreateTicketClassData(input)
         // assert
         expect(output).toMatchObject(expected)
+    })
+})
+
+describe("handleFormatDate" , ()=>{
+    test("when passed a Strings it should return an empty object", ()=> {
+        // assign
+        const input1 = ''
+        const input2 = ''
+        const expected = {}
+        // act
+        const output = handleFormatDate(input1, input2)
+        // assert
+        expect(output).toEqual(expected)
+    })
+    test("when passed an empty startDateString it should return an empty object", ()=> {
+        // assign
+        const input1 = ''
+        const input2 = '2024-06-13T10:05:21Z'
+        const expected = {}
+        // act
+        const output = handleFormatDate(input1, input2)
+        // assert
+        expect(output).toEqual(expected)
+    })
+    test("when passed an empty endDateString it should return an empty object", ()=> {
+        // assign
+        const input1 = '2024-06-13T10:05:21Z'
+        const input2 = ''
+        const expected = {}
+        // act
+        const output = handleFormatDate(input1, input2)
+        // assert
+        expect(output).toEqual(expected)
+    })
+    test("when passed an correct string it should return an empty correct object", ()=> {
+        // assign
+        const input1 = '2024-06-13T10:05:21Z'
+        const input2 = '2024-06-13T12:05:21Z'
+        const expected = {
+            startDate: 'Thu Jun 13 2024 11:05',
+            endDate: 'Thu Jun 13 2024 13:05'
+          }
+        // act
+        const output = handleFormatDate(input1, input2)
+        console.log('test', output)
+        // assert
+        expect(output).toEqual(expected)
+    })
+    test("when passed an incorrect format string it should return an empty correct object", ()=> {
+        // assign
+        const input1 = '2024-0613T10:05:21Z'
+        const input2 = '2024-0613T12:05:21Z'
+        const expected = {}
+        // act
+        const output = handleFormatDate(input1, input2)
+        console.log('test', output)
+        // assert
+        expect(output).toEqual(expected)
+    })
+})
+describe("eventIsOld" , ()=>{
+    test("when passed an empty string it should return 'no date passed to function'", ()=> {
+        // assign
+        const input = ''
+        const expected = "no date passed to function"
+        // act
+        const output = isEventOld(input)
+        // assert
+        expect(output).toBe(expected)
+    })
+    test("when passed a date the in the past it should return false", ()=> {
+        // assign
+        const input = "2024-06-13T10:05:21Z"
+        const expected = true
+        // act
+        const output = isEventOld(input)
+        // assert
+        expect(output).toBe(expected)
+    })
+    test("when passed a date the in the future it should return true", ()=> {
+        // assign
+        const input = "9999-06-13T10:05:21Z"
+        const expected = false
+        // act
+        const output = isEventOld(input)
+        // assert
+        expect(output).toBe(expected)
     })
 })
