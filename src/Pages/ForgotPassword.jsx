@@ -18,7 +18,7 @@ export default function ForgotPassword() {
             setLoading(true)
             await resetPassword(data.email)
             setMessage('Check your inbox or junk for futher instructions')
-        } catch {
+        } catch(error) {
             // no error sent from Firebase if email does not exsist due to Firebases 'email enumeration protection' to stop brute-force attacks           
         }
         setLoading(false)

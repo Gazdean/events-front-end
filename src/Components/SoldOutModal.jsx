@@ -8,7 +8,7 @@ export default function SoldOutModal({setShowSoldOutModal, showSoldOutModal, eve
     function handleClose() {
         setShowSoldOutModal(false)
     }
-    console.log(event)
+    
     return (
         <Modal
         show={showSoldOutModal}
