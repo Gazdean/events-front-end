@@ -11,7 +11,7 @@ import { MyEventsContext } from "../Contexts/MyEventsContext";
 import { addAnEvent, upDateEventAttendees, upDateMyEvents } from "../apiFirebaseCalls";
 import SoldOutModal from "../Components/SoldOutModal";
 
-export default function IndividualEvent({ organizationId, images, imagesLoading }) {
+export default function IndividualEvent({ organizationId, images, imagesLoading, setEventsTickets }) {
   const { myEvents } = useContext(MyEventsContext);
   const { event_id } = useParams();
   const { currentUser } = useAuth();
@@ -107,19 +107,18 @@ export default function IndividualEvent({ organizationId, images, imagesLoading 
           bug with with reducing tickets quantity, cant reduce to zero always needs to be at least 1 */
           
         if (uptoDateTickets > 1) {
-          console.log("if signup")
           const updatedTicketsQuantity = responseTickets[0].quantity_total - 1
           const body = {ticket_class:{quantity_total: updatedTicketsQuantity}}
           const ticketClassId = responseTickets[0].id
           const eventId = event.id
-          const response = await updateEventTickets(body, eventId, ticketClassId)
-          console.log("updated tickets " , response)
+          const updatedResponseTicket = await updateEventTickets(body, eventId, ticketClassId)
           handleAddAttendeesToDataBase()
-          // optimisticRenderingTickets(ticketClassId)
+          
+          setEventsTickets((prevTickets) => ({...prevTickets, [event.id]: updatedResponseTicket})) // update tickets to show new quantity_total for this ticket
+       
           handleShowSignUpModal()
           setSignUpComplete(true)
         } else if (uptoDateTickets <= 1) {
-          console.log("elseif signup")
           setSoldOut(true)
           handleShowSoldOutModal()
         }
@@ -130,15 +129,6 @@ export default function IndividualEvent({ organizationId, images, imagesLoading 
       }
   }
 
-  // to update events tickets for events view, so dont need to call api again
-
-  // function optimisticRenderingTickets(ticketClassId) {
-  //   console.log('events tickets optimistic', eventsTickets)
-  //   const currentTicket = 
-  //   console.log('current ticket optimistic', currentTicket)
-  // }
-
-  
   return (
     <Container>
        {fetchEventError && <Alert variant="danger">{fetchEventError}</Alert>}

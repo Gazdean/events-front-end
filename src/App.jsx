@@ -260,6 +260,7 @@ function App() {
                     organizationId={organizationId}
                     images={images}
                     imagesLoading={imagesLoading}
+                    setEventsTickets={setEventsTickets}
                   />
                 }
               />
