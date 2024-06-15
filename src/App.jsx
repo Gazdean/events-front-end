@@ -16,9 +16,9 @@ import IndividualEvent from "./Pages/IndividualEvent";
 import UserPrivateRoute from "./Components/UserPrivateRoute";
 
 import {
-  getEventbriteOrganizationId,
-  fetchEventbriteCategories,
-  fetchAllEvents,
+  // getEventbriteOrganizationId,
+  // fetchEventbriteCategories,
+  // fetchAllEvents,
 } from "./apiEventBriteCalls";
 
 import { fetchUnsplashCollection } from "./apiUnsplashCalls";
