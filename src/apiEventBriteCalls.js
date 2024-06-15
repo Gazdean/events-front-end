@@ -52,12 +52,14 @@ async function createEventTicketClass(ticketData, event_id) {
 
 async function fetchAllEvents(organizationId) {
   console.log("called All Events");
+ 
 
   const url = `${baseUrl}organizations/${organizationId}/events/`;
   const params = { expand: "ticket_availability" };
   try {
     const response = await axios.get(url, { headers: headers, params: params });
-    return response.data;
+    console.log("All Events", response.data.events);
+    return response.data.events;
   } catch (error) {
     console.error("Error fetching events:",error);
     throw error
