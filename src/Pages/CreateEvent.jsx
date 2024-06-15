@@ -8,7 +8,7 @@ import CategoryOptions from "../Components/CategoryOptions"
 import {formatCreateEventData, formatCreateTicketClassData} from "../utils"
 import ReturnToEventsButton from "../Components/ReturnToEventsButton"
 
-export default function createEvent ({organizationId, categories}) {
+export default function createEvent ({organizationId, categories, setNewEventCreated}) {
     const navigate = useNavigate() 
 
     const [error, setError] = useState("")
@@ -35,6 +35,7 @@ export default function createEvent ({organizationId, categories}) {
     async function onSubmit(data) {
         setError('')
         setLoading(true)
+        setNewEventCreated(false)
         setCreatingEvent(true)
         try {
            
@@ -47,6 +48,8 @@ export default function createEvent ({organizationId, categories}) {
             const ticketBody = formatCreateTicketClassData(data)
 
             const createdTicketClass = await createEventTicketClass(ticketBody, eventId)
+
+            setNewEventCreated(true)
             
             navigate("/")
             
