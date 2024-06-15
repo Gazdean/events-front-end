@@ -14,12 +14,13 @@ export async function querySnapshot(collection, document) {
 }
 
 export async function addNewUser(email){
-    try {const userRef = doc(db, `users/${email}`)
-        const userData = {
-            firstName: "",
-            lastName: "",
-            myEvents:[]
-        }
+    const userData = {
+        firstName: "",
+        lastName: "",
+        myEvents:[]
+    }
+
+    try {const userRef = doc(db, `users/${email}`)       
         await setDoc(userRef, userData)
     } catch(error){ 
         console.log(error)
@@ -39,32 +40,22 @@ export async function getCollection(collection, document) {
     }
 }
 
-export async function upDateMyEvents(id, data) {
-    try {
-         await updateDoc(doc(db, "users", id), {
-            myEvents: arrayUnion(data)
-          });;
-        
-    } catch (error) {
-        console.log(error)
-        throw error
-    }
-}
-
+// adds document to collection but only if it doesnt exist
 export async function addAnEvent(id, data) {
     try {
          await setDoc(doc(db, "events", id), {         
-          }, { merge: true });
+          }, { merge: true 
+          });
     } catch (error) {
         console.log(error)
         throw error
     }
 } 
 
-export async function upDateEventAttendees(id, data) {
+export async function upDateMyEvents(id, data) {
     try {
-         await updateDoc(doc(db, "events", id), {
-            signedUpUsers:arrayUnion(data)
+         await updateDoc(doc(db, "users", id), {
+            myEvents: arrayUnion(data)
           });
     } catch (error) {
         console.log(error)
@@ -72,3 +63,28 @@ export async function upDateEventAttendees(id, data) {
     }
 }
 
+// updates the documents fields
+export async function upDateEventAttendees(id, data) {
+    try {
+         await updateDoc(doc(db, "events", id), {
+            signedUpUsers: arrayUnion(data)
+          });
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}
+
+export async function createStaff(id, data) {
+    console.log('in call', data)
+    try {
+        await updateDoc(doc(db, "events", id), {
+           firstName: data.firstName,
+           lastName: data.lastName,
+           isAdmin: data.isAdmin
+         });
+   } catch (error) {
+       console.log(error)
+       throw error
+   }
+}

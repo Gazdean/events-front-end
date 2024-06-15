@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 
 import { useForm } from 'react-hook-form'
 import ReturnToEventsButton from "../Components/ReturnToEventsButton"
+import { createStaff } from "../apiFirebaseCalls"
 
 export default function CreateStaffMembers ({}) {
     const navigate = useNavigate() 
@@ -14,35 +15,23 @@ export default function CreateStaffMembers ({}) {
     
     const {register, handleSubmit, watch, formState:{errors}, setValue} = useForm()
 
-//  below useEffect resets form values depending on the value of true/false answers
+    const emailRegex = /^((([!#$%&'*+\-/=?^_`{|}~\w])|([!#$%&'*+\-/=?^_`{|}~\w][!#$%&'*+\-/=?^_`{|}~\.\w]{0,}[!#$%&'*+\-/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)$/
     
     async function onSubmit(data) {
         setError('')
-        setLoading(true)
-        setNewEventCreated(false)
         setCreatingStaff(true)
+        const id = data.email
+        const dataBody = {... data}
+        delete dataBody.email
         try {
-           
-            const eventBody = formatCreateEventData(data)
-
-            const createdEvent = await createEventbriteEvent(eventBody, organizationId)
-
-            const eventId = createdEvent.id
-
-            const ticketBody = formatCreateTicketClassData(data)
-
-            const createdTicketClass = await createEventTicketClass(ticketBody, eventId)
-
-            setNewEventCreated(true)
+           createStaff(id, dataBody)
             
-            navigate("/")
-            
+            // navigate("/")
         } catch(error){
             console.log(error)
             setError('failed to create event')
             
         } finally {
-            setLoading(false)
             setCreatingStaff(false)
         }
     }
@@ -58,26 +47,33 @@ export default function CreateStaffMembers ({}) {
 
                     <Form onSubmit={handleSubmit(onSubmit)} noValidate={true}>
 
-                        <Form.Group id="eventTitle">
-                            <Form.Label htmlFor="name">First Name</Form.Label>
-                            <Form.Control id="name" name="name" type="text" maxLength={140} {...register('name', {required:true, })}></Form.Control>
-                            {errors.name?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An event name is required</p>}
+                        <Form.Group id="inputFirstName">
+                            <Form.Label htmlFor="firstName">First firstName</Form.Label>
+                            <Form.Control id="firstName" name="firstName" type="text" maxLength={140} {...register('firstName', {required:true})}></Form.Control>
+                            {errors.firstName?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A first name is required</p>}
                         </Form.Group>
 
-                        <Form.Group id="eventTitle">
-                            <Form.Label htmlFor="name">Last Name</Form.Label>
-                            <Form.Control id="name" name="name" type="text" maxLength={140} {...register('name', {required:true, })}></Form.Control>
-                            {errors.name?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An event name is required</p>}
+                        <Form.Group id="inputLastName">
+                            <Form.Label htmlFor="lastName">Last Name</Form.Label>
+                            <Form.Control id="lastName" name="lastName" type="text" maxLength={140} {...register('lastName', {required:true})}></Form.Control>
+                            {errors.lastName?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A last name is required</p>}
                         </Form.Group>
 
-                        <Form.Group id="inputIsFree">
-                            <Form.Label htmlFor="isFree">Is the staff member admin</Form.Label>
-                            <Form.Select id="isFree" name="isFree" {...register('isFree', {required:true})} >              
-                              <option>Please Select</option>
-                              <option>true</option>
-                              <option>false</option>
+                        <Form.Group id="email">
+                            <Form.Label htmlFor="joinEmail">Email</Form.Label>
+                            <Form.Control id="joinEmail" name="joinEmail" type="email"  {...register('email', {required:true, pattern:emailRegex})}></Form.Control>
+                            {errors.email?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An email is required</p>}
+                            {errors.email?.type==="pattern"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2">Must be a valid email address</p>}
+                        </Form.Group>
+
+                        <Form.Group id="inputIsAdmin">
+                            <Form.Label htmlFor="isAdmin">Is the staff member admin</Form.Label>
+                            <Form.Select id="isAdmin" name="isAdmin"  {...register('isAdmin', {required:true})} >              
+                                <option value="" >Please Select</option>
+                                <option value="true">true</option>
+                                <option value="false">false</option>
                             </Form.Select>
-                            {errors.isFree?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Free event status is required</p>}
+                            {errors.isAdmin?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Admin status is required</p>}
                         </Form.Group>
 
                         <Button disabled={loading} className="w-100 mt-4" type="submit" >Add Staff Member</Button>                   
