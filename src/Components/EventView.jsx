@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import EventCard from './EventCard'
-import { Alert, Button, ButtonGroup, ButtonToolbar, Col, Container, Row } from 'react-bootstrap'
+import { Button, ButtonGroup, ButtonToolbar, Col, Container, Row } from 'react-bootstrap'
 import FilterButton from './FilterButton'
 
 export default function EventView({images, categories, events, eventsTickets, setEventsTickets, imagesLoading}) {
@@ -34,11 +34,9 @@ export default function EventView({images, categories, events, eventsTickets, se
           <Row className="mt-5">
             {filteredEvents.map(event=><EventCard key={event.id} event={event} images={images} imagesLoading={imagesLoading} eventsTickets={eventsTickets} setEventsTickets={setEventsTickets} />)}     
           </Row>
-          {events.length && !filteredEvents.length ? <Row><h2>Sorry<br/> There Are No Events Of This Type!</h2></Row> : null}
-          
+          {events.length && !filteredEvents.length ? <Row><h2>Sorry<br/> There Are No Events Of This Type!</h2></Row> : null}        
         </Container >
       }
-    </>
-    
+    </>  
   )
 }

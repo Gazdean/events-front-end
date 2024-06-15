@@ -30,16 +30,16 @@ export default function Profile({events, handleFetchMyEvents}) {
 
   return (
     <>
-        <Container>
-          <h2>My Events</h2>
-          {myEventsError && <Alert variant="danger">{myEventsError}</Alert>}
-          {myEventsLoading ? <p>-- Loading My Events --</p> : 
-            <Row className="mt-5">
-              {!myEvents.length ? <p>You Have No Events</p> : filteredEvents.map(event=><ProfileEventCard key={event.id} event={event}/>)}     
-            </Row>
-          }   
-          <ReturnToEventsButton string={"Return To Events"}/>
-        </Container>
+      <Container>
+        <h2>My Events</h2>
+        {myEventsError && <Alert variant="danger">{myEventsError}</Alert>}
+        {myEventsLoading ? <p>-- Loading My Events --</p> : 
+          <Row className="mt-5">
+            {!myEvents.length ? <p>You Have No Events</p> : filteredEvents.map(event=><ProfileEventCard key={event.id} event={event}/>)}     
+          </Row>
+        }   
+        <ReturnToEventsButton string={"Return To Events"}/>
+      </Container>
     </>
   )
 }

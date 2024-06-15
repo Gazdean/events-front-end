@@ -12,7 +12,6 @@ export default function ForgotPassword() {
     const {register, handleSubmit, formState:{errors}} = useForm()
 
     async function onSubmit(data) {
-
         try {
             setMessage('')
             setLoading(true)
@@ -20,9 +19,9 @@ export default function ForgotPassword() {
             setMessage('Check your inbox or junk for futher instructions')
         } catch(error) {
             // no error sent from Firebase if email does not exsist due to Firebases 'email enumeration protection' to stop brute-force attacks           
+        } finally {
+            setLoading(false)
         }
-        setLoading(false)
-        
     }
 
     return (
@@ -44,8 +43,7 @@ export default function ForgotPassword() {
               <div className="w-100 text-center mt-2">
                 Don't have an account? <Link to="/join">Sign up</Link> 
               </div>
-            </Card>
-            
+            </Card>        
         </Container>
     )
 }

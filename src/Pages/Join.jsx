@@ -28,8 +28,9 @@ export default function Join () {
         } catch {
             console.log(error)
             setError('Failed to create account')
+        } finally {
+            setLoading(false)
         }
-        setLoading(false)
 
     }
 

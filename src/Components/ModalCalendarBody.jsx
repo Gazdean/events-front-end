@@ -6,12 +6,12 @@ import { postCalendarEventGoogleApi } from '../apiGoogleCalls';
 import { Alert } from 'react-bootstrap';
 
 export default function ModalCalendarBody({event, showSignUpModal}) {
-    const [calendarEventError, setCalendarEventError] = useState('');
-    const [creatingCalendarEvent, setCreatingCalendarEvent] = useState(false);
-    const navigate = useNavigate()
+  const [calendarEventError, setCalendarEventError] = useState('');
+  const [creatingCalendarEvent, setCreatingCalendarEvent] = useState(false);
+  const navigate = useNavigate()
 
-    const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    const SCOPES = 'https://www.googleapis.com/auth/calendar.events';
+  const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const SCOPES = 'https://www.googleapis.com/auth/calendar.events';
 
 
   const handleAddEventToCalendar = () => {
