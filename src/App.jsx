@@ -172,7 +172,7 @@ function App() {
 
     try {
       const eventsObject = await fetchAllEvents(organizationId);
-      const responseEvents = eventsObject.events;
+      const responseEvents = eventsObject;
       
       setEvents(responseEvents);
     } catch (error) {
