@@ -21,8 +21,9 @@ export default function SignIn () {
             navigate("/")
         } catch {
             setError('Failed to log in')
+        }finally {
+            setLoading(false)
         }
-        setLoading(false)    
     }
 
     return (

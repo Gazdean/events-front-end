@@ -9,9 +9,9 @@ export default function FilterButtonOptions({categories, setFilteredCat}) {
 
   return (
     <>
-        {categories.map((category, index) => (
-        <Dropdown.Item key={`${category.short_name}${index}`} onClick={()=>handleOnClick(category.id)}>{category.short_name}{category.id} </Dropdown.Item>
-        ))}
+      {categories.map((category, index) => (
+      <Dropdown.Item key={`${category.short_name}${index}`} onClick={()=>handleOnClick(category.id)}>{category.short_name}{category.id} </Dropdown.Item>
+      ))}
     </>
   )
 }

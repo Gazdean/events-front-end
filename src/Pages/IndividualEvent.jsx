@@ -84,54 +84,57 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
   }
   
   async function handleAddAttendeesToDataBase() { 
+    setSignUpError('')
     try {
       const eventData = event.id
       await upDateMyEvents(currentUser.email, eventData)
       await addAnEvent(event.id)
       await upDateEventAttendees(eventData, currentUser.email)
     } catch(error) {
-      console.log(error)
-      setSignUpError('Error signing up please try again')
+      console.log('error adding attendee to database', error)
+      setSignUpError('Error adding you to this events data base, please contact Gather')
     } finally {
     }
   }
 
   async function handleSignUp() {
+    setSignUpError('')
     setSigningUp(true)
     try{
       const responseTickets = await fetchEventTickets(event.id)
       const uptoDateTickets = responseTickets[0].quantity_total
 
-      console.log("ticketsRemaing", responseTickets[0].quantity_total)
           /* eventbrite issue, cant write to tickets_sold its read only, 
           bug with with reducing tickets quantity, cant reduce to zero always needs to be at least 1 */
           
-        if (uptoDateTickets > 1) {
-          const updatedTicketsQuantity = responseTickets[0].quantity_total - 1
-          const body = {ticket_class:{quantity_total: updatedTicketsQuantity}}
-          const ticketClassId = responseTickets[0].id
-          const eventId = event.id
-          const updatedResponseTicket = await updateEventTickets(body, eventId, ticketClassId)
-          handleAddAttendeesToDataBase()
-          
-          setEventsTickets((prevTickets) => ({...prevTickets, [event.id]: updatedResponseTicket})) // update tickets to show new quantity_total for this ticket
-       
-          handleShowSignUpModal()
-          setSignUpComplete(true)
-        } else if (uptoDateTickets <= 1) {
-          setSoldOut(true)
-          handleShowSoldOutModal()
-        }
-      } catch (error) {
-        console.log("error checking ticket availibilty", error)
-      } finally {
-        setSigningUp(false)
+      if (uptoDateTickets > 1) {
+        const updatedTicketsQuantity = responseTickets[0].quantity_total - 1
+        const body = {ticket_class:{quantity_total: updatedTicketsQuantity}}
+        const ticketClassId = responseTickets[0].id
+        const eventId = event.id
+        const updatedResponseTicket = await updateEventTickets(body, eventId, ticketClassId)
+        handleAddAttendeesToDataBase()
+        
+        setEventsTickets((prevTickets) => ({...prevTickets, [event.id]: updatedResponseTicket})) // update tickets to show new quantity_total for this ticket
+      
+        handleShowSignUpModal()
+        setSignUpComplete(true)
+      } else if (uptoDateTickets <= 1) {
+        setSoldOut(true)
+        handleShowSoldOutModal()
       }
+    } catch (error) {
+      console.log("error checking ticket availibilty", error)
+      setSignUpError('error completing signing up')
+    } finally {
+      setSigningUp(false)
+    }
   }
 
   return (
     <Container>
        {fetchEventError && <Alert variant="danger">{fetchEventError}</Alert>}
+       {signUpError && <Alert variant="danger">{signUpError}</Alert>}
         {eventLoading ? <p>-- Loading Event --</p> : 
           <Row className=''> 
             <Col className= 'p-1 ml-0' >

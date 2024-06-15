@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import CallToAction from "../Components/CallToAction";
 import EventView from "../Components/EventView";
 import { Col, Container, Row, Image } from "react-bootstrap";
@@ -7,8 +7,7 @@ export default function Landing({ images, categories, events, eventsTickets, set
  
   return (
     <Container className="mt-3">
-      <Row>
-        
+      <Row>    
         <Col sm={6}><Image className="mt-4"width='100%' height='auto' src={images?.landing?.full} alt="cafe picture"/> {imagesLoading  && <p>-- Image Loading --</p>}  </Col>
         <Col sm={6}><CallToAction /></Col>
       </Row>
