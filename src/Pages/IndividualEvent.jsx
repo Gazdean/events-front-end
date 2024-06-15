@@ -3,12 +3,13 @@ import { Button, Container, Image, Row, Col, Alert } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
 import { useAuth } from "../Contexts/AuthContext";
-import { fetchEventTickets, fetchIndividualEvent } from "../apiEventBriteCalls";
+import { fetchEventTickets, fetchIndividualEvent, updateEventTickets } from "../apiEventBriteCalls";
 import SignUpModal from '../Components/SignUpModal'
 import { handleFormatDate } from "../utils";
 import ReturnToEventsButton from "../Components/ReturnToEventsButton";
 import { MyEventsContext } from "../Contexts/MyEventsContext";
 import { addAnEvent, upDateEventAttendees, upDateMyEvents } from "../apiFirebaseCalls";
+import SoldOutModal from "../Components/SoldOutModal";
 
 export default function IndividualEvent({ organizationId, images, imagesLoading }) {
   const { myEvents } = useContext(MyEventsContext);
@@ -19,9 +20,11 @@ export default function IndividualEvent({ organizationId, images, imagesLoading 
   const [event, setEvent] = useState([]);
   const [dateTime, setDateTime] = useState({})
   const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [showSoldOutModal, setShowSoldOutModal] = useState(false);
   const [eventTickets, setEventTickets] = useState(null)
   const [alreadySignedUp, setAlreadySignedUp] = useState(false) 
   const [signUpComplete, setSignUpComplete]= useState(false)
+  const [soldOut, setSoldOut]= useState(false)
 
   // loading states
   const [eventLoading, setEventLoading] = useState(false);
@@ -41,7 +44,8 @@ export default function IndividualEvent({ organizationId, images, imagesLoading 
     handleSetAlreadySignedUp()
   }, [event]);
   
-  const handleShowSignUpModal = () => setShowSignUpModal(true);
+  function handleShowSignUpModal() {setShowSignUpModal(true);}
+  function handleShowSoldOutModal() {setShowSoldOutModal(true);}
 
   async function handleFetchIndividualEvent() {
     setEventLoading(true)
@@ -66,6 +70,7 @@ export default function IndividualEvent({ organizationId, images, imagesLoading 
     try {
       const responseTickets = await fetchEventTickets(eventId)
       setEventTickets(responseTickets[0])
+      responseTickets[0].quantity_total <= 1 ? setSoldOut(true) : setSoldOut(false)
     } catch (error) {
         console.log('failed to fetch individual Ticket', error);
         setFetchTicketError('Failed to load Ticket')
@@ -78,22 +83,61 @@ export default function IndividualEvent({ organizationId, images, imagesLoading 
     myEvents.includes(event.id) ? setAlreadySignedUp(true) : null
   }
   
-  async function handleSignUp() {
-    setSigningUp(true)
+  async function handleAddAttendeesToDataBase() { 
     try {
       const eventData = event.id
       await upDateMyEvents(currentUser.email, eventData)
       await addAnEvent(event.id)
       await upDateEventAttendees(eventData, currentUser.email)
-      setSignUpComplete(true)
-      handleShowSignUpModal()
     } catch(error) {
       console.log(error)
       setSignUpError('Error signing up please try again')
     } finally {
-      setSigningUp(false)
     }
   }
+
+  async function handleSignUp() {
+    setSigningUp(true)
+    try{
+      const responseTickets = await fetchEventTickets(event.id)
+      const uptoDateTickets = responseTickets[0].quantity_total
+
+      console.log("ticketsRemaing", responseTickets[0].quantity_total)
+          /* eventbrite issue, cant write to tickets_sold its read only, 
+          bug with with reducing tickets quantity, cant reduce to zero always needs to be at least 1 */
+          
+        if (uptoDateTickets > 1) {
+          console.log("if signup")
+          const updatedTicketsQuantity = responseTickets[0].quantity_total - 1
+          const body = {ticket_class:{quantity_total: updatedTicketsQuantity}}
+          const ticketClassId = responseTickets[0].id
+          const eventId = event.id
+          const response = await updateEventTickets(body, eventId, ticketClassId)
+          console.log("updated tickets " , response)
+          handleAddAttendeesToDataBase()
+          // optimisticRenderingTickets(ticketClassId)
+          handleShowSignUpModal()
+          setSignUpComplete(true)
+        } else if (uptoDateTickets <= 1) {
+          console.log("elseif signup")
+          setSoldOut(true)
+          handleShowSoldOutModal()
+        }
+      } catch (error) {
+        console.log("error checking ticket availibilty", error)
+      } finally {
+        setSigningUp(false)
+      }
+  }
+
+  // to update events tickets for events view, so dont need to call api again
+
+  // function optimisticRenderingTickets(ticketClassId) {
+  //   console.log('events tickets optimistic', eventsTickets)
+  //   const currentTicket = 
+  //   console.log('current ticket optimistic', currentTicket)
+  // }
+
   
   return (
     <Container>
@@ -111,16 +155,19 @@ export default function IndividualEvent({ organizationId, images, imagesLoading 
 
                 {fetchTicketError ? 
                   <Alert variant="danger">{fetchTicketError}</Alert> :
-                  ticketLoading? <p>-- Ticket Loading --</p> :
+                  ticketLoading ? <p>-- Ticket Loading --</p> :
+                  soldOut ? <Alert variant="danger">TICKETS SOLD OUT</Alert> :
                   <>
                     {eventTickets?.free ? <p style={{color:"green"}}>free event</p> : eventTickets?.donation ? <p style={{color:"blue"}}>donation</p> : <p style={{color:"red"}}>Price: {eventTickets?.cost?.display}</p>}
                     <p style={{color:"green"}}>Tickets Available: {eventTickets?.quantity_total < 5 && eventTickets?.quantity_total > 0 ? 'Nearly Sold Out!!' : eventTickets?.quantity_total == 0 ? 'Sold Out!!!!!' : eventTickets?.quantity_total }</p>
                   </>
                 }
                 <ReturnToEventsButton string={"Return To Events"}/>
-                {currentUser && !alreadySignedUp && !fetchTicketError ? 
+                {currentUser && !alreadySignedUp ? 
                   <>
-                    <Button className="ms-5" onClick={handleSignUp} disabled={signUpComplete}>Sign Up</Button>
+                    {!soldOut && <Button className="ms-5" onClick={handleSignUp} disabled={signUpComplete}>Sign Up</Button>}
+                    {soldOut && <SoldOutModal setShowSoldOutModal={setShowSoldOutModal} showSoldOutModal={showSoldOutModal} event={event} />}
+
                     {signUpComplete ? 
                       <SignUpModal setShowSignUpModal={setShowSignUpModal} showSignUpModal={showSignUpModal} event={event} signUpComplete={signUpComplete}/> : 
                       signingUp ? 

@@ -206,38 +206,3 @@ test("when passed an object with key of isFree and value true it should the corr
         expect(output).toMatchObject(expected)
     })
 })
-
-
-
-
-    // test("when passed an object with address data it should the correctly formatted object", ()=> {
-    //     // assign
-    //     const input = {
-    //         venueName: "gogo",
-    //         address_1: "here",
-    //         address_2: "there",
-    //         city: "manchester",
-    //         region: "lancashire",
-    //         postal_code: "m60",
-
-    //     }
-    //     const expected = {event: {
-    //             venue:{
-    //                 name: "gogo",
-    //                 address: {
-    //                     address_1: "here",
-    //                     address_2: "there",
-    //                     city: "manchester",
-    //                     region: "lancashire",
-    //                     postal_code: "m60",
-    //                     country: "UK"
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     const output = formatCreateTicketClassData(input)
-    //     // assert
-    //     expect(output).toMatchObject(expected)
-    // })
-
-    // // -----   added image test to be added?  ------

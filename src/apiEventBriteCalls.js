@@ -129,4 +129,5 @@ export {
   fetchAllEvents,
   fetchEventTickets,
   fetchIndividualEvent,
+  updateEventTickets
 };

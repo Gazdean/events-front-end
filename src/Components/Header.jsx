@@ -8,7 +8,7 @@ import { useAuth } from '../Contexts/AuthContext'
 import { Link, useLocation } from 'react-router-dom';
 import { querySnapshot } from '../apiFirebaseCalls';
 
-export default function HeaderTest() {
+export default function Header() {
     const [error, setError] = useState("")
   const location = useLocation();
   const {currentUser, logout} = useAuth()
