@@ -8,14 +8,17 @@ import SignUpModal from '../Components/SignUpModal'
 import { handleFormatDate, isEventOld } from "../utils";
 import ReturnToEventsButton from "../Components/ReturnToEventsButton";
 import { MyEventsContext } from "../Contexts/MyEventsContext";
-import { addAnEvent, upDateEventAttendees, upDateMyEvents } from "../apiFirebaseCalls";
+import { addAnEvent, getCollection, upDateEventAttendees, upDateMyEvents } from "../apiFirebaseCalls";
 import SoldOutModal from "../Components/SoldOutModal";
+import { IsStaffContext } from "../Contexts/IsStaffContext";
+import AttendeeCard from "../Components/AttendeeCard";
 
 export default function IndividualEvent({ organizationId, images, imagesLoading, setEventsTickets }) {
   const { myEvents } = useContext(MyEventsContext);
   const { event_id } = useParams();
   const { currentUser } = useAuth();
-
+  const {isStaff} = useContext(IsStaffContext);
+  
   // data states
   const [event, setEvent] = useState([]);
   const [dateInfo, setDateInfo] = useState({})
@@ -26,19 +29,24 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
   const [signUpComplete, setSignUpComplete]= useState(false)
   const [soldOut, setSoldOut]= useState(false)
   const [pastEvent, setPastEvent] = useState(false)
+  const [attendees, setAttendees] =useState([])
+  
 
   // loading states
   const [eventLoading, setEventLoading] = useState(false);
   const [ticketLoading, setTicketLoading] = useState(false);
   const [signingUp, setSigningUp]= useState(false)
+  const [attendeesLoading, setAttendeesLoading] =useState(false)
   
   // error states
   const [fetchEventError, setFetchEventError] = useState("")
   const [fetchTicketError, setFetchTicketError] = useState("")
   const [signUpError, setSignUpError] = useState("")
+  const [attendeesError, setAttendeesError] =useState("")
    
   useEffect(() => {
     handleFetchIndividualEvent()
+    handleFetchAttendees()
   }, []);
 
   useEffect(() => {
@@ -100,6 +108,21 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
       console.log('error adding attendee to database', error)
       setSignUpError('Error adding you to this events data base, please contact Gather')
     } finally {
+    }
+  }
+
+  async function handleFetchAttendees() { 
+    setAttendeesError('')
+    setAttendeesLoading(true)
+    try {
+      const attendeesResponse = await getCollection("events", event_id)
+      console.log(attendeesResponse.signedUpUsers)
+      setAttendees(attendeesResponse.signedUpUsers)
+    } catch(error) {
+      console.log('error fetching attendees ', error)
+      setAttendeesError('Error fetching attendees')
+    } finally {
+      setAttendeesLoading(false)
     }
   }
 
@@ -181,6 +204,14 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
                     !pastEvent && currentUser && <Button disabled={true} variant="success" className="ms-5" >You are Already Signed Up</Button>
                 }
             </Col>
+          </Row>
+        }
+        { isStaff && 
+          <Row>
+            <h3>Signed up</h3>
+            <ol>
+              {attendees && attendees.map((attendee, index)=><AttendeeCard key={`${index}${event_id}`} attendee={attendee}/>)}
+            </ol>
           </Row>
         }
     </Container>
