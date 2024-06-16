@@ -1,38 +1,43 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import {Form, Button, Card, Alert, Container} from "react-bootstrap"
-import { useNavigate } from "react-router-dom"
 
 import { useForm } from 'react-hook-form'
 import ReturnToEventsButton from "../Components/ReturnToEventsButton"
-import { createStaff } from "../apiFirebaseCalls"
+import { addNewStaff } from "../apiFirebaseCalls"
 
 export default function CreateStaffMembers ({}) {
-    const navigate = useNavigate() 
-
     const [error, setError] = useState("")
-    const [loading, setLoading] = useState(false)
     const [creatingStaff, setCreatingStaff] = useState(false)
+    const [staffCreated, setStaffCreated] = useState(false)
     
-    const {register, handleSubmit, watch, formState:{errors}, setValue} = useForm()
+    const {register, handleSubmit, watch, formState:{errors}, reset} = useForm()
 
     const emailRegex = /^((([!#$%&'*+\-/=?^_`{|}~\w])|([!#$%&'*+\-/=?^_`{|}~\w][!#$%&'*+\-/=?^_`{|}~\.\w]{0,}[!#$%&'*+\-/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)$/
-    
+   
     async function onSubmit(data) {
         setError('')
         setCreatingStaff(true)
-        const id = data.email
-        const dataBody = {... data}
-        delete dataBody.email
+        setStaffCreated(false)
+        const email = data.email
+        const staffData = {... data}
+        delete staffData.email
+        
         try {
-           createStaff(id, dataBody)
-            
-            // navigate("/")
+            await addNewStaff(email, staffData)
+            setStaffCreated(true)
         } catch(error){
             console.log(error)
-            setError('failed to create event')
+            setError(error.message)
             
         } finally {
             setCreatingStaff(false)
+        }
+    }
+
+    function handleOnFocus() {
+        if (staffCreated) {
+            setStaffCreated(false)
+            reset()
         }
     }
 
@@ -43,19 +48,20 @@ export default function CreateStaffMembers ({}) {
                 <Card.Body >
                     <h2 className="text-center mb-4">Add a Staff Member</h2>
                     {error && <Alert variant="danger">{error}</Alert>}
-                    {creatingStaff && <Alert variant="primary">CreatingStaff event</Alert>}
+                    {creatingStaff && <Alert variant="primary">CreatingStaff</Alert>}
+                    {staffCreated && <Alert variant="primary">Staff Member Added</Alert>}
 
                     <Form onSubmit={handleSubmit(onSubmit)} noValidate={true}>
 
                         <Form.Group id="inputFirstName">
-                            <Form.Label htmlFor="firstName">First firstName</Form.Label>
-                            <Form.Control id="firstName" name="firstName" type="text" maxLength={140} {...register('firstName', {required:true})}></Form.Control>
+                            <Form.Label htmlFor="firstName">First Name</Form.Label>
+                            <Form.Control id="firstName" name="firstName" type="text" maxLength={140} onFocus={handleOnFocus} {...register('firstName', {required:true})}></Form.Control>
                             {errors.firstName?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A first name is required</p>}
                         </Form.Group>
 
                         <Form.Group id="inputLastName">
                             <Form.Label htmlFor="lastName">Last Name</Form.Label>
-                            <Form.Control id="lastName" name="lastName" type="text" maxLength={140} {...register('lastName', {required:true})}></Form.Control>
+                            <Form.Control id="lastName" name="lastName" type="text" maxLength={140} onFocus={handleOnFocus} {...register('lastName', {required:true})}></Form.Control>
                             {errors.lastName?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A last name is required</p>}
                         </Form.Group>
 
@@ -67,8 +73,8 @@ export default function CreateStaffMembers ({}) {
                         </Form.Group>
 
                         <Form.Group id="inputIsAdmin">
-                            <Form.Label htmlFor="isAdmin">Is the staff member admin</Form.Label>
-                            <Form.Select id="isAdmin" name="isAdmin"  {...register('isAdmin', {required:true})} >              
+                            <Form.Label htmlFor="isAdmin">Is the staff member also an  admin</Form.Label>
+                            <Form.Select id="isAdmin" name="isAdmin"  onFocus={handleOnFocus} {...register('isAdmin', {required:true})} >              
                                 <option value="" >Please Select</option>
                                 <option value="true">true</option>
                                 <option value="false">false</option>
@@ -76,11 +82,11 @@ export default function CreateStaffMembers ({}) {
                             {errors.isAdmin?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Admin status is required</p>}
                         </Form.Group>
 
-                        <Button disabled={loading} className="w-100 mt-4" type="submit" >Add Staff Member</Button>                   
+                        <Button disabled={creatingStaff} className="w-100 mt-4" type="submit" >Add Staff Member</Button>                   
                     </Form>
                 </Card.Body>
             </Card>
-            <ReturnToEventsButton string={"Cancel And Return To Events"}/>
+            <ReturnToEventsButton string={"Return To Events"}/>
         </Container>
     )
 }

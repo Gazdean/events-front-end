@@ -90,7 +90,7 @@ export default function createEvent ({organizationId, categories, setNewEventCre
                         <Form.Group id="EventCategory">
                             <Form.Label htmlFor="category_id">Event Category</Form.Label>
                             <Form.Select id="category_id" name="category_id" {...register('category_id', {required:true, })}>              
-                              <option>-- please select a category --</option>
+                              <option value="">-- please select a category --</option>
                               <CategoryOptions categories={categories}/>
                             </Form.Select>
                             {errors.category_id?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >A category is required</p>}
@@ -118,7 +118,7 @@ export default function createEvent ({organizationId, categories, setNewEventCre
                         <Form.Group id="inputIsFree">
                             <Form.Label htmlFor="isFree">Is the event free</Form.Label>
                             <Form.Select id="isFree" name="isFree" {...register('isFree', {required:true})} >              
-                              <option>Please Select</option>
+                              <option value= "">Please Select</option>
                               <option>true</option>
                               <option>false</option>
                             </Form.Select>
@@ -129,7 +129,7 @@ export default function createEvent ({organizationId, categories, setNewEventCre
                         <Form.Group id="selectDonation">
                             <Form.Label htmlFor="donation">Is the event pay what you feel</Form.Label>
                             <Form.Select id="donation" name="donation" {...register('donation', {required:true})} >              
-                              <option>Please Select</option>
+                              <option value="">Please Select</option>
                               <option>true</option>
                               <option>false</option>
                             </Form.Select>
