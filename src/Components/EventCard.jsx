@@ -41,7 +41,6 @@ export default function EventCard({event, images, imagesLoading, eventsTickets, 
     <> 
       <Col sm={2} className="w-100 border m-2 ms-0 p-3" variant="primary" style={{maxWidth:"400px"}}>
         <h2 >{event.name.text}</h2>  
-        <h2 >{event.id}</h2>  
         <div>
           <p>Start: <strong>{dateInfo.startDate}</strong> at <strong>{dateInfo.startTime}</strong></p>
           <p>End: <strong>{dateInfo.endDate}</strong> at <strong>{dateInfo.endTime}</strong></p>
