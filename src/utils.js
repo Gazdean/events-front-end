@@ -50,18 +50,31 @@ export function formatCreateTicketClassData(data) {
   
 }
 
-export function handleFormatDate(event) {
+export function handleFormatDate(startDateString, endDateString) {
+    if (!startDateString.length || !endDateString.length) {
+        return {}
+    }
+    else {
+        const startDate =  String(new Date(startDateString)).slice(0,21)
+        const endDate =  String(new Date(endDateString)).slice(0,21)
+        if (startDate === 'Invalid Date' || endDate === 'Invalid Date') {
+            return {}
+        } else {
+            const dateObj = {startDate, endDate}
+            
+            return dateObj
+        }
+    }
+}  
 
-    const startString = event.start.utc 
-    const endString = event.end.utc
+export function isEventOld(dateStr) {
+    if(!dateStr.length) return "no date passed to function"
+    const date1 = new Date(dateStr);
+    const dateNow = new Date();
 
-    const startDate = `${startString.slice(8,10)}-${startString.slice(5,7)}-${startString.slice(0, 4)}`
-    const endDate = `${endString.slice(8,10)}-${endString.slice(5,7)}-${endString.slice(0, 4)}`
-    
-    const startTime = startString.slice(11, 16)
-    const endTime = endString.slice(11, 16)
-
-    const dateObj = {startDate, endDate, startTime, endTime}
-
-    return dateObj
+    if (date1 > dateNow) {
+        return false;
+    } else if (date1 < dateNow) {
+        return true; 
+    }
 }

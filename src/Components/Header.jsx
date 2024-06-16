@@ -5,17 +5,20 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { useAuth } from '../Contexts/AuthContext'
 import { Link, useLocation } from 'react-router-dom';
-import { querySnapshot } from '../apiFirebaseCalls';
+import { getCollection, querySnapshot } from '../apiFirebaseCalls';
 
 export default function Header() {
   const [error, setError] = useState("")
   const location = useLocation();
   const {currentUser, logout} = useAuth()
+
   const [isStaff, setIsStaff] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [checkStaffError, setCheckStaffError] = useState('')
 
   async function handleLogout() {
     setIsStaff(false)
+    setIsAdmin(false)
     setError("")
     try {
         await logout()
@@ -37,14 +40,14 @@ export default function Header() {
       const querySnapShot = await querySnapshot("staff", email)
       if (querySnapShot.exists()) {
         setIsStaff(true)
-        console.log("Staff member exists");
+        const staffCollectionDocumentFields = await getCollection("staff", email);
+        setIsAdmin(true)
       } else {
         setIsStaff(false)
-        console.log("Staff member does not exist");
       }
     } catch (error) {
-      console.error("Error checking if staff exists: ", error);
-      setCheckStaffError('Error checking if you are staff member')
+      console.error("Error checking if staff/admin exists: ", error);
+      setCheckStaffError('Error checking if you are staff/admin member')
     }
   };
  
@@ -72,6 +75,11 @@ export default function Header() {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav" >
               <Nav className="ms-auto">  
+                {isAdmin && 
+                  <Nav.Link as={Link} to={"/create-staff-members"}>
+                    <Button variant="primary" size="sm">Add Staff Members</Button>
+                  </Nav.Link >
+                }
                 {isStaff && 
                   <Nav.Link as={Link} to={"/create-event"}>
                     <Button variant="primary" size="sm">Create Event</Button>

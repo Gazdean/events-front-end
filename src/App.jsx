@@ -13,7 +13,6 @@ import Profile from "./Pages/Profile";
 import SignIn from "./Pages/SignIn";
 import IndividualEvent from "./Pages/IndividualEvent";
 
-
 import UserPrivateRoute from "./Components/UserPrivateRoute";
 
 import {
@@ -29,6 +28,7 @@ import { useAuth } from "./Contexts/AuthContext";
 import { MyEventsContext } from "./Contexts/MyEventsContext";
 import LoadingComponent from "./Components/LoadingComponent";
 import Header from "./Components/Header";
+import CreateStaffMembers from "./Pages/CreateStaffMembers";
 
 function App() {
   const { setMyEvents, setMyEventsError, setMyEventsLoading } = useContext(MyEventsContext); /* for rendering events in users profile */
@@ -41,6 +41,7 @@ function App() {
   const [categories, setCategories] = useState([]);
   const [eventsTickets, setEventsTickets] = useState({});
   const [events, setEvents] = useState([]);
+  const [newEventCreated, setNewEventCreated] =useState(false)
 
   // Error Handling States
   const [organizationIdError, setOrganizationIdError] = useState("");
@@ -163,7 +164,8 @@ function App() {
 
   useEffect(() => {
     organizationId && handleFetchEvents();
-  }, [organizationId]);
+    setNewEventCreated(false)
+  }, [organizationId, newEventCreated]);
 
   async function handleFetchEvents() {
     setEventsLoading(true);
@@ -171,7 +173,7 @@ function App() {
 
     try {
       const eventsObject = await fetchAllEvents(organizationId);
-      const responseEvents = eventsObject.events;
+      const responseEvents = eventsObject;
       
       setEvents(responseEvents);
     } catch (error) {
@@ -194,7 +196,7 @@ function App() {
     setMyEventsLoading(true)
     try {
       const myEventsResponse = await getCollection(collection, document);
-        setMyEvents(myEventsResponse.myEvents);    
+      setMyEvents(myEventsResponse.myEvents);    
     } catch (error) {
       console.log('failed to load my events', error);
       setMyEventsError("Failed to load My Events");
@@ -213,7 +215,7 @@ function App() {
         <LoadingComponent loadingMessage={"LOADING GATHER EVENTS"}/>}
       {organizationId && events.length && categories.length &&
       <>
-        <Header/>
+        <Header />
         {imageError && <Alert variant="danger">{imageError}</Alert>}
           <Container id="container" className="mt-5 d-flex align-items-center justify-content-center" style={{ minHeight: "80vh" }}>
             <Routes>
@@ -241,6 +243,16 @@ function App() {
                     <CreateEvent
                       organizationId={organizationId}
                       categories={categories}
+                      setNewEventCreated={setNewEventCreated}
+                    />
+                  </UserPrivateRoute>
+                }
+              />
+              <Route
+                path="/create-staff-members"
+                element={
+                  <UserPrivateRoute>
+                    <CreateStaffMembers
                     />
                   </UserPrivateRoute>
                 }

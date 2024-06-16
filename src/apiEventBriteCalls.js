@@ -23,7 +23,6 @@ async function fetchEventbriteCategories() {
 
 async function createEventbriteEvent(eventData, organizationId) {
   console.log("called create event");
-  console.log("event data", eventData);
 
   const url = `${baseUrl}organizations/${organizationId}/events/`;
 
@@ -52,12 +51,13 @@ async function createEventTicketClass(ticketData, event_id) {
 
 async function fetchAllEvents(organizationId) {
   console.log("called All Events");
+ 
 
   const url = `${baseUrl}organizations/${organizationId}/events/`;
   const params = { expand: "ticket_availability" };
   try {
     const response = await axios.get(url, { headers: headers, params: params });
-    return response.data;
+    return response.data.events;
   } catch (error) {
     console.error("Error fetching events:",error);
     throw error
