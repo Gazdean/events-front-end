@@ -11,9 +11,10 @@ export async function querySnapshot(collection, document) {
     }
 }
 
-export async function addNewUser(email, userData){
+export async function addNewUser(email){
     const bodyData = {
-       ...userData,
+        firstName: "",
+        lastName: "",
         myEvents:[]
     }
     try {const userRef = doc(db, `users/${email}`)       
