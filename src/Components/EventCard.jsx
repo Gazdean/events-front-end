@@ -44,13 +44,11 @@ export default function EventCard({event, images, imagesLoading, eventsTickets, 
     } 
 
   return (
-
     <> 
       {pastEvent ? null :
         <> 
           <Col sm={2} className="w-100 border m-2 ms-0 p-3" variant="primary" style={{maxWidth:"400px"}}>
             <h2 >{event.name.text}</h2>  
-            <h2 >{event.id}</h2>  
             <div>
               <p>Start: <strong>{dateInfo.startDate}</strong></p>
               <p>End: <strong>{dateInfo.endDate}</strong></p>
@@ -60,7 +58,6 @@ export default function EventCard({event, images, imagesLoading, eventsTickets, 
               <Image src={images[event.category_id]?.thumb} alt={`generic ${event?.name?.text} event picture`}/>
             }
             <p >{`${event.description.text.slice(0, 80)}.........`}</p>
-
             <Card className= "mb-3">
               {eventTicketsError ? 
                 <Alert variant="danger">{eventTicketsError}</Alert> :
