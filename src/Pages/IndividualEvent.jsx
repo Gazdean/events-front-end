@@ -165,9 +165,10 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
                 }
                 <ReturnToEventsButton string={"Return To Events"}/>
                 {
-                  currentUser && !alreadySignedUp ? 
+                  currentUser && !alreadySignedUp && !pastEvent  ? 
                     <>
-                      {!soldOut && !pastEvent && <Button className="ms-5" onClick={handleSignUp} disabled={signUpComplete}>Sign Up</Button>}
+                      {!soldOut && <Button className="ms-5" onClick={handleSignUp} disabled={signUpComplete}>Sign Up</Button>}
+
                       {soldOut && <SoldOutModal setShowSoldOutModal={setShowSoldOutModal} showSoldOutModal={showSoldOutModal} event={event} />}
 
                       {signUpComplete ? 
@@ -177,8 +178,8 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
                           null
                       }
                     </> : 
-                    !pastEvent && <Button disabled={true} variant="success" className="ms-5" >You are Already Signed Up</Button>
-                  }
+                    !pastEvent && currentUser && <Button disabled={true} variant="success" className="ms-5" >You are Already Signed Up</Button>
+                }
             </Col>
           </Row>
         }
