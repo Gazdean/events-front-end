@@ -57,7 +57,6 @@ export function handleFormatDate(startDateString, endDateString) {
     else {
         const startDate =  String(new Date(startDateString)).slice(0,21)
         const endDate =  String(new Date(endDateString)).slice(0,21)
-            console.log(startDate, endDate)
         if (startDate === 'Invalid Date' || endDate === 'Invalid Date') {
             return {}
         } else {

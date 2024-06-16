@@ -14,7 +14,12 @@ export function AuthProvider({children}) {
     const [loading, setLoading] = useState(true)
 
     function signup(email, password) {
-        return createUserWithEmailAndPassword(auth, email, password)
+        console.log(password)
+        let passwordData = password
+        if(!password) {
+            passwordData = new Date().toISOString()
+        }
+        return createUserWithEmailAndPassword(auth, email, passwordData)
     }
 
     function signin(email, password) {

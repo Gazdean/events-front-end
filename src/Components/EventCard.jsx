@@ -42,7 +42,6 @@ export default function EventCard({event, images, imagesLoading, eventsTickets, 
           setEventsTicketsLoading(false);
       }
     } 
-    console.log(event.id, pastEvent)
 
   return (
 

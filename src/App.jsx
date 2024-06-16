@@ -28,6 +28,7 @@ import { useAuth } from "./Contexts/AuthContext";
 import { MyEventsContext } from "./Contexts/MyEventsContext";
 import LoadingComponent from "./Components/LoadingComponent";
 import Header from "./Components/Header";
+import CreateStaffMembers from "./Pages/CreateStaffMembers";
 
 function App() {
   const { setMyEvents, setMyEventsError, setMyEventsLoading } = useContext(MyEventsContext); /* for rendering events in users profile */
@@ -195,7 +196,7 @@ function App() {
     setMyEventsLoading(true)
     try {
       const myEventsResponse = await getCollection(collection, document);
-        setMyEvents(myEventsResponse.myEvents);    
+      setMyEvents(myEventsResponse.myEvents);    
     } catch (error) {
       console.log('failed to load my events', error);
       setMyEventsError("Failed to load My Events");
@@ -243,6 +244,15 @@ function App() {
                       organizationId={organizationId}
                       categories={categories}
                       setNewEventCreated={setNewEventCreated}
+                    />
+                  </UserPrivateRoute>
+                }
+              />
+              <Route
+                path="/create-staff-members"
+                element={
+                  <UserPrivateRoute>
+                    <CreateStaffMembers
                     />
                   </UserPrivateRoute>
                 }
