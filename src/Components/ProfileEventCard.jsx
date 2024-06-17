@@ -11,8 +11,6 @@ export default function ProfileEventCard({ event }) {
     const eventEnd = event?.end?.utc
     setDateObj(handleFormatDate(eventStart, eventEnd));
   }, [event]);
-
-  console.log(dateObj)
   
   return (
     <Card>

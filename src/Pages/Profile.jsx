@@ -30,7 +30,7 @@ export default function Profile({events, handleFetchMyEvents}) {
 
   return (
     <>
-      <Container>
+      <Container className="mt-3">
         <h2>My Events</h2>
         {myEventsError && <Alert variant="danger">{myEventsError}</Alert>}
         {myEventsLoading ? <p>-- Loading My Events --</p> : 
