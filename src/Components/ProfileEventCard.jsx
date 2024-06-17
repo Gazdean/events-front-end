@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { handleFormatDate } from '../utils';
 
 export default function ProfileEventCard({ event }) {
-  
+  const [dateObj, setDateObj] = useState({});
+
   useEffect(() => {
     const eventStart = event.start.utc
     const eventEnd = event.end.utc
