@@ -29,7 +29,7 @@ It is hosted [here]()
 - [Firebase](https://firebase.google.com/) -  For both Authorisation and Cloud FireStore DataBase
 - [Google Cloud](https://console.cloud.google.com/) - [Google Calendar Api](https://console.cloud.google.com/apis/library/calendar-json.googleapis.com)
 - [Unsplash Api](https://unsplash.com/developers) - To fetch a collection of images in to the app
-- [Eventbrite(https://www.eventbrite.co.uk/)] - To create, store and fetch events
+- [Eventbrite](https://www.eventbrite.co.uk/) - To create, store and fetch events
 - [Axios](https://axios-http.com/docs/intro) - For Api calls
 - [React-Hook-Form](https://react-hook-form.com) - For dealing with form validation
 - [React-Bootstrap](https://react-bootstrap.netlify.app/) - For styling and reday made components
