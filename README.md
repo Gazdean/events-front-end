@@ -15,11 +15,11 @@ It is hosted [here]()
 - It allows signed in staff members to create events
 - It allows signed in admins to add staff to the database
 
-<img src="./readme-images/allEvents.png" alt="all events page" width="400"/>
-<img src="./readme-images/signIn.png" alt="asign in form" width="400"/>
-<img src="./readme-images/individualEvent1.png" alt="individual event and signed up list" width="400"/>
-<img src="./readme-images/createEvent.png" alt="create event form" width="400"/>
-<img src="./readme-images/addStaff.png" alt="add staff form" width="400"/>
+<img src="./readme-images/allEvents.png" alt="all events page" width="200"/>
+<img src="./readme-images/signIn.png" alt="asign in form" width="200"/>
+<img src="./readme-images/individualEvent1.png" alt="individual event and signed up list" width="200"/>
+<img src="./readme-images/createEvent.png" alt="create event form" width="200"/>
+<img src="./readme-images/addStaff.png" alt="add staff form" width="200"/>
 
 ## Tech Stack
 
