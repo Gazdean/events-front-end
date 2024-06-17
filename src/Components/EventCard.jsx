@@ -47,7 +47,7 @@ export default function EventCard({event, images, imagesLoading, eventsTickets, 
     <> 
       {pastEvent ? null :
         <> 
-          <Col sm={2} variant="primary" style={{maxWidth:"400px", border: "2px solid #429DD0", padding: "10px", borderRadius: "15px", borderTopLeftRadius: "0"}} >
+          <Col sm={2} className="w-100 m-2 ms-0 p-3" variant="primary" style={{maxWidth:"400px", border: "2px solid #429DD0", padding: "10px", borderRadius: "15px", borderTopLeftRadius: "0"}} >
             <h2 >{event.name.text}</h2>  
             <div>
               <p>Start: <strong>{dateInfo.startDate}</strong></p>
