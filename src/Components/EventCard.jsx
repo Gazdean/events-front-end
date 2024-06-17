@@ -62,7 +62,7 @@ export default function EventCard({event, images, imagesLoading, eventsTickets, 
               {eventTicketsError ? 
                 <Alert variant="danger">{eventTicketsError}</Alert> :
                 eventsTicketsLoading ? <p> --tickets loading --</p> :
-                // same issue cant write to quantity_sold so with using quantity-total to track tickets cant reduce to zero on eventbrite Api
+                // same issue cant write to quantity_sold so with using quantity-total to track tickets cant reduce to zero on eventbrite Api.
                 currentEventTicket?.quantity_total <= 1 ? <Alert variant="danger">TICKETS SOLD OUT!!</Alert> :
                 <>
                   {currentEventTicket?.free ? <p style={{color:"green"}}>free event</p> : currentEventTicket?.donation ? <p style={{color:"blue"}}>donation</p> : <p style={{color:"red"}}>Price: {currentEventTicket?.cost?.display}</p>}
