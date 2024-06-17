@@ -7,16 +7,18 @@ export default function ProfileEventCard({ event }) {
   const [dateObj, setDateObj] = useState({});
 
   useEffect(() => {
-    const eventStart = event.start.utc
-    const eventEnd = event.end.utc
+    const eventStart = event?.start?.utc
+    const eventEnd = event?.end?.utc
     setDateObj(handleFormatDate(eventStart, eventEnd));
   }, [event]);
 
+  console.log(dateObj)
+  
   return (
-    <Card xs={6}>
-      <Row xs={6} className="p-3">
-        <Row >{event.name.text}</Row>     
-        <Col>Date: {dateObj.startDate}</Col>
+    <Card>
+      <Row>
+        <Row>{event.name.text}</Row>     
+        <Col>Date: {dateObj?.startDate}</Col>
         <Col>
           <Link to={`/event/${event.id}`}><Button>View Event</Button></Link>
         </Col>
