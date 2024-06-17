@@ -92,7 +92,7 @@ export default function Header() {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav" >
               <Nav className="ms-auto">  
-                { isStaffLoading ? <p>-- Loading Staff Options --</p> :
+                { isStaffLoading ? <p></p> :
                   <>
                     {isAdmin && 
                       <Nav.Link as={Link} to={"/create-staff-members"}>
