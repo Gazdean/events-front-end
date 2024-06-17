@@ -75,14 +75,16 @@ export default function Header() {
         </Navbar.Brand>
         {error ? <p>{error}</p> : null}
         {!currentUser ?
-          <>  <Nav>
+          <>  <Nav >
+             <div className="d-flex align-items-center">
             {location.pathname !== "/sign-in" ? 
-              (<Nav.Link as={Link} to={"/sign-in"}>
+              (<Nav.Link as={Link} to={"/sign-in"} className="me-2">
                 <Button variant="primary" size="sm">Sign in</Button>
               </Nav.Link> ): 
               null 
             }
             {location.pathname !== "/join" && <Nav.Link as={Link} to={"/join"}><Button variant="primary" size="sm" style={{width:"3.9rem"}}>Join</Button></Nav.Link>}
+            </div>
             </Nav>
           </> : 
           <>
