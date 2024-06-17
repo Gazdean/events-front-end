@@ -75,7 +75,7 @@ create the api keys and add to the .env file
 [Create an account](https://unsplash.com/login) and [create an app](https://unsplash.com/oauth/applications) this will generate the necessary api keys and add to the .env file
 
 ### Eventbrite
-[Create an account](https://id.auth.eventbrite.com/u/login) and go to account settings/developer links to create your api keys and add to the .env file
+[Create an account](https://id.auth.eventbrite.com/u/login) and go to account settings/developer links to create your api keys and then add to the .env file
 
 ### FireBase
 
