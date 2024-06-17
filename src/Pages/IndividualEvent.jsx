@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Container, Image, Row, Col, Alert } from "react-bootstrap";
+import { Button, Container, Image, Row, Col, Alert, DropdownButton } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
 import { useAuth } from "../Contexts/AuthContext";
@@ -161,19 +161,19 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
   }
 
   return (
-    <Container>
+    <Container >
        {fetchEventError && <Alert variant="danger">{fetchEventError}</Alert>}
        {signUpError && <Alert variant="danger">{signUpError}</Alert>}
         {eventLoading ? <p>-- Loading Event --</p> : 
-          <Row className=''> 
-            <Col className= 'p-1 ml-0' >
-                {imagesLoading ? <p>-- Image Loading --</p> :<Image className= ''src={images[event?.category_id]?.small} alt={`generic ${event?.name?.text} event image`}/>}
+          <Row > 
+            <Col className= 'p-1 mt-4' >
+                {imagesLoading ? <p>-- Image Loading --</p> :<Image style={{width:"92vw", maxWidth:"600px"}} className="ps-2" src={images[event?.category_id]?.small} alt={`generic ${event?.name?.text} event image`}/>}
             </Col>
-            <Col>
-                <h1 style={{ fontSize: "80px" }}>{event?.name?.text}</h1>
-                <h2 >{dateInfo?.startDate}</h2>
+            <Col >
+                <h1 className= 'mt-5'> {event?.name?.text}</h1>
+                <h5 >{dateInfo?.startDate}</h5>
                 <p>To</p>
-                <h2 >{dateInfo?.endDate}</h2>
+                <h5 >{dateInfo?.endDate}</h5>
                 <p>{event?.summary}</p>
 
                 {fetchTicketError ? 
@@ -196,22 +196,20 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
 
                       {signUpComplete ? 
                         <SignUpModal setShowSignUpModal={setShowSignUpModal} showSignUpModal={showSignUpModal} event={event} signUpComplete={signUpComplete}/> : 
-                        signingUp ? 
-                          <p>signing up</p> :
-                          null
+                        signingUp &&
+                          <p>signing up</p>
                       }
                     </> : 
-                    !pastEvent && currentUser && <Button disabled={true} variant="success" className="ms-5" >You are Already Signed Up</Button>
+                    !pastEvent && currentUser && <Button disabled={true}  variant="success" className="ms-2" >Already Signed Up</Button>
                 }
             </Col>
           </Row>
         }
-        { isStaff && 
+        { currentUser && isStaff &&
           <Row>
-            <h3>Signed up</h3>
-            <ol>
-              {attendees && attendees.map((attendee, index)=><AttendeeCard key={`${index}${event_id}`} attendee={attendee}/>)}
-            </ol>
+            <DropdownButton className="mt-2 mb-2" id="dropdown-item-button" title="Current Guest List">
+              {attendees && attendees.map((attendee, index)=><AttendeeCard key={`${index}${event_id}`} attendee={attendee} />)}
+            </DropdownButton>
           </Row>
         }
     </Container>

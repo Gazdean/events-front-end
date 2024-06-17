@@ -24,7 +24,7 @@ export default function EventView({images, categories, events, eventsTickets, se
     <>
       {events.length &&
         <Container className="mt-5">
-          <h1>{filteredEvents.length === events.length ? "All Events" : filteredCat ? categories.find(category=>category.id === filteredCat).name : null}</h1>
+          <h2>{filteredEvents.length === events.length ? "All Events" : filteredCat ? categories.find(category=>category.id === filteredCat).name : null}</h2>
           <ButtonToolbar aria-label="Toolbar with button groups">
           <ButtonGroup className="me-1" aria-label="First group">
           <FilterButton classname="pe-1" categories={categories} setFilteredCat={setFilteredCat}/>

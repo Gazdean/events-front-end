@@ -51,6 +51,7 @@ export function formatCreateTicketClassData(data) {
 }
 
 export function handleFormatDate(startDateString, endDateString) {
+
     if (!startDateString.length || !endDateString.length) {
         return {}
     }
