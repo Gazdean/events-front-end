@@ -31,7 +31,7 @@ import Header from "./Components/Header";
 import CreateStaffMembers from "./Pages/CreateStaffMembers";
 
 function App() {
-  const { setMyEvents, setMyEventsError, setMyEventsLoading } = useContext(MyEventsContext); /* for rendering events in users profile */
+  const { setMyEvents, setMyEventsError, setMyEventsLoading } = useContext(MyEventsContext);
 
   const { currentUser } = useAuth();
 
@@ -48,20 +48,28 @@ function App() {
   const [catError, setCatError] = useState("");
   const [imageError, setImageError] = useState("");
   const [eventsError, setEventsError] = useState("");
-  // const [myEventsError, setMyEventsError] = useState(""); // moved to context
 
   // Loading States
   const [fetchingOrganisatioId, setFetchingOrganisationId] = useState(false)
   const [imagesLoading, setImagesLoading] = useState(false);
   const [catLoading, setCatLoading] = useState(false);
   const [eventsLoading, setEventsLoading] = useState(false);
-  // const [myEventsLoading, setMyEventsLoading] = useState(false); // moved to context
+  const [showLoadingPage, setshowLoadingPage] = useState(false);
+
 
   useEffect(() => {
     handleSetOrganisationId();
     handleSetCategories();
     handleFetchImages();
+    setshowLoadingPage(true)
   }, []);
+
+  useEffect(() => {
+    if(fetchingOrganisatioId || catLoading || eventsLoading)
+    setTimeout(()=>{
+      setshowLoadingPage(false)
+    },2000)
+  },[fetchingOrganisatioId, catLoading, eventsLoading])
 
   async function handleSetOrganisationId() {
     setFetchingOrganisationId(true);
@@ -211,9 +219,9 @@ function App() {
       {eventsError && <Alert variant="danger">{eventsError}</Alert>}
       {catError && <Alert variant="danger">{catError}</Alert>}
 
-      {eventsLoading || catLoading && 
-        <LoadingComponent loadingMessage={"LOADING GATHER EVENTS"}/>}
-      {organizationId && events.length && categories.length &&
+      {showLoadingPage ?
+        <LoadingComponent loadingMessage={"LOADING GATHER EVENTS"}/> :
+      organizationId && events.length && categories.length &&
       <>
         <Header />
         {imageError && <Alert variant="danger">{imageError}</Alert>}
