@@ -63,7 +63,7 @@ export default function Header() {
   };
  
   return (
-    <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary" fixed="top" >
+    <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary" fixed="top" style={{ borderBottom: "0.5px solid #429DD0", borderBottomRightRadius: "15px"}}>
       {isStaffError && <Alert variant="danger">{isStaffError}</Alert>}
       <Container>
         <Navbar.Brand style={{ color: "#429DD0" }} as={Link} to={"/"}  >
