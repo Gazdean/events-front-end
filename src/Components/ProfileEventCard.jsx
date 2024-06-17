@@ -13,8 +13,8 @@ export default function ProfileEventCard({ event }) {
   }, [event]);
 
   return (
-    <Card xs={6}>
-      <Row xs={6} className="p-3">
+    <Card>
+      <Row className="p-3">
         <Row >{event.name.text}</Row>     
         <Col>Date: {dateObj.startDate}</Col>
         <Col>
