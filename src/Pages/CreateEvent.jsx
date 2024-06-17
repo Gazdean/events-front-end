@@ -19,6 +19,7 @@ export default function createEvent ({organizationId, categories, setNewEventCre
 
     const watchIsFree = watch("isFree", "")
     const watchIsDonation = watch("donation", "")
+    const watchStartDate = watch("start", "")
 
     const wholeNumRegex = /^(0|[1-9]\d*)$/
 
@@ -63,6 +64,12 @@ export default function createEvent ({organizationId, categories, setNewEventCre
         }
     }
 
+    const checkEndDate = (value) => {
+        const startDate = new Date(watchStartDate);
+        const endDate = new Date(value);
+        return endDate > startDate || "End date must be after start date";
+      };
+
     return (
         
         <Container className="w-100" style={{maxWidth:"400px"}}>
@@ -72,11 +79,11 @@ export default function createEvent ({organizationId, categories, setNewEventCre
                     {error && <Alert variant="danger">{error}</Alert>}
                     {creatingEvent && <Alert variant="primary">Creating your event</Alert>}
 
-                    <Form onSubmit={handleSubmit(onSubmit)} noValidate={true}>
+                    <Form onSubmit={handleSubmit(onSubmit)} nocheck={true}>
 
                         <Form.Group id="eventTitle">
                             <Form.Label htmlFor="name">Event Name</Form.Label>
-                            <Form.Control id="name" name="name" type="text" maxLength={140} {...register('name', {required:true, })}></Form.Control>
+                            <Form.Control id="name" name="name" type="text" maxLength={140} {...register('name', {required:true})}></Form.Control>
                             {errors.name?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An event name is required</p>}
                         </Form.Group>
 
@@ -104,8 +111,9 @@ export default function createEvent ({organizationId, categories, setNewEventCre
 
                         <Form.Group id="endDate">
                             <Form.Label htmlFor="end">Event EndDate</Form.Label>
-                            <Form.Control id="end" name="end" type="datetime-local" {...register('end', {required:true, })}></Form.Control>
+                            <Form.Control id="end" name="end" type="datetime-local" {...register('end', {required:true, validate:checkEndDate })}></Form.Control>
                             {errors.end?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An end date and time is required</p>}
+                            {errors.end?.type==="validate"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >{errors.end.message}</p>}
                         </Form.Group>
 
                         <Form.Group id="ticketsAvailable">
