@@ -8,7 +8,6 @@ const headers = {
 };
 
 async function fetchEventbriteCategories() {
-  console.log("called categories");
 
   const url = `${baseUrl}categories/`;
 
@@ -22,7 +21,6 @@ async function fetchEventbriteCategories() {
 }
 
 async function createEventbriteEvent(eventData, organizationId) {
-  console.log("called create event");
 
   const url = `${baseUrl}organizations/${organizationId}/events/`;
 
@@ -36,7 +34,6 @@ async function createEventbriteEvent(eventData, organizationId) {
 }
 
 async function createEventTicketClass(ticketData, event_id) {
-  console.log("called ticket classes");
 
   const url = `${baseUrl}events/${event_id}/ticket_classes/`;
 
@@ -50,8 +47,6 @@ async function createEventTicketClass(ticketData, event_id) {
 }
 
 async function fetchAllEvents(organizationId) {
-  console.log("called All Events");
- 
 
   const url = `${baseUrl}organizations/${organizationId}/events/`;
   const params = { expand: "ticket_availability" };
@@ -65,7 +60,6 @@ async function fetchAllEvents(organizationId) {
 }
 
 async function fetchIndividualEvent(eventId) {
-  console.log("called individual event");
 
   const url = `${baseUrl}/events/${eventId}/`;
 
@@ -79,7 +73,6 @@ async function fetchIndividualEvent(eventId) {
 }
 
 async function fetchEventTickets(eventId) {
-  console.log("called ticket classes");
 
   const url = `${baseUrl}events/${eventId}/ticket_classes/`;
 
@@ -93,7 +86,6 @@ async function fetchEventTickets(eventId) {
 }
 
 async function getEventbriteOrganizationId() {
-  console.log("called organization");
 
   const url = `${baseUrl}users/me/organizations/`;
 
@@ -107,7 +99,6 @@ async function getEventbriteOrganizationId() {
 }
 
 async function updateEventTickets(data, eventId, ticket_class_id) {
-  console.log("called update ticket classes");
 
   const url = `${baseUrl}events/${eventId}/ticket_classes/${ticket_class_id}/`;
   // update TicketClasses is a post on eventbrite not a patch?

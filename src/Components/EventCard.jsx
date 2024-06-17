@@ -47,7 +47,7 @@ export default function EventCard({event, images, imagesLoading, eventsTickets, 
     <> 
       {pastEvent ? null :
         <> 
-          <Col sm={2} className="w-100 m-2 ms-0 p-3" variant="primary" style={{maxWidth:"400px", border: "2px solid #429DD0", padding: "10px", borderRadius: "15px", borderTopLeftRadius: "0"}} >
+          <Col sm={2} className="w-100 m-2 ms-0 p-3" variant="primary" style={{maxWidth:"400px", border: "1px solid #429DD0", padding: "10px", borderRadius: "15px", borderTopLeftRadius: "0px"}} >
             <h2 >{event.name.text}</h2>  
             <div>
               <p>Start: <strong>{dateInfo.startDate}</strong></p>
@@ -62,7 +62,8 @@ export default function EventCard({event, images, imagesLoading, eventsTickets, 
               {eventTicketsError ? 
                 <Alert variant="danger">{eventTicketsError}</Alert> :
                 eventsTicketsLoading ? <p> --tickets loading --</p> :
-                // same issue cant write to quantity_sold so with using quantity-total to track tickets cant reduce to zero on eventbrite api
+
+                // same issue cant write to quantity_sold so with using quantity-total to track tickets cant reduce to zero on eventbrite Api.
                 currentEventTicket?.quantity_total <= 1 ? <Alert variant="danger">TICKETS SOLD OUT!!</Alert> :
                 <>
                   {currentEventTicket?.free ? <p style={{color:"green"}}>free event</p> : currentEventTicket?.donation ? <p style={{color:"blue"}}>donation</p> : <p style={{color:"red"}}>Price: {currentEventTicket?.cost?.display}</p>}
