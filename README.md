@@ -1,8 +1,9 @@
 ![Gather Logo](./favicon.ico)
-# **[Gather Events]()**
+# **[Gather Events](https://gatherevents.netlify.app)**
 
-Gather Events is a event platform for a small business, it displays events created by the business.\
-It is hosted [here]()
+Gather Events is a event platform for a small business, it displays events created by the business.
+
+It is hosted here [Gather Events](https://gatherevents.netlify.app)
 
 ![home page](./readme-images/homePage.png)
 
