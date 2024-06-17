@@ -166,7 +166,7 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
         {eventLoading ? <p>-- Loading Event --</p> : 
           <Row > 
             <Col className= 'p-1 mt-4' >
-                {imagesLoading ? <p>-- Image Loading --</p> :<Image style={{width:"92vw", maxWidth:"600px"}} className="ps-2" src={images[event?.category_id]?.small} alt={`generic ${event?.name?.text} event image`}/>}
+                {imagesLoading ? <p>-- Image Loading --</p> :<Image style={{width:"92vw", maxWidth:"600px", border: "1px solid #429DD0", borderRadius: "15px", borderTopLeftRadius: "0px"}} src={images[event?.category_id]?.small} alt={`generic ${event?.name?.text} event image`}/>}
             </Col>
             <Col >
                 <h1 className= 'mt-5'> {event?.name?.text}</h1>
