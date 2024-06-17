@@ -116,7 +116,6 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
     setAttendeesLoading(true)
     try {
       const attendeesResponse = await getCollection("events", event_id)
-      console.log(attendeesResponse.signedUpUsers)
       setAttendees(attendeesResponse.signedUpUsers)
     } catch(error) {
       console.log('error fetching attendees ', error)
