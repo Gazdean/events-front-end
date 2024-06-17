@@ -103,7 +103,7 @@ export default function Header() {
                     {isStaff && 
                       <Nav.Link as={Link} to={"/create-event"}>
                         <Button variant="primary" size="sm">Create Event</Button>
-                      </Nav.Link >
+                      </Nav.Link>
                     }
                   </>
                 }
