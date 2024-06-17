@@ -66,7 +66,13 @@ export default function Header() {
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary" fixed="top" >
       {isStaffError && <Alert variant="danger">{isStaffError}</Alert>}
       <Container>
-        <Navbar.Brand style={{ color: "#429DD0" }} as={Link} to={"/"}  ><strong>Gather</strong></Navbar.Brand>
+        <Navbar.Brand style={{ color: "#429DD0" }} as={Link} to={"/"}  >
+          <strong>Gather</strong>
+          <svg className="pb-1 bi bi-house-heart-fill" xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M7.293 1.5a1 1 0 0 1 1.414 0L11 3.793V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3.293l2.354 2.353a.5.5 0 0 1-.708.707L8 2.207 1.354 8.853a.5.5 0 1 1-.708-.707z"/>
+            <path d="m14 9.293-6-6-6 6V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5zm-6-.811c1.664-1.673 5.825 1.254 0 5.018-5.825-3.764-1.664-6.691 0-5.018"/>
+          </svg>
+        </Navbar.Brand>
         {error ? <p>{error}</p> : null}
         {!currentUser ?
           <>  <Nav>
@@ -92,6 +98,7 @@ export default function Header() {
                       <Nav.Link as={Link} to={"/create-staff-members"}>
                         <Button variant="primary" size="sm">Add Staff Members</Button>
                       </Nav.Link >
+
                     }
                     {isStaff && 
                       <Nav.Link as={Link} to={"/create-event"}>
