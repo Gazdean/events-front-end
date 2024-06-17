@@ -40,13 +40,60 @@ It is hosted here [Gather Events](https://gatherevents.netlify.app)
 ## Running Locally
 To run the app locally you will need to create a new folder and [intialiseit with git](https://kbroman.org/github_tutorial/pages/init.html) (git init) then [clone the repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) and save it locally to the folder.
 
-Open the repository in your choosen code editor, open a new terminal and navigate to the new folder, run
+Open the repository in your choosen code editor, open a new terminal and navigate to the new folder, and run the following
 
 ```
 ~ npm install
 ```
 
 this will install all the dependencies for the app to run
+
+your package.json should look like this
+
+```
+{
+  "name": "events-platform",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "test": "jest --watch"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "bootstrap": "^5.3.3",
+    "firebase": "^10.12.1",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.10.2",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.51.5",
+    "react-router-dom": "^6.23.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.6",
+    "@babel/preset-env": "^7.24.6",
+    "@babel/preset-react": "^7.24.6",
+    "@testing-library/jest-dom": "^6.4.5",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "babel-jest": "^29.7.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-transform-stub": "^2.0.0",
+    "vite": "^5.2.0"
+  }
+}
+
+```
 
 Create a .env.local file in the application's root directory to store your api keys, and other sensitive data
 
