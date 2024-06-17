@@ -173,7 +173,8 @@ in your terminal run
 ~ npm run dev
 ```
 
-and click on the link
+and click on the link in the console
+
 
 
 
