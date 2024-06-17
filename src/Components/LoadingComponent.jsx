@@ -4,20 +4,15 @@ import CallToAction from './CallToAction'
 
 export default function LoadingComponent({loadingMessage}) {
   return (
-    <Container>
+    <Container >
         <CallToAction/>
-        <Row>
-            <Col sm={2}>
-                <Spinner animation="border" variant="primary" />
+        <Row className='d-flex align-content-center mt-5' style={{height:'30vh'}}>
+            <Col sm={12} className='d-flex justify-content-center mt-5'><Spinner animation="border" variant="primary" />
                 <Spinner animation="border" variant="success" />
-            </Col>
-            <Col sm={8}>
-                <h2>{loadingMessage}</h2>
-            </Col>
-            <Col sm={2}>
-                <Spinner animation="border" variant="danger" />
+                <h2 className="ms-5 me-5" >{loadingMessage}</h2><Spinner animation="border" variant="danger" />
                 <Spinner animation="border" variant="warning" />
             </Col>
+         
         </Row>
     </Container>
   )
