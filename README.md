@@ -97,7 +97,7 @@ your package.json should look like this
 
 Create a .env.local file in the application's root directory to store your api keys, and other sensitive data
 
-![VITE_APP_FIREBASE_API_KEY=Your-Key-Here
+<img src="./readme-images/envFile.png" alt="data needed for dot env file, VITE_APP_FIREBASE_API_KEY=Your-Key-Here
 VITE_APP_FIREBASE_AUTH_DOMAIN=Your-Key-Here
 VITE_APP_FIREBASE_PROJECT_ID=Your-Key-Here
 VITE_APP_FIREBASE_STORAGE_BUCKET=Your-Key-Here
@@ -109,7 +109,7 @@ VITE_EVENTBRITE_ORGANIZER_ID=Your-Key-Here
 VITE_UNSPLASH_API_KEY=Your-Key-Here
 VITE_UNSPLASH_SECRET_KEY=Your-Key-Here
 VITE_GOOGLE_API_KEY=Your-Key-Here
-VITE_GOOGLE_CLIENT_ID=Your-Key-Here](./readme-images/envFile.png)
+VITE_GOOGLE_CLIENT_ID=Your-Key-Here" width="600"/>
 
 ## Create accounts
 
