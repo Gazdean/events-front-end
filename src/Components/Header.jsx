@@ -89,9 +89,9 @@ export default function Header() {
             </Nav>
           </> : 
           <>
-            <Nav.Item className='pt-2 me-2 text-blue' style={{fontSize:"0.9rem", color: "#429DD0"}}>{isStaff && `Staff`}{isAdmin ? `(Admin):` : !isAdmin && !isStaff ? '':':'}</Nav.Item>
+            <Nav.Item className='pt-2 me-2 mb-2 text-blue' style={{fontSize:"0.9rem", color: "#429DD0"}}>{isStaff && `Staff`}{isAdmin ? `(Admin):` : !isAdmin && !isStaff ? '':':'}</Nav.Item>
             <Nav.Link as={Link} to={"/profile"}>
-              <Nav.Item className='pt-2 me-2' style={{fontSize:"0.9rem"}}>{currentUser.email}</Nav.Item>
+              <Nav.Item className='pt-2 me-2 mb-2' style={{fontSize:"0.9rem"}}>{currentUser.email}</Nav.Item>
             </Nav.Link >
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav" >
