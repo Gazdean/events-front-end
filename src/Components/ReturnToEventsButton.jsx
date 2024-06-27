@@ -4,6 +4,6 @@ import { Link } from 'react-router-dom'
 
 export default function ReturnToEventsButton({string}) {
   return (
-    <Link to={`/`}><Button variant='secondary' className="mt-2">{string}</Button></Link>
+    <Link to={`/`}><Button variant='secondary'>{string}</Button></Link>
   )
 }
