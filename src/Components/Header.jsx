@@ -34,7 +34,7 @@ export default function Header() {
         setError('Failed to log out')
     }
   }
-
+ 
   useEffect(() => {
     if (currentUser) {
       checkIfStaffExists(currentUser.email);
@@ -50,7 +50,7 @@ export default function Header() {
       if (querySnapShot.exists()) {
         setIsStaff(true)
         const staffCollectionDocumentFields = await getCollection("staff", email);
-        setIsAdmin(true)
+        if (staffCollectionDocumentFields.isAdmin === 'true') setIsAdmin(true)
       } else {
         setIsStaff(false)
       }
