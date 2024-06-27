@@ -10,7 +10,7 @@ export default function CreateStaffMembers ({}) {
     const [creatingStaff, setCreatingStaff] = useState(false)
     const [staffCreated, setStaffCreated] = useState(false)
     
-    const {register, handleSubmit, watch, formState:{errors}, reset} = useForm()
+    const {register, handleSubmit, formState:{errors}, reset} = useForm()
 
     const emailRegex = /^((([!#$%&'*+\-/=?^_`{|}~\w])|([!#$%&'*+\-/=?^_`{|}~\w][!#$%&'*+\-/=?^_`{|}~\.\w]{0,}[!#$%&'*+\-/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)$/
    
@@ -20,15 +20,16 @@ export default function CreateStaffMembers ({}) {
         setStaffCreated(false)
         const email = data.email
         const staffData = {... data}
+        if (staffData.isAdmin === "true") staffData.isAdmin = true
+        else staffData.isAdmin = false
         delete staffData.email
-        
+        console.log(staffData)
         try {
             await addNewStaff(email, staffData)
             setStaffCreated(true)
         } catch(error){
             console.log(error)
-            setError(error.message)
-            
+            setError(error.message)       
         } finally {
             setCreatingStaff(false)
         }
@@ -76,8 +77,8 @@ export default function CreateStaffMembers ({}) {
                             <Form.Label htmlFor="isAdmin">Is the staff member also an  admin</Form.Label>
                             <Form.Select id="isAdmin" name="isAdmin"  onFocus={handleOnFocus} {...register('isAdmin', {required:true})} >              
                                 <option value="" >Please Select</option>
-                                <option value="true">true</option>
-                                <option value="false">false</option>
+                                <option value={true}>true</option>
+                                <option value={false}>false</option>
                             </Form.Select>
                             {errors.isAdmin?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Admin status is required</p>}
                         </Form.Group>

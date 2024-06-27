@@ -34,7 +34,7 @@ export default function Header() {
         setError('Failed to log out')
     }
   }
- 
+
   useEffect(() => {
     if (currentUser) {
       checkIfStaffExists(currentUser.email);
@@ -43,6 +43,7 @@ export default function Header() {
 
   async function checkIfStaffExists(email) {
     setIsStaff(false)
+    setIsAdmin(false)
     setIsStaffError("")
     setIsStaffLoading(true)
     try {
@@ -50,7 +51,7 @@ export default function Header() {
       if (querySnapShot.exists()) {
         setIsStaff(true)
         const staffCollectionDocumentFields = await getCollection("staff", email);
-        if (staffCollectionDocumentFields.isAdmin === 'true') setIsAdmin(true)
+        staffCollectionDocumentFields.isAdmin && setIsAdmin(true)
       } else {
         setIsStaff(false)
       }
@@ -88,8 +89,9 @@ export default function Header() {
             </Nav>
           </> : 
           <>
+            <Nav.Item className='pt-2 me-2 text-blue' style={{fontSize:"0.9rem", color: "#429DD0"}}>{isStaff && `Staff`}{isAdmin ? `(Admin):` : !isAdmin && !isStaff ? '':':'}</Nav.Item>
             <Nav.Link as={Link} to={"/profile"}>
-              <Nav.Item className='pt-2 me-2 ' style={{fontSize:"0.9rem"}}>{currentUser.email}</Nav.Item>
+              <Nav.Item className='pt-2 me-2' style={{fontSize:"0.9rem"}}>{currentUser.email}</Nav.Item>
             </Nav.Link >
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav" >
