@@ -67,7 +67,7 @@ export default function EventCard({event, images, imagesLoading, eventsTickets, 
                 currentEventTicket?.quantity_total <= 1 ? <Alert variant="danger">TICKETS SOLD OUT!!</Alert> :
                 <>
                   {currentEventTicket?.free ? <p style={{color:"green"}}>free event</p> : currentEventTicket?.donation ? <p style={{color:"blue"}}>donation</p> : <p style={{color:"red"}}>Price: {currentEventTicket?.cost?.display}</p>}
-                  <p style={{color:"green"}}>Tickets Available: {currentEventTicket?.quantity_total < 5 && currentEventTicket?.quantity_total > 0 ? 'Nearly Sold Out!!' : currentEventTicket?.quantity_total == 0 ? 'Sold Out!!!!!' : currentEventTicket?.quantity_total }</p> 
+                  <p style={{color:"green"}}>Tickets Available: {currentEventTicket?.quantity_total < 5 && currentEventTicket?.quantity_total > 1 ? 'Nearly Sold Out!!' : currentEventTicket?.quantity_total == 1 ? 'Sold Out!!!!!' : currentEventTicket?.quantity_total }</p> 
                 </>
               }
             </Card>
