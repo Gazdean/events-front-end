@@ -116,7 +116,7 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
     setAttendeesLoading(true)
     try {
       const attendeesResponse = await getCollection("events", event_id)
-      setAttendees(attendeesResponse.signedUpUsers)
+      setAttendees(attendeesResponse?.signedUpUsers)
     } catch(error) {
       console.log('error fetching attendees ', error)
       setAttendeesError('Error fetching attendees')
@@ -173,7 +173,7 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
                 <h5 >{dateInfo?.startDate}</h5>
                 <p>To</p>
                 <h5 >{dateInfo?.endDate}</h5>
-                <p>{event?.summary}</p>
+                <p>{event?.description?.text}</p>
 
                 {fetchTicketError ? 
                   <Alert variant="danger">{fetchTicketError}</Alert> :

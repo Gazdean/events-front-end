@@ -79,7 +79,7 @@ export default function createEvent ({organizationId, categories, setNewEventCre
                     {error && <Alert variant="danger">{error}</Alert>}
                     {creatingEvent && <Alert variant="primary">Creating your event</Alert>}
 
-                    <Form onSubmit={handleSubmit(onSubmit)} nocheck={true}>
+                    <Form onSubmit={handleSubmit(onSubmit)} nocheck={"true"}>
 
                         <Form.Group id="eventTitle">
                             <Form.Label htmlFor="name">Event Name</Form.Label>
@@ -89,9 +89,9 @@ export default function createEvent ({organizationId, categories, setNewEventCre
 
                         <Form.Group id="eventDescription">
                             <Form.Label htmlFor="description">Event Description</Form.Label>
-                            <Form.Control id="description" name="description" type="text"  as="textarea" rows={3} {...register('description', {required:true, maxLength: 140})}></Form.Control>
+                            <Form.Control id="description" name="description" type="text"  as="textarea" rows={3} {...register('description', {required:true})}></Form.Control>
                             {errors.description?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An event description is required</p>}
-                            {errors.description?.type==="maxLength"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Only use 140 characters</p>}
+                            {/* {errors.description?.type==="maxLength"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >Only use 140 characters</p>} */}
                         </Form.Group>
 
                         <Form.Group id="EventCategory">
