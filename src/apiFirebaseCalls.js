@@ -74,6 +74,7 @@ export async function upDateEventAttendees(id, data) {
 
 
 export async function addNewStaff(email, staffData){
+    console.log(staffData)
     try {const userRef = doc(db, `staff/${email}`)       
         await setDoc(userRef, staffData)
     } catch(error){ 
