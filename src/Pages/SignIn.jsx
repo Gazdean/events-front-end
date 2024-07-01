@@ -6,8 +6,9 @@ import { Link, useNavigate } from "react-router-dom"
 import { useForm } from 'react-hook-form'
 
 export default function SignIn () {
-    const {signin} = useAuth()
+    const {signin, googleSignIn} = useAuth()
     const [error, setError] = useState("")
+    const [googleError, setGoogleError] = useState("")
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
@@ -19,10 +20,22 @@ export default function SignIn () {
             setLoading(true)
             await signin(data.email, data.password)
             navigate("/")
-        } catch {
+        } catch(error) {
             setError('Failed to log in')
         }finally {
             setLoading(false)
+        }
+    }
+
+    async function handleGoogleSignIn(event) {
+        setGoogleError("")
+        try {
+            await googleSignIn(event)
+            navigate("/")
+
+        } catch (error) {
+            console.log(error)
+            setGoogleError(error)
         }
     }
 
@@ -43,7 +56,8 @@ export default function SignIn () {
                         <Form.Control id="signInPassword" name="signInPassword"type="password" {...register('password', {required:true})}></Form.Control>
                         {errors.password?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2">A password is required</p>}
                     </Form.Group>
-                    <Button disabled={loading} className="w-100 mt-4" type="submit">Sign in</Button>
+                    <Button disabled={loading} className="w-100 mt-4" type="submit">Sign In</Button>
+                    <Button disabled={loading}  variant="success" className="w-100 mt-4" onClick={handleGoogleSignIn}>Sign In With Google</Button>
                 </Form>
                 <div className="w-100 text-center mt-3"><Link to="/forgot-password">Forgot Password?</Link></div>
             </Card.Body>
