@@ -1,17 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Container, Image, Row, Col, Alert, DropdownButton } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
-import { useAuth } from "../Contexts/AuthContext";
-import { fetchEventTickets, fetchIndividualEvent, updateEventTickets } from "../apiEventBriteCalls";
-import SignUpModal from '../Components/SignUpModal'
-import { handleFormatDate, isEventOld } from "../utils";
-import ReturnToEventsButton from "../Components/ReturnToEventsButton";
-import { MyEventsContext } from "../Contexts/MyEventsContext";
-import { addAnEvent, getCollection, upDateEventAttendees, upDateMyEvents } from "../apiFirebaseCalls";
-import SoldOutModal from "../Components/SoldOutModal";
+import { useAuth } from "../Contexts/AuthContext"
 import { IsStaffContext } from "../Contexts/IsStaffContext";
+import { MyEventsContext } from "../Contexts/MyEventsContext";
+
+import { fetchEventTickets, fetchIndividualEvent, updateEventTickets } from "../apiEventBriteCalls";
+import { addAnEvent, getCollection, upDateEventAttendees, upDateMyEvents } from "../apiFirebaseCalls";
+
+import { handleFormatDate, isEventOld } from "../utils";
+
 import AttendeeCard from "../Components/AttendeeCard";
+import ReturnToEventsButton from "../Components/ReturnToEventsButton";
+import SignUpModal from '../Components/SignUpModal'
+import SoldOutModal from "../Components/SoldOutModal";
+import ShareSocialsModal from "../Components/ShareSocialsModal";
 
 export default function IndividualEvent({ organizationId, images, imagesLoading, setEventsTickets }) {
   const { myEvents } = useContext(MyEventsContext);
@@ -24,6 +28,7 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
   const [dateInfo, setDateInfo] = useState({})
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showSoldOutModal, setShowSoldOutModal] = useState(false);
+  const [showShareSocialsModal, setShowShareSocialsModal] = useState(false);
   const [eventTickets, setEventTickets] = useState(null)
   const [alreadySignedUp, setAlreadySignedUp] = useState(false) 
   const [signUpComplete, setSignUpComplete]= useState(false)
@@ -43,7 +48,10 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
   const [fetchTicketError, setFetchTicketError] = useState("")
   const [signUpError, setSignUpError] = useState("")
   const [attendeesError, setAttendeesError] =useState("")
-   
+
+  const shareUrl = useLocation().pathname
+  const title = `Check out the upcoming ${event?.name?.text}event at Gather Events`;
+
   useEffect(() => {
     handleFetchIndividualEvent()
     handleFetchAttendees()
@@ -164,12 +172,24 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
        {fetchEventError && <Alert variant="danger">{fetchEventError}</Alert>}
        {signUpError && <Alert variant="danger">{signUpError}</Alert>}
         {eventLoading ? <p>-- Loading Event --</p> : 
-          <Row > 
+          <Row >
             <Col className= 'p-1 mt-4' >
                 {imagesLoading ? <p>-- Image Loading --</p> :<Image style={{width:"92vw", maxWidth:"600px", border: "1px solid #429DD0", borderRadius: "15px", borderTopLeftRadius: "0px"}} src={images[event?.category_id]?.small} alt={`generic ${event?.name?.text} event image`}/>}
             </Col>
             <Col >
-                <h1 className= 'mt-5'> {event?.name?.text}</h1>
+              <Row className="align-items-end">
+                <Col>
+                  <h1 className= 'mt-5'> {event?.name?.text}</h1>
+                </Col>
+                <Col className='pb-2'>
+                <Button className='ps-2 pe-2' variant="success"onClick={()=>setShowShareSocialsModal(true)}>Share 
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-share-fill ms-2" viewBox="0 0 16 16">
+                    <path d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5"/>
+                  </svg>
+                </Button>
+                <ShareSocialsModal showShareSocialsModal={showShareSocialsModal} setShowShareSocialsModal={setShowShareSocialsModal} shareUrl={shareUrl} title={title}/>
+                </Col>
+              </Row>
                 <h5 >{dateInfo?.startDate}</h5>
                 <p>To</p>
                 <h5 >{dateInfo?.endDate}</h5>
@@ -204,6 +224,7 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
             </Col>
           </Row>
         }
+        
         { currentUser && isStaff &&
           <Row>
             <DropdownButton className="mt-2 mb-2" id="dropdown-item-button" title="Current Guest List">
