@@ -49,7 +49,7 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
   const [signUpError, setSignUpError] = useState("")
   const [attendeesError, setAttendeesError] =useState("")
 
-  const shareUrl = useLocation().pathname
+  const shareUrl = `https://gatherevents.netlify.app/${useLocation().pathname}`
   const title = `Check out the upcoming ${event?.name?.text}event at Gather Events`;
 
   useEffect(() => {
