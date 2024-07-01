@@ -51,7 +51,7 @@ export default function IndividualEvent({ organizationId, images, imagesLoading,
 
   const shareUrl = `https://gatherevents.netlify.app/${useLocation().pathname}`;
   const title = `Check out the upcoming ${event?.name?.text}event at Gather Events`;
-  console.log(shareSocial)
+  console.log(shareUrl)
   useEffect(() => {
     handleFetchIndividualEvent()
     handleFetchAttendees()
