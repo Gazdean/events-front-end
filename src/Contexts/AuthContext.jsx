@@ -1,9 +1,13 @@
 import React from 'react'
 import { useState, useContext, useEffect  } from 'react'
 import { auth } from '../firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, signInWithPopup } from 'firebase/auth'
+
+import { GoogleAuthProvider } from "firebase/auth"
 
 const AuthContext = React.createContext()
+
+
 
 export function useAuth() {
     return useContext(AuthContext)
@@ -41,8 +45,18 @@ export function AuthProvider({children}) {
         })
         return unsubscribe
     }, [])
+
+    async function googleSignIn(event) {
+        try {
+            const provider = new GoogleAuthProvider()
+            return signInWithPopup(auth, provider)
+        } catch(error) {
+            console.log(error)
+            throw new Error(error)
+        }
+    }
    
-    const value = {currentUser, signup, signin, logout, resetPassword}
+    const value = {currentUser, signup, signin, logout, resetPassword, googleSignIn}
 
     return (
         <AuthContext.Provider value={value}>
