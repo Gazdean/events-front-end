@@ -42,6 +42,7 @@ export default function Header() {
 
   useEffect(() => {
     if (currentUser) {
+      console.log('currentUser', currentUser )
       checkIfStaffExists(currentUser.email);
     }
   }, [currentUser]);

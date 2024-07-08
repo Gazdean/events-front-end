@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useContext, useEffect  } from 'react'
 import { auth } from '../firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, signInWithPopup } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, signInWithPopup, sendEmailVerification } from 'firebase/auth'
 
 import { GoogleAuthProvider } from "firebase/auth"
 
@@ -15,41 +15,55 @@ export function useAuth() {
 
 export function AuthProvider({children}) {
     const [currentUser, setCurrentUser] = useState(null)
-    const [loading, setLoading] = useState(true)
+    
+// functions
 
-    function signup(email, password) {
-        console.log(password)
-        let passwordData = password
-        if(!password) {
-            passwordData = new Date().toISOString()
+    async function signup(email, password) {
+        try{
+            const userCredential = await createUserWithEmailAndPassword( auth, email, password );
+            const results = userCredential.user;
+            await sendEmailVerification(results);
+        } catch (error){
+            throw new Error
         }
-        return createUserWithEmailAndPassword(auth, email, passwordData)
     }
 
-    function signin(email, password) {
-        return signInWithEmailAndPassword(auth, email, password)
+    async function signin(email, password) {
+        try{
+            const userCredentials = await signInWithEmailAndPassword(auth, email, password)
+            const results = userCredentials.user
+            console.log(results.emailVerified)
+            if (results.emailVerified) setCurrentUser(results)
+            return results
+        } catch (error){
+            throw new Error
+        }
+        
     }
 
-    function logout() {
-        return signOut(auth)
+    async function logout() {
+        try{
+            await signOut(auth)
+            setCurrentUser(null)
+        } catch (error){
+            throw new Error
+        }
+        
     }
 
     function resetPassword(email) {
         return sendPasswordResetEmail(auth, email)
     }
 
-    useEffect(()=> {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-             setCurrentUser(user)
-             setLoading(false)        
-        })
-        return unsubscribe
-    }, [])
+    
 
     async function googleSignIn(event) {
         try {
             const provider = new GoogleAuthProvider()
-            return signInWithPopup(auth, provider)
+            const result = await signInWithPopup(auth, provider)
+            const user = result.user
+            setCurrentUser(user)
+            return user
         } catch(error) {
             console.log(error)
             throw new Error(error)
@@ -60,7 +74,7 @@ export function AuthProvider({children}) {
 
     return (
         <AuthContext.Provider value={value}>
-            {!loading && children}
+            {children}
         </AuthContext.Provider>
     )
     }

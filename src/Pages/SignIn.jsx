@@ -4,12 +4,14 @@ import { useAuth } from '../Contexts/AuthContext'
 import { Link, useNavigate } from "react-router-dom"
 
 import { useForm } from 'react-hook-form'
+import { addNewUser } from "../apiFirebaseCalls"
 
 export default function SignIn () {
     const {signin, googleSignIn} = useAuth()
     const [error, setError] = useState("")
     const [googleError, setGoogleError] = useState("")
     const [loading, setLoading] = useState(false)
+    const [verifiedUser, setVerifiedUser] = useState(true)
     const navigate = useNavigate()
 
     const {register, handleSubmit, formState:{errors}} = useForm()
@@ -18,8 +20,11 @@ export default function SignIn () {
         try {
             setError('')
             setLoading(true)
-            await signin(data.email, data.password)
-            navigate("/")
+            const results = await signin(data.email, data.password)
+            console.log(results.emailVerified)
+            !results.emailVerified ? 
+                setVerifiedUser(false) :
+                navigate("/")
         } catch(error) {
             setError('Failed to log in')
         }finally {
@@ -27,15 +32,20 @@ export default function SignIn () {
         }
     }
 
-    async function handleGoogleSignIn(event) {
-        setGoogleError("")
-        try {
-            await googleSignIn(event)
+    async function handleGoogleSignIn() {
+        setError("")
+        setLoading(true)
+        console.log('here')
+        try {   
+            const signIn = await googleSignIn()
+            console.log('google sign in email', signIn.email)
+            await addNewUser(signIn.email)
             navigate("/")
-
         } catch (error) {
             console.log(error)
-            setGoogleError(error)
+            setError('Failed to log in')
+        }finally {
+            setLoading(false)
         }
     }
 
@@ -45,10 +55,11 @@ export default function SignIn () {
             <Card.Body>
                 <h2 className="text-center mb-4">Sign In</h2>
                 {error && <Alert variant="danger">{error}</Alert>}
+                {!verifiedUser && <Alert variant="danger">Please verify your account, check inboxes and junk folder</Alert>}
                 <Form onSubmit={handleSubmit(onSubmit)} >
                     <Form.Group id="email">
                         <Form.Label htmlFor="signInEmail">Email</Form.Label>
-                        <Form.Control id="signInEmail" name="signInEmail" type="email" {...register('email', {required:true})}></Form.Control>
+                        <Form.Control id="signInEmail" name="signInEmail" type="email" autoComplete="family-name"{...register('email', {required:true})}></Form.Control>
                         {errors.email?.type==="required"&&<p tabIndex="0" className="border border-2 border-danger rounded mt-2 ps-2" >An email is required</p>}
                     </Form.Group>
                     <Form.Group id="password">
